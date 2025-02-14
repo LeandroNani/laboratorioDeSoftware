@@ -14,3 +14,5 @@
 | 07     | Professor  | O professor deve poder ver quais são os alunos matriculados em cada disciplina.             |
 
 # Casos De uso 
+![Casos de Uso no Figma](https://www.figma.com/board/wgrxUGQZNYCmVDGKUjQr75/DIAGRAMA-DE-CASO-DE-USO-(Community)?node-id=0-1&t=yvtsfLDaWPLSANSA-1)
+![{FE6FF162-EF1C-4D46-83F2-CAFC2363909B}](https://github.com/user-attachments/assets/bf26777c-d560-4cb5-ac06-4f46f3bb3924)
