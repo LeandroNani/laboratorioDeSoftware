@@ -72,7 +72,6 @@ O sistema segue a **arquitetura MVC (Model-View-Controller)** e os seguintes pad
 ## 🚀 Como Executar o Projeto
 ### 🔧 **Pré-requisitos**
 - .NET 7.0+ SDK
-- SQL Server ou SQLite
 ### **🏃‍♂️ Passos para rodar a aplicação**
 Clone o repositório:
 ````bash
