@@ -1,6 +1,6 @@
 # 🎓 Sistema de Matrículas - Universidade
 
-Este é um sistema de matrículas para uma universidade, desenvolvido em **ASP.NET Core**, permitindo que alunos realizem matrículas em disciplinas, professores acompanhem os alunos matriculados e a secretaria gerencie os currículos e ofertas de disciplinas.
+Este é um sistema de matrículas para uma universidade, desenvolvido em **C#**, permitindo que alunos realizem matrículas em disciplinas, professores acompanhem os alunos matriculados e a secretaria gerencie os currículos e ofertas de disciplinas.
 
 ---
 
