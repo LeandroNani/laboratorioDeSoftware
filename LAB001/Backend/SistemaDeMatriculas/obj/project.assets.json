@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Repos\\laboratorioDeSoftware\\LAB001\\SistemaDeMatriculas\\SistemaDeMatriculas.csproj",
+      "projectUniqueName": "G:\\repos\\laboratorioDeSoftware\\LAB001\\SistemaDeMatriculas\\SistemaDeMatriculas.csproj",
       "projectName": "SistemaDeMatriculas",
-      "projectPath": "C:\\Repos\\laboratorioDeSoftware\\LAB001\\SistemaDeMatriculas\\SistemaDeMatriculas.csproj",
+      "projectPath": "G:\\repos\\laboratorioDeSoftware\\LAB001\\SistemaDeMatriculas\\SistemaDeMatriculas.csproj",
       "packagesPath": "C:\\Users\\thiag\\.nuget\\packages\\",
-      "outputPath": "C:\\Repos\\laboratorioDeSoftware\\LAB001\\SistemaDeMatriculas\\obj\\",
+      "outputPath": "G:\\repos\\laboratorioDeSoftware\\LAB001\\SistemaDeMatriculas\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\thiag\\AppData\\Roaming\\NuGet\\NuGet.Config"
