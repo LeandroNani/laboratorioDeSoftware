@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "G:\\repos\\labSoftware01-Matriculas\\LAB001\\SistemaDeMatriculas\\SistemaDeMatriculas.csproj": {}
+    "C:\\Repos\\laboratorioDeSoftware\\LAB001\\SistemaDeMatriculas\\SistemaDeMatriculas.csproj": {}
   },
   "projects": {
-    "G:\\repos\\labSoftware01-Matriculas\\LAB001\\SistemaDeMatriculas\\SistemaDeMatriculas.csproj": {
+    "C:\\Repos\\laboratorioDeSoftware\\LAB001\\SistemaDeMatriculas\\SistemaDeMatriculas.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\repos\\labSoftware01-Matriculas\\LAB001\\SistemaDeMatriculas\\SistemaDeMatriculas.csproj",
+        "projectUniqueName": "C:\\Repos\\laboratorioDeSoftware\\LAB001\\SistemaDeMatriculas\\SistemaDeMatriculas.csproj",
         "projectName": "SistemaDeMatriculas",
-        "projectPath": "G:\\repos\\labSoftware01-Matriculas\\LAB001\\SistemaDeMatriculas\\SistemaDeMatriculas.csproj",
+        "projectPath": "C:\\Repos\\laboratorioDeSoftware\\LAB001\\SistemaDeMatriculas\\SistemaDeMatriculas.csproj",
         "packagesPath": "C:\\Users\\thiag\\.nuget\\packages\\",
-        "outputPath": "G:\\repos\\labSoftware01-Matriculas\\LAB001\\SistemaDeMatriculas\\obj\\",
+        "outputPath": "C:\\Repos\\laboratorioDeSoftware\\LAB001\\SistemaDeMatriculas\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\thiag\\AppData\\Roaming\\NuGet\\NuGet.Config"

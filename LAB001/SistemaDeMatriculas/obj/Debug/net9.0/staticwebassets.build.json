@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "wS2EJVClRUUqPmczLlEfkwxbwHdC42dXUWg6dy77xLs=",
+  "Source": "SistemaDeMatriculas",
+  "BasePath": "_content/SistemaDeMatriculas",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

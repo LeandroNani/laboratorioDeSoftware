@@ -1,7 +1,7 @@
-namespace AlunoRepository
-
-class AlunoRepository
+namespace SistemaDeMatriculas.Repositories
 {
-    public AlunoRepository(){}
-
+    public class AlunoRepository
+    {
+        public AlunoRepository(){}
+    }
 }
