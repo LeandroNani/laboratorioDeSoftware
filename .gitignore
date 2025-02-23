@@ -45,3 +45,4 @@ next-env.d.ts
 **/.vs
 **/obj
 **/bin
+**/config

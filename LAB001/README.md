@@ -113,4 +113,8 @@ Implementação inicial da API REST.
 
 # Casos De uso 
 [Casos de Uso no Figma](https://www.figma.com/board/wgrxUGQZNYCmVDGKUjQr75/DIAGRAMA-DE-CASO-DE-USO-(Community)?node-id=0-1&t=yvtsfLDaWPLSANSA-1)
-![{FE6FF162-EF1C-4D46-83F2-CAFC2363909B}](https://github.com/user-attachments/assets/bf26777c-d560-4cb5-ac06-4f46f3bb3924)
+![alt text](/LAB001/images/casosdeuso.png)
+
+# Diagrama de Classes
+[Diagrama de classes no Figma](https://www.figma.com/board/nv4dDPlsAJE6QxKSL0CkC2/Class-Diagram-Template-(Community)?node-id=0-1&t=e14welY9WEIl3acg-1)
+![alt text](/LAB001/images/diagramadeclasses.png)
