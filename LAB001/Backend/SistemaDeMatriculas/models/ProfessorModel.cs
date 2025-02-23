@@ -1,5 +1,4 @@
 namespace SistemaDeMatriculas.Models
-using SistemaDeMatriculas.Models
 {
     public class ProfessorModel : PessoaModel
     {
