@@ -1,41 +1,28 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+// Adiciona serviços ao contêiner
+builder.Services.AddControllers();
+
+// Adiciona suporte ao Swagger/OpenAPI
+builder.Services.AddEndpointsApiExplorer();
+//builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+// Configura o pipeline HTTP
+if (app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    //app.UseSwagger(); // Gera o JSON do Swagger
+    //app.UseSwaggerUI(); // Interface interativa do Swagger
 }
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowNextJs", policy =>
-    {
-        policy.WithOrigins("http://localhost:3000") // Next.js dev server
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
-});
-
-app.UseCors("AllowNextJs");
-
 app.UseHttpsRedirection();
-app.UseRouting();
-
 app.UseAuthorization();
 
-app.MapStaticAssets();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
-
+app.MapControllers(); // Mapeia os endpoints dos controllers
 
 app.Run();
