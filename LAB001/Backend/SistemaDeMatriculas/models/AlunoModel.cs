@@ -12,7 +12,7 @@ namespace SistemaDeMatriculas.Models
         public required int Mensalidade { get; set; }
 
 
-        public AlunoModel()
+        public AlunoModel() : base()
         {
         }
     }
