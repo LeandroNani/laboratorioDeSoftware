@@ -8,7 +8,6 @@ namespace Backend.src.services.interfaces
         void AtualizarDisciplina();
         void RemoverDisciplina();
         void AlocarProfessor();
-
         List<DisciplinaModel> ListarDisciplinas();
         // ...
     }

@@ -3,18 +3,31 @@ using Microsoft.AspNetCore.Mvc;
 using Backend.src.services;
 using System.Threading.Tasks;
 using Backend.src.Data;
+using Backend.src.DTOs;
 namespace Backend.src.controllers
 {
     [ApiController]
     [Route("[controller]")] // Define a rota como /aluno
-    public class AlunoController(AppDbContext context) : ControllerBase {
-        private readonly AppDbContext _context = context;
+    public class AlunoController : ControllerBase {
+        private readonly AppDbContext _context;
+        private readonly AlunoService _alunoService;
 
-        [HttpPost]
+        public AlunoController(AppDbContext context) {
+            _context = context;
+            _alunoService = new AlunoService(_context);
+        }
+
+        [HttpPost("adicionar")]
         public async Task<IActionResult> AdicionarAluno(AlunoModel aluno)
         {
-            await new AlunoService(_context).AdicionarAluno(aluno);
+            await _alunoService.AdicionarAluno(aluno);
             return Ok(aluno);
+        }
+
+        [HttpPost("login")]
+        public IActionResult Login(LoginRequest loginRequest)
+        {
+            return Ok(loginRequest);
         }
     }
 }

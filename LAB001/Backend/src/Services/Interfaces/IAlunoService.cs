@@ -1,3 +1,4 @@
+using Backend.src.DTOs;
 using Backend.src.models;
 
 namespace Backend.src.services.interfaces
@@ -6,11 +7,10 @@ namespace Backend.src.services.interfaces
     {
         Task AdicionarAluno(AlunoModel aluno);
         Task AtualizarAluno(string id);
+        Task Login(LoginRequest loginRequest);
         Task RemoverAluno();
         Task EfetuarMatricula();
         Task CancelarMatricula();
-
-
         List<AlunoModel> ListarAlunos();
         // ...
     }

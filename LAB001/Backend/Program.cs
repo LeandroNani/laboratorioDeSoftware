@@ -15,6 +15,17 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddSwaggerGen();
 
+// Adicionando CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 // Adicionando Controllers e Serviços
 builder.Services.AddControllers();
 
@@ -25,6 +36,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Ativando CORS
+app.UseCors("AllowAll");
 
 // Ativando Controllers
 app.MapControllers();

@@ -1,22 +1,22 @@
-"use client"
+'use client'
 
-import type React from "react"
-
-import { useState } from "react"
+import React, { useState } from "react"
 import { Eye, EyeOff } from "lucide-react"
 import { Button } from "react-bootstrap"
 import { Form } from "react-bootstrap"
+import { login } from "@/api/login"
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    numeroDePessoa: "",
+    senha: "",
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log(formData)
+    const response = await login({ ...formData, numeroDePessoa: Number(formData.numeroDePessoa) });
+    if(response.status === 200) window.location.href = "/"
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,49 +32,54 @@ export default function LoginPage() {
       <div className="w-full max-w-4xl bg-white rounded-3xl shadow-xl overflow-hidden">
         <div className="grid lg:grid-cols-2">
           <div className="p-8 lg:p-12">
-            {/* Header Section */}
             <div className="space-y-3 mb-8">
               <h1 className="text-3xl font-bold text-gray-900">Login</h1>
               <p className="text-gray-600">Bem vindo(a) de volta</p>
             </div>
 
-            {/* Form Section */}
             <form onSubmit={handleSubmit} className="space-y-6">
-                <label htmlFor="email" className="text-black">Email</label>
-                <div className="relative">
-                  <Form.Control
-                    id="email"
-                    name="email"
-                    type={showPassword ? "text" : "email"}
-                    placeholder="Email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="h-12 pr-10 text-black"
-                    required
-                  />
+              <div className="relative">
+                <Form.Control
+                  id="numeroDePessoa"
+                  name="numeroDePessoa"
+                  type="number"
+                  placeholder=" "
+                  value={formData.numeroDePessoa}
+                  onChange={handleChange}
+                  className="peer h-12 w-full border-b-2 border-gray-300 text-black placeholder-transparent focus:outline-none focus:border-red-500"
+                  required
+                />
+                <label
+                  htmlFor="numeroDePessoa"
+                  className="absolute left-0 -top-3.5 text-gray-600 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-red-500 peer-focus:text-sm"
+                >
+                  Número de pessoa
+                </label>
               </div>
 
-              <div className="space-y-2">
-                <label htmlFor="password" className="text-black">Senha</label>
-                <div className="relative">
-                  <Form.Control
-                    id="password"
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Senha"
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="h-12 pr-10 text-black"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                  >
-                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                  </button>
-                </div>
+              <div className="relative">
+                <Form.Control
+                  id="senha"
+                  name="senha"
+                  type={showPassword ? "text" : "password"}
+                  placeholder=" "
+                  value={formData.senha}
+                  onChange={handleChange}
+                  className="peer h-12 w-full border-b-2 border-gray-300 text-black placeholder-transparent focus:outline-none focus:border-red-500"
+                  required
+                />
+                <label
+                  htmlFor="senha"
+                  className="absolute left-0 -top-3.5 text-gray-600 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-red-500 peer-focus:text-sm"
+                >
+                  Senha
+                </label>
+                <Button
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-3.5 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </Button>
               </div>
 
               <div className="flex items-center justify-between">
@@ -90,13 +95,6 @@ export default function LoginPage() {
               <Button type="submit" className="w-full h-12 bg-red-500 hover:bg-red-600">
                 Login
               </Button>
-
-              <p className="text-center text-sm text-gray-600">
-                Não tem uma conta?{" "}
-                <a href="#" className="font-medium text-red-600 hover:text-red-500">
-                  Registre-se
-                </a>
-              </p>
             </form>
           </div>
 
@@ -104,13 +102,7 @@ export default function LoginPage() {
           <div className="hidden lg:block relative">
             <div className="absolute inset-0 bg-gradient-to-br from-red-100 to-red-50/90" />
             <div className="absolute inset-0 flex items-center justify-center p-8">
-              {/* <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/robot_img-6laTjTJeW0iHaHwxvzCsi6UrMVm1t4.png"
-                alt="Robot illustration"
-                width={300}
-                height={300}
-                className="w-full h-auto max-w-md transform -rotate-6"
-              /> */}
+              {/* <Image src="/images/image.png" alt="Login" width={400} height={400} /> */}
             </div>
           </div>
         </div>
@@ -118,4 +110,3 @@ export default function LoginPage() {
     </div>
   )
 }
-
