@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.src.models
@@ -5,6 +6,7 @@ namespace Backend.src.models
     [Table("curso")]
     public class CursoModel
     {
+        [Key]
         public required string Id { get; set; }
         public required string Nome { get; set; }
         public required List<DisciplinaModel> Disciplinas { get; set; }

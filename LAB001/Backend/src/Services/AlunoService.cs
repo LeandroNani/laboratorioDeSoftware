@@ -12,6 +12,7 @@ namespace Backend.src.services
         public async Task AdicionarAluno(AlunoModel aluno)
         {
             await _context.Alunos.AddAsync(aluno);
+            await _context.SaveChangesAsync(); 
         }
 
         public async Task AtualizarAluno(string id)
