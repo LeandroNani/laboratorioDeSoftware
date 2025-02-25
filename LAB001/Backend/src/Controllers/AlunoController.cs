@@ -1,7 +1,6 @@
 using Backend.src.models;
 using Microsoft.AspNetCore.Mvc;
 using Backend.src.services;
-using System.Threading.Tasks;
 using Backend.src.Data;
 using Backend.src.DTOs;
 namespace Backend.src.controllers
@@ -25,9 +24,10 @@ namespace Backend.src.controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login(LoginRequest loginRequest)
+        public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
-            return Ok(loginRequest);
+            AlunoModel aluno = await _alunoService.Login(loginRequest);
+            return Ok(aluno);
         }
     }
 }

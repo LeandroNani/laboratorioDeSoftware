@@ -1,8 +1,8 @@
 using Backend.src.models;
 using Backend.src.services.interfaces;
 using Backend.src.Data;
-using System.Threading.Tasks;
 using Backend.src.DTOs;
+using Backend.src.Middleware.Exceptions;
 
 namespace Backend.src.services
 {
@@ -26,7 +26,7 @@ namespace Backend.src.services
             }
             else
             {
-                throw new KeyNotFoundException($"Aluno com id {id} não encontrado");
+                throw new NotFoundException($"Aluno com id {id} não encontrado");
             }
         }
 
@@ -45,9 +45,10 @@ namespace Backend.src.services
             throw new NotImplementedException();
         }
 
-        public Task Login(LoginRequest loginRequest)
+        public async Task<AlunoModel> Login(LoginRequest loginRequest)
         {
-            throw new NotImplementedException();
+            AlunoModel? aluno = await _context.Alunos.FindAsync(loginRequest.NumeroDePessoa);
+            return aluno ?? throw new NotFoundException($"Aluno com Numero de Pessoa {loginRequest.NumeroDePessoa} não encontrado");
         }
 
         public Task RemoverAluno()
