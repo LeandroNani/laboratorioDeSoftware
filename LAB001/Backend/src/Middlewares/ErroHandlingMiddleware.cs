@@ -1,8 +1,8 @@
 using System.Net;
 using System.Text.Json;
-using Backend.src.Middleware.Exceptions;
+using Backend.src.Middlewares.Exceptions;
 
-namespace Backend.src.Middleware;
+namespace Backend.src.Middlewares;
 public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
 {
     private readonly RequestDelegate _next = next;

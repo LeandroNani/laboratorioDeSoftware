@@ -1,4 +1,4 @@
-namespace Backend.src.Middleware.Exceptions
+namespace Backend.src.Middlewares.Exceptions
 {
     public class NotFoundException(string message) : Exception(message)
     {

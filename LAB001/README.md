@@ -59,14 +59,45 @@ O sistema segue a **arquitetura MVC (Model-View-Controller)** e os seguintes pad
 ## 📂 Estrutura de Diretórios
 
 ```plaintext
-/SistemaMatriculas
-│── /SistemaMatriculas.Web          # Camada de apresentação (MVC)
-│── /SistemaMatriculas.Application  # Serviços e Regras de Negócio
-│── /SistemaMatriculas.Domain       # Modelagem do Domínio
-│── /SistemaMatriculas.Infrastructure # Banco de dados e Repositórios
-│── /SistemaMatriculas.Tests        # Testes Unitários
-│── SistemaMatriculas.sln           # Solução do projeto
-│── README.md                       # Documentação do projeto
+/LAB001
+│── /Backend
+│   │── /bin                      # Compiled binaries
+│   │── /Migrations               # Database migrations
+│   │   │──                       # Database 
+│   │── /obj                      # Object files
+│   │── /Properties               # Project properties
+│   │── /src  
+│   │   │── /Controllers         
+│   │   │── /Data
+│   │   │── /DTOs
+│   │   │── /Middlewares
+│   │   │   │── /Exceptions
+│   │   │── /Models
+│   │   │── /Services
+│   │   │   │── /Helpers
+│   │   │   │── /Interfaces
+│   │── appsettings.Development.json # Development settings
+│   │── appsettings.json          # Application settings
+│   │── Backend.csproj            # Project file
+│   │── Backend.sln               # Solution file
+│   │── Program.cs                # Main program file
+│   │── README.md                 # Backend documentation
+│── /doc
+│   │── README.md                 # Documentation
+│── /Frontend
+│   │── /sistema-de-matriculas    # Frontend source code
+│   │   │── /public
+│   │   │── /src
+│   │   │   │── /api
+│   │   │   │   │── /lib
+│   │   │   │── /app
+│   │   │   │   │── /(pages)
+│   │   │   │── /types
+│── /images
+│   │── casosdeuso.png            # Use case diagram
+│   │── diagrama_de_classes_v2.0.png # Class diagram v2.0
+│   │── diagramadeclasses.png     # Class diagram
+│── README.md                     # Project documentation
 ```` 
 ---
 ## 🚀 Como Executar o Projeto
@@ -92,29 +123,3 @@ Inicie o projeto:
 ````bash
 dotnet run --project SistemaMatriculas.Web
 ````
-
-## 📜 Histórico de Versões
-### 📅 Sprint 1
-Criado modelo de caso de uso e histórias de usuário
-Implementação inicial da API REST.
-
----
-# Histórias de Usuário
-
-| Número | Ator       | Descrição                                                                                   |
-|--------|------------|---------------------------------------------------------------------------------------------|
-| 01     | Admin      | O admin deve gerenciar cada curso (Nome, Número de Créditos, Disciplinas).                  |
-| 02     | Usuário    | O usuário deve logar no sistema como admin, aluno ou professor.                             |
-| 03     | Aluno      | O aluno deve poder se matricular em uma disciplina, seguindo as restrições definidas.       |
-| 04     | Aluno      | O aluno deve poder cancelar as matrículas feitas no período certo.                          |
-| 05     | Aluno      | O aluno só terá sua disciplina confirmada se houver ao menos 3 alunos matriculados.         |
-| 06     | Aluno      | O aluno deve ser notificado e cobrado pelas disciplinas daquele semestre.                   |
-| 07     | Professor  | O professor deve poder ver quais são os alunos matriculados em cada disciplina.             |
-
-# Casos De uso 
-[Casos de Uso no Figma](https://www.figma.com/board/wgrxUGQZNYCmVDGKUjQr75/DIAGRAMA-DE-CASO-DE-USO-(Community)?node-id=0-1&t=yvtsfLDaWPLSANSA-1)
-![alt text](/LAB001/images/casosdeuso.png)
-
-# Diagrama de Classes
-[Diagrama de classes no Figma](https://www.figma.com/board/nv4dDPlsAJE6QxKSL0CkC2/Class-Diagram-Template-(Community)?node-id=0-1&t=e14welY9WEIl3acg-1)
-![alt text](/LAB001/images/diagramadeclasses.png)
