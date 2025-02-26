@@ -5,6 +5,7 @@ import { Eye, EyeOff } from "lucide-react"
 import { Button } from "react-bootstrap"
 import { Form } from "react-bootstrap"
 import { login } from "@/api/login"
+import Image from 'next/image'
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -16,7 +17,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const response = await login({ ...formData, numeroDePessoa: Number(formData.numeroDePessoa) });
-    if(response.status === 200) window.location.href = "/"
+    if (response.status === 200) window.location.href = "/"
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,27 +83,15 @@ export default function LoginPage() {
                 </Button>
               </div>
 
-              <div className="flex items-center justify-between">
-                <label className="flex items-center gap-2">
-                  <input type="checkbox" className="rounded border-gray-300 text-red-500 focus:ring-red-500" />
-                  <span className="text-sm text-gray-600">Remember me</span>
-                </label>
-                <a href="#" className="text-sm font-medium text-red-600 hover:text-red-500">
-                  Esqueceu a senha
-                </a>
-              </div>
 
               <Button type="submit" className="w-full h-12 bg-red-500 hover:bg-red-600">
                 Login
               </Button>
             </form>
           </div>
-
-          {/* Image Section */}
           <div className="hidden lg:block relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-red-100 to-red-50/90" />
-            <div className="absolute inset-0 flex items-center justify-center p-8">
-              {/* <Image src="/images/image.png" alt="Login" width={400} height={400} /> */}
+            <div className="absolute inset-0 bg-gradient-to-br from-red-100 to-red-50/90 z-0 flex items-center justify-center">
+              <Image src="/brasao-escaladecinza.png" alt="Login" width={400} height={400} className="relative z-10" />
             </div>
           </div>
         </div>

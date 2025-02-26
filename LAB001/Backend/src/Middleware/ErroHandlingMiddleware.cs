@@ -46,6 +46,10 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
                 statusCode = (int)HttpStatusCode.NotFound;
                 message = keyNotFoundEx.Message;
                 break;
+            case InvalidPasswordException invalidPasswordException:
+                statusCode = (int)HttpStatusCode.Unauthorized;
+                message = invalidPasswordException.Message;
+                break;
             default:
                 message = exception.Message;
                 break;

@@ -15,4 +15,8 @@ namespace Backend.src.Middleware.Exceptions
     public class KeyNotFoundException(string message) : Exception(message)
     {
     }
+
+    public class InvalidPasswordException(string message) : Exception(message)
+    {
+    }
 }

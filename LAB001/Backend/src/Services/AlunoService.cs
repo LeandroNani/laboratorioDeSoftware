@@ -47,8 +47,14 @@ namespace Backend.src.services
 
         public async Task<AlunoModel> Login(LoginRequest loginRequest)
         {
-            AlunoModel? aluno = await _context.Alunos.FindAsync(loginRequest.NumeroDePessoa);
-            return aluno ?? throw new NotFoundException($"Aluno com Numero de Pessoa {loginRequest.NumeroDePessoa} não encontrado");
+            var aluno = await _context.Alunos.FindAsync(loginRequest.NumeroDePessoa) 
+            ?? throw new NotFoundException($"Aluno com numero de pessoa {loginRequest.NumeroDePessoa} não encontrado");
+
+            if (!loginRequest.Senha.Equals(aluno.Senha))
+            {
+            throw new InvalidPasswordException("Senha incorreta");
+            }
+            return aluno;
         }
 
         public Task RemoverAluno()
