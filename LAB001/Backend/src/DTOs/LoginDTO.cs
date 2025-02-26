@@ -6,7 +6,6 @@ namespace Backend.src.DTOs
     {
         [Required]
         public required int NumeroDePessoa { get; set; }
-        
         [Required]
         public required string Senha { get; set; }
     }

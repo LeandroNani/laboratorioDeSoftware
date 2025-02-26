@@ -50,6 +50,10 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
                 statusCode = (int)HttpStatusCode.Unauthorized;
                 message = invalidPasswordException.Message;
                 break;
+            case Exceptions.InvalidOperationException invalidOperationException:
+                statusCode = (int)HttpStatusCode.BadRequest;
+                message = invalidOperationException.Message;
+                break;
             default:
                 message = exception.Message;
                 break;

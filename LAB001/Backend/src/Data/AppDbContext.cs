@@ -1,5 +1,5 @@
 using Backend.src.models;
-
+using Backend.src.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.src.Data
@@ -14,7 +14,8 @@ namespace Backend.src.Data
         public DbSet<PessoaModel> Pessoas { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<AlunoDisciplina>()
+            .HasKey(ad => new { ad.AlunoId, ad.DisciplinaId });
         }
     }
 }

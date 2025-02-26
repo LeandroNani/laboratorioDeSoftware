@@ -8,6 +8,7 @@ namespace Backend.src.models
         public CursoModel? Curso { get; set; }
         public required string Matricula { get; set; }
         public List<DisciplinaModel>? DisciplinasCursadas { get; set; }
+        public List<DisciplinaModel>? PlanoDeEnsino { get; set; } // Disciplinas que o aluno está cursando atualmente
         public required string Email { get; set; }
         public required int Mensalidade { get; set; }
 

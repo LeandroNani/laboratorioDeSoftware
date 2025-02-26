@@ -6,10 +6,10 @@ namespace Backend.src.services.interfaces
     public interface IAlunoService
     {
         Task AdicionarAluno(AlunoModel aluno);
-        Task AtualizarAluno(string id);
+        Task AtualizarAluno(int id);
         Task<AlunoModel> Login(LoginRequest loginRequest);
         Task RemoverAluno();
-        Task EfetuarMatricula();
+        Task<AlunoModel> EfetuarMatricula(EfetuarMatriculaRequest efetuarMatriculaRequest);
         Task CancelarMatricula();
         List<AlunoModel> ListarAlunos();
         // ...
