@@ -3,6 +3,7 @@ using System.Text.Json;
 using Backend.src.Middlewares.Exceptions;
 
 namespace Backend.src.Middlewares;
+
 public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
 {
     private readonly RequestDelegate _next = next;
@@ -24,7 +25,7 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
     private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         int statusCode = (int)HttpStatusCode.InternalServerError;
-        string message;
+        string message = "Something went wrong. Error: " + exception.Message;
 
         switch (exception)
         {
@@ -32,12 +33,10 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
                 statusCode = (int)HttpStatusCode.NotFound;
                 message = notFoundEx.Message;
                 break;
-
             case BadRequestException badRequestEx:
                 statusCode = (int)HttpStatusCode.BadRequest;
                 message = badRequestEx.Message;
                 break;
-
             case UnauthorizedException unauthorizedEx:
                 statusCode = (int)HttpStatusCode.Unauthorized;
                 message = unauthorizedEx.Message;
@@ -55,18 +54,13 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
                 message = invalidOperationException.Message;
                 break;
             default:
-                message = exception.Message;
                 break;
         }
 
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = statusCode;
 
-        var result = JsonSerializer.Serialize(new
-        {
-            error = message,
-            statusCode
-        });
+        var result = JsonSerializer.Serialize(new { error = message, statusCode });
 
         return context.Response.WriteAsync(result);
     }

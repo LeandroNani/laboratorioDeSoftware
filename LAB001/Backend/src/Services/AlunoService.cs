@@ -1,18 +1,18 @@
-using Backend.src.models;
-using Backend.src.services.interfaces;
 using Backend.src.Data;
 using Backend.src.DTOs;
-using Backend.src.Middleware.Exceptions;
+using Backend.src.Middlewares.Exceptions;
+using Backend.src.models;
 using Backend.src.services.Helpers;
+using Backend.src.services.interfaces;
 using Microsoft.EntityFrameworkCore;
-using InvalidOperationException = Backend.src.Middleware.Exceptions.InvalidOperationException;
+using InvalidOperationException = Backend.src.Middlewares.Exceptions.InvalidOperationException;
 
 namespace Backend.src.services
 {
     public class AlunoService(AppDbContext context) : IAlunoService
     {
         private readonly AppDbContext _context = context;
-        private readonly AlunoHelper _alunoHelper = new (context);
+        private readonly AlunoHelper _alunoHelper = new(context);
 
         public async Task AdicionarAluno(AlunoModel aluno)
         {
@@ -28,7 +28,11 @@ namespace Backend.src.services
         // TODO: Fazer a lógica correta para atualização genérica de um aluno
         public async Task AtualizarAluno(int numeroDePessoa)
         {
-            var aluno = await _context.Alunos.FindAsync(numeroDePessoa) ?? throw new NotFoundException($"Aluno com número de pessoa {numeroDePessoa} não encontrado");
+            var aluno =
+                await _context.Alunos.FindAsync(numeroDePessoa)
+                ?? throw new NotFoundException(
+                    $"Aluno com número de pessoa {numeroDePessoa} não encontrado"
+                );
             _context.Alunos.Update(aluno);
             await _context.SaveChangesAsync();
         }
@@ -38,23 +42,40 @@ namespace Backend.src.services
             throw new NotImplementedException();
         }
 
-        public async Task<AlunoModel> EfetuarMatricula(EfetuarMatriculaRequest efetuarMatriculaRequest)
+        public async Task<AlunoModel> EfetuarMatricula(
+            EfetuarMatriculaRequest efetuarMatriculaRequest
+        )
         {
-            var aluno = await _alunoHelper.FindAlunoByNumeroDePessoa(efetuarMatriculaRequest.NumeroDePessoa);
+            var aluno = await _alunoHelper.FindAlunoByNumeroDePessoa(
+                efetuarMatriculaRequest.NumeroDePessoa
+            );
 
-            if (efetuarMatriculaRequest.Disciplinas == null || efetuarMatriculaRequest.Disciplinas.Count == 0)
+            if (
+                efetuarMatriculaRequest.Disciplinas == null
+                || efetuarMatriculaRequest.Disciplinas.Count == 0
+            )
             {
                 throw new InvalidOperationException("A lista de disciplinas não pode estar vazia");
             }
 
             aluno.PlanoDeEnsino ??= [];
-            aluno.PlanoDeEnsino.AddRange(efetuarMatriculaRequest.Disciplinas);
-
+            List<DisciplinaModel> disciplinas = efetuarMatriculaRequest.Disciplinas;
+            foreach (var disciplina in disciplinas)
+            {
+                if (aluno.PlanoDeEnsino.Contains(disciplina))
+                {
+                    throw new InvalidOperationException(
+                        $"Aluno já está matriculado na disciplina {disciplina.Nome}"
+                    );
+                }
+                aluno.PlanoDeEnsino.Add(disciplina);
+            }
             _context.Alunos.Update(aluno);
             await _context.SaveChangesAsync();
 
             return aluno;
         }
+
         // TODO: listagem de alunos
         public List<AlunoModel> ListarAlunos()
         {
@@ -70,6 +91,7 @@ namespace Backend.src.services
             }
             return aluno;
         }
+
         // TODO: remoção de um aluno
         public Task RemoverAluno()
         {

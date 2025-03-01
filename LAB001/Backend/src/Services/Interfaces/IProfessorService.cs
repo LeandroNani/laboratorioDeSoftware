@@ -7,7 +7,7 @@ namespace Backend.src.services.interfaces
         void AdicionarProfessor();
         void AtualizarProfessor();
         void RemoverProfessor();
-        void AlocarDisciplina();
+        Task<DisciplinaModel> AlocarDisciplina(int numeroDePessoa, DisciplinaModel disciplina);
         List<ProfessorModel> ListarProfessores();
         // ...
     }
