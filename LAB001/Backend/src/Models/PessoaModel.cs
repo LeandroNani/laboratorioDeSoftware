@@ -7,7 +7,7 @@ namespace Backend.src.models
     public abstract class PessoaModel
     {
         [Key]
-        public int? NumeroDePessoa { get; set; }
+        public required int NumeroDePessoa { get; set; }
         public required string Nome { get; set; }
         public required string Senha { get; set; }
 

@@ -1,6 +1,7 @@
 using Backend.src.models;
 using Backend.src.services.interfaces;
-namespace  Backend.src.services
+
+namespace Backend.src.services
 {
     public class DisciplinaService : IDisciplinaService
     {
