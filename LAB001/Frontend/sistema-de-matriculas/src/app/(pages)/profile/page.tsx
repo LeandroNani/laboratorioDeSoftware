@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Aluno } from "@/types/aluno.type";
-import { FiUser, FiBook, FiSettings } from "react-icons/fi";
+import { FiUser, FiBook } from "react-icons/fi";
 import Navbar from "@/components/Navbar";
 
 const PerfilPage = () => {
