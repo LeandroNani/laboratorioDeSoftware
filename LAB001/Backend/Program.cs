@@ -1,5 +1,5 @@
 using Backend.src.Data;
-using Backend.src.Middleware;
+using Backend.src.Middlewares;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
