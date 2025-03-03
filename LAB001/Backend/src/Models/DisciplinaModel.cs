@@ -16,7 +16,20 @@ namespace Backend.src.models
         public required List<DisciplinaModel> DisciplinasNecessarias { get; set; }
         public required string Campus { get; set; }
         public required bool Optativa { get; set; }
-
-        public DisciplinaModel() { }
+        private int _quantAlunos;
+        public required int QuantAlunos
+        {
+            get => _quantAlunos;
+            set
+            {
+                if (value > 60)
+                {
+                    throw new InvalidOperationException(
+                        "Uma disciplina pode ter, no máximo, 60 alunos"
+                    );
+                }
+                _quantAlunos = value;
+            }
+        }
     }
 }

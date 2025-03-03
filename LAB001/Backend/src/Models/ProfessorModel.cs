@@ -9,8 +9,5 @@ namespace Backend.src.models
         public required List<DisciplinaModel> Disciplinas { get; set; }
         public required string NivelEscolar { get; set; }
         public string Type = RoleExtensions.ToString(Role.PROFESSOR);
-
-        public ProfessorModel()
-            : base() { }
     }
 }

@@ -1,6 +1,5 @@
 using Backend.src.Data;
 using Backend.src.DTOs;
-using Backend.src.Middlewares.Exceptions;
 using Backend.src.models;
 using Backend.src.services.Helpers;
 using Backend.src.services.interfaces;
@@ -28,11 +27,7 @@ namespace Backend.src.services
         // TODO: Fazer a lógica correta para atualização genérica de um aluno
         public async Task AtualizarAluno(int numeroDePessoa)
         {
-            var aluno =
-                await _context.Alunos.FindAsync(numeroDePessoa)
-                ?? throw new NotFoundException(
-                    $"Aluno com número de pessoa {numeroDePessoa} não encontrado"
-                );
+            AlunoModel aluno = await _alunoHelper.FindAlunoByNumeroDePessoa(numeroDePessoa);
             _context.Alunos.Update(aluno);
             await _context.SaveChangesAsync();
         }
@@ -46,7 +41,7 @@ namespace Backend.src.services
             EfetuarMatriculaRequest efetuarMatriculaRequest
         )
         {
-            var aluno = await _alunoHelper.FindAlunoByNumeroDePessoa(
+            AlunoModel aluno = await _alunoHelper.FindAlunoByNumeroDePessoa(
                 efetuarMatriculaRequest.NumeroDePessoa
             );
 
@@ -80,16 +75,6 @@ namespace Backend.src.services
         public List<AlunoModel> ListarAlunos()
         {
             throw new NotImplementedException();
-        }
-
-        public async Task<AlunoModel> Login(LoginRequest loginRequest)
-        {
-            var aluno = await _alunoHelper.FindAlunoByNumeroDePessoa(loginRequest.NumeroDePessoa);
-            if (aluno == null || !loginRequest.Senha.Equals(aluno.Senha))
-            {
-                throw new InvalidPasswordException("Senha incorreta");
-            }
-            return aluno;
         }
 
         // TODO: remoção de um aluno

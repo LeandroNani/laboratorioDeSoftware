@@ -25,12 +25,5 @@ namespace Backend.src.controllers
             await _alunoService.AdicionarAluno(aluno);
             return Ok(aluno);
         }
-
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginRequest loginRequest)
-        {
-            AlunoModel aluno = await _alunoService.Login(loginRequest);
-            return Ok(aluno);
-        }
     }
 }

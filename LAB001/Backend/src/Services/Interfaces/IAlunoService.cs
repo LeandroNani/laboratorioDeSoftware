@@ -7,7 +7,6 @@ namespace Backend.src.services.interfaces
     {
         Task AdicionarAluno(AlunoModel aluno);
         Task AtualizarAluno(int id);
-        Task<AlunoModel> Login(LoginRequest loginRequest);
         Task RemoverAluno();
         Task<AlunoModel> EfetuarMatricula(EfetuarMatriculaRequest efetuarMatriculaRequest);
         Task CancelarMatricula();

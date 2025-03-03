@@ -15,7 +15,5 @@ namespace Backend.src.models
         public required List<ProfessorModel> Professores { get; set; }
         public required List<CursoModel> Curso { get; set; }
         public required string Semestre { get; set; }
-
-        public CurriculoModel() { }
     }
 }

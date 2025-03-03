@@ -12,10 +12,12 @@ namespace Backend.src.Data
         public DbSet<CursoModel> Cursos { get; set; }
         public DbSet<CurriculoModel> Curriculos { get; set; }
         public DbSet<PessoaModel> Pessoas { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AlunoDisciplina>()
-            .HasKey(ad => new { ad.AlunoId, ad.DisciplinaId });
+            modelBuilder
+                .Entity<AlunoDisciplina>()
+                .HasKey(ad => new { ad.AlunoId, ad.DisciplinaId });
         }
     }
 }

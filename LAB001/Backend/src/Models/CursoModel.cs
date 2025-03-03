@@ -12,7 +12,5 @@ namespace Backend.src.models
         public required List<DisciplinaModel> Disciplinas { get; set; }
         public required List<AlunoModel> Alunos { get; set; }
         public required int NumeroDeCreditos { get; set; }
-
-        public CursoModel() { }
     }
 }
