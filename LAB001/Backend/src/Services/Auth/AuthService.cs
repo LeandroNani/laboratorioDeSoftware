@@ -12,10 +12,13 @@ namespace Backend.src.services.Auth
 
         public async Task<object> Login(LoginRequest loginRequest)
         {
-            var pessoa = await _context.Pessoas.FindAsync(loginRequest.NumeroDePessoa);
+            var pessoa =
+                await _context.Pessoas.FindAsync(loginRequest.NumeroDePessoa)
+                ?? throw new NotFoundException(
+                    "Este número de pessoa ainda não foi cadastrado, entre em contato com a secretaria"
+                );
             if (
-                pessoa != null
-                && pessoa.NumeroDePessoa.Equals(loginRequest.NumeroDePessoa)
+                pessoa.NumeroDePessoa.Equals(loginRequest.NumeroDePessoa)
                 && pessoa.Senha.Equals(loginRequest.Senha)
             )
             {

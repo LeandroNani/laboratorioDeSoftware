@@ -23,13 +23,13 @@ export default function LoginPage() {
     e.preventDefault()
     try {
       const response = await login({ ...formData, numeroDePessoa: Number(formData.numeroDePessoa) })
-      
+
       if (response.status === 200) {
         window.location.href = "/"
       }
     } catch (error) {
-      if (error instanceof AxiosError && error.response && error.response.status === 401) {
-        toast.error("Número de pessoa ou senha incorretos!", {
+      if (error instanceof AxiosError && error.response && error.status === 401) {
+        toast.error(error.response.data.error, {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
@@ -39,7 +39,22 @@ export default function LoginPage() {
           progress: undefined,
           theme: "colored",
         })
-      } else {
+        return;
+      }
+      if (error instanceof AxiosError && error.response && error.status === 404) {
+        toast.error(error.response.data.error, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        })
+        return;
+      }
+      else {
         toast.error("Erro ao tentar fazer login. Tente novamente.", {
           position: "top-right",
           autoClose: 3000,
@@ -50,10 +65,11 @@ export default function LoginPage() {
           progress: undefined,
           theme: "colored",
         })
+        return
       }
     }
   }
-  
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
