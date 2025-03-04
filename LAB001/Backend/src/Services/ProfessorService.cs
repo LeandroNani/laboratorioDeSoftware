@@ -1,6 +1,5 @@
 using Backend.src.Data;
-using Backend.src.DTOs.ProfessorDTO;
-using Backend.src.Middlewares.Exceptions;
+using Backend.src.DTOs;
 using Backend.src.models;
 using Backend.src.services.Helpers;
 using Backend.src.services.interfaces;

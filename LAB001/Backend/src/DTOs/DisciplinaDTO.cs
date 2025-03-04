@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Backend.src.models;
 
-namespace Backend.src.DTOs.DisciplinaDTO
+namespace Backend.src.DTOs
 {
     public class AdicionarDisciplinaRequest
     {

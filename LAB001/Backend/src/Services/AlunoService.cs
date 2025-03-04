@@ -1,7 +1,5 @@
-using System.Threading.Tasks;
 using Backend.src.Data;
 using Backend.src.DTOs;
-using Backend.src.DTOs.AlunoDTO;
 using Backend.src.models;
 using Backend.src.services.Helpers;
 using Backend.src.services.interfaces;
@@ -55,17 +53,17 @@ namespace Backend.src.services
                 throw new InvalidOperationException("A lista de disciplinas não pode estar vazia");
             }
 
-            aluno.PlanoDeEnsino ??= [];
+            aluno.Matricula.PlanoDeEnsino ??= [];
             List<DisciplinaModel> disciplinas = efetuarMatriculaRequest.Disciplinas;
             foreach (var disciplina in disciplinas)
             {
-                if (aluno.PlanoDeEnsino.Contains(disciplina))
+                if (aluno.Matricula.PlanoDeEnsino.Contains(disciplina))
                 {
                     throw new InvalidOperationException(
                         $"Aluno já está matriculado na disciplina {disciplina.Nome}"
                     );
                 }
-                aluno.PlanoDeEnsino.Add(disciplina);
+                aluno.Matricula.PlanoDeEnsino.Add(disciplina);
             }
             _context.Alunos.Update(aluno);
             await _context.SaveChangesAsync();
@@ -79,7 +77,6 @@ namespace Backend.src.services
             return alunos;
         }
 
-        // TODO: remoção de um aluno
         public async Task<AlunoModel> RemoverAluno(RemoverAlunoRequest removerAlunoRequest)
         {
             AlunoModel aluno = await _alunoHelper.FindAlunoByNumeroDePessoa(
@@ -95,7 +92,7 @@ namespace Backend.src.services
                 getPrecoSemestre.NumeroDePessoa
             );
 
-            int preco = aluno.PlanoDeEnsino?.Sum(disciplina => disciplina.Preco) ?? 0;
+            int preco = aluno.Matricula.PlanoDeEnsino?.Sum(disciplina => disciplina.Preco) ?? 0;
 
             return new ResponsePrecoSemestre { Preco = preco };
         }

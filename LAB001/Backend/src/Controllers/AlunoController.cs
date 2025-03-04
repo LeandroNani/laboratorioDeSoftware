@@ -1,6 +1,5 @@
 using Backend.src.Data;
 using Backend.src.DTOs;
-using Backend.src.DTOs.AlunoDTO;
 using Backend.src.models;
 using Backend.src.services;
 using Microsoft.AspNetCore.Mvc;

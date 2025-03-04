@@ -1,6 +1,6 @@
 using Backend.src.models;
 
-namespace Backend.src.DTOs.ProfessorDTO
+namespace Backend.src.DTOs
 {
     public class AlocarDisciplinaRequest
     {
