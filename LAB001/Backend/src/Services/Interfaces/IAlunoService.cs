@@ -8,10 +8,10 @@ namespace Backend.src.services.interfaces
     {
         Task AdicionarAluno(AlunoModel aluno);
         Task AtualizarAluno(int id);
-        Task RemoverAluno();
+        Task<AlunoModel> RemoverAluno(RemoverAlunoRequest removerAlunoRequest);
         Task<AlunoModel> EfetuarMatricula(EfetuarMatriculaRequest efetuarMatriculaRequest);
         Task CancelarMatricula();
-        List<AlunoModel> ListarAlunos();
+        Task<List<AlunoModel>> ListarAlunos();
         Task<ResponsePrecoSemestre> GetPrecoSemestre(GetPrecoSemestre getPrecoSemestre);
         // ...
     }

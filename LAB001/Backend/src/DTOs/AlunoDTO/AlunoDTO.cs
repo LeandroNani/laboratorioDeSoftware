@@ -21,6 +21,12 @@ namespace Backend.src.DTOs.AlunoDTO
     public class ResponsePrecoSemestre
     {
         [Required]
-        public int preco;
+        public int Preco;
+    }
+
+    public class RemoverAlunoRequest
+    {
+        [Required]
+        public int NumeroDePessoa;
     }
 }

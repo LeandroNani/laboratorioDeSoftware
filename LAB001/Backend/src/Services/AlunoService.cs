@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Backend.src.Data;
 using Backend.src.DTOs;
 using Backend.src.DTOs.AlunoDTO;
@@ -72,16 +73,20 @@ namespace Backend.src.services
             return aluno;
         }
 
-        // TODO: listagem de alunos
-        public List<AlunoModel> ListarAlunos()
+        public async Task<List<AlunoModel>> ListarAlunos()
         {
-            throw new NotImplementedException();
+            List<AlunoModel> alunos = await _context.Alunos.ToListAsync();
+            return alunos;
         }
 
         // TODO: remoção de um aluno
-        public Task RemoverAluno()
+        public async Task<AlunoModel> RemoverAluno(RemoverAlunoRequest removerAlunoRequest)
         {
-            throw new NotImplementedException();
+            AlunoModel aluno = await _alunoHelper.FindAlunoByNumeroDePessoa(
+                removerAlunoRequest.NumeroDePessoa
+            );
+            _context.Alunos.Remove(aluno);
+            return aluno;
         }
 
         public async Task<ResponsePrecoSemestre> GetPrecoSemestre(GetPrecoSemestre getPrecoSemestre)
@@ -92,7 +97,7 @@ namespace Backend.src.services
 
             int preco = aluno.PlanoDeEnsino?.Sum(disciplina => disciplina.Preco) ?? 0;
 
-            return new ResponsePrecoSemestre { preco = preco };
+            return new ResponsePrecoSemestre { Preco = preco };
         }
     }
 }
