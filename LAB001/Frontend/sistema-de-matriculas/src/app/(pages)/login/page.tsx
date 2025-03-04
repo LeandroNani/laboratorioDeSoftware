@@ -6,6 +6,11 @@ import { Button } from "react-bootstrap"
 import { Form } from "react-bootstrap"
 import { login } from "@/api/login"
 import Image from 'next/image'
+import { toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import { AxiosError } from "axios"
+import { ToastContainer } from "react-toastify"
+
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -16,10 +21,39 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const response = await login({ ...formData, numeroDePessoa: Number(formData.numeroDePessoa) });
-    console.log(response.data)
-    // if (response.status === 200) window.location.href = "/"
+    try {
+      const response = await login({ ...formData, numeroDePessoa: Number(formData.numeroDePessoa) })
+      
+      if (response.status === 200) {
+        window.location.href = "/"
+      }
+    } catch (error) {
+      if (error instanceof AxiosError && error.response && error.response.status === 401) {
+        toast.error("Número de pessoa ou senha incorretos!", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        })
+      } else {
+        toast.error("Erro ao tentar fazer login. Tente novamente.", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        })
+      }
+    }
   }
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -31,6 +65,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 to-red-100/50 flex items-center justify-center p-4">
+      <ToastContainer />
       <div className="w-full max-w-4xl bg-white rounded-3xl shadow-xl overflow-hidden">
         <div className="grid lg:grid-cols-2">
           <div className="p-8 lg:p-12">
@@ -83,8 +118,6 @@ export default function LoginPage() {
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </Button>
               </div>
-
-
               <Button type="submit" className="w-full h-12 bg-red-500 hover:bg-red-600">
                 Login
               </Button>
