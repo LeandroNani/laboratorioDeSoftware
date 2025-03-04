@@ -1,5 +1,6 @@
 using Backend.src.Data;
 using Backend.src.DTOs;
+using Backend.src.DTOs.AlunoDTO;
 using Backend.src.models;
 using Backend.src.services.Helpers;
 using Backend.src.services.interfaces;
@@ -81,6 +82,17 @@ namespace Backend.src.services
         public Task RemoverAluno()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<ResponsePrecoSemestre> GetPrecoSemestre(GetPrecoSemestre getPrecoSemestre)
+        {
+            AlunoModel aluno = await _alunoHelper.FindAlunoByNumeroDePessoa(
+                getPrecoSemestre.NumeroDePessoa
+            );
+
+            int preco = aluno.PlanoDeEnsino?.Sum(disciplina => disciplina.Preco) ?? 0;
+
+            return new ResponsePrecoSemestre { preco = preco };
         }
     }
 }

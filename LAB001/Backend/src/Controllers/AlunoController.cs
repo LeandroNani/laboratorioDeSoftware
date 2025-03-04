@@ -1,5 +1,6 @@
 using Backend.src.Data;
 using Backend.src.DTOs;
+using Backend.src.DTOs.AlunoDTO;
 using Backend.src.models;
 using Backend.src.services;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,13 @@ namespace Backend.src.controllers
         {
             await _alunoService.AdicionarAluno(aluno);
             return Ok(aluno);
+        }
+
+        [HttpGet("preco-semestre")]
+        public async Task<IActionResult> GetPrecoSemestre(GetPrecoSemestre getPrecoSemestre)
+        {
+            ResponsePrecoSemestre response = await _alunoService.GetPrecoSemestre(getPrecoSemestre);
+            return Ok(response);
         }
     }
 }

@@ -11,12 +11,14 @@ namespace Backend.src.Models
         public int AlunoId { get; set; }
 
         [Required]
+        [ForeignKey("aluno_id")]
         public required AlunoModel Aluno { get; set; }
 
         [Key]
         public int DisciplinaId { get; set; }
 
         [Required]
+        [ForeignKey("disciplina_id")]
         public required DisciplinaModel Disciplina { get; set; }
     }
 }

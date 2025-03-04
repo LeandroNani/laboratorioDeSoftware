@@ -6,14 +6,16 @@ namespace Backend.src.models
     [Table("aluno")]
     public class AlunoModel : PessoaModel
     {
+        [ForeignKey("curso_id")]
         public CursoModel? Curso { get; set; }
         public required string Matricula { get; set; }
 
-        public List<DisciplinaModel>? disciplinasCursadas;
+        [ForeignKey("disciplina_cursada_id")]
         public List<DisciplinaModel>? DisciplinasCursadas { get; set; }
 
+        [ForeignKey("plano_de_ensino_id")]
         private List<DisciplinaModel>? planoDeEnsino;
-        public List<DisciplinaModel>? PlanoDeEnsino // Disciplinas que o aluno está cursando atualmene
+        public required List<DisciplinaModel>? PlanoDeEnsino // Disciplinas que o aluno está cursando atualmene
         {
             get => planoDeEnsino;
             set

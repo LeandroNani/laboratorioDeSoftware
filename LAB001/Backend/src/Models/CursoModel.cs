@@ -9,6 +9,8 @@ namespace Backend.src.models
         [Key]
         public required string Id { get; set; }
         public required string Nome { get; set; }
+
+        [ForeignKey("disciplina_id")]
         public required List<DisciplinaModel> Disciplinas { get; set; }
         public required List<AlunoModel> Alunos { get; set; }
         public required int NumeroDeCreditos { get; set; }

@@ -12,6 +12,7 @@ namespace Backend.src.Data
         public DbSet<CursoModel> Cursos { get; set; }
         public DbSet<CurriculoModel> Curriculos { get; set; }
         public DbSet<PessoaModel> Pessoas { get; set; }
+        public DbSet<AdminModel> Admins { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -29,13 +29,18 @@ namespace Backend.Migrations
                     b.Property<int>("DisciplinaId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("DisciplinaId1")
+                    b.Property<int>("aluno_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("disciplina_id")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("AlunoId", "DisciplinaId");
 
-                    b.HasIndex("DisciplinaId1");
+                    b.HasIndex("aluno_id");
+
+                    b.HasIndex("disciplina_id");
 
                     b.ToTable("aluno_disciplina");
                 });
@@ -59,9 +64,6 @@ namespace Backend.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
-                    b.Property<string>("CurriculoModelId")
-                        .HasColumnType("text");
-
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("text");
@@ -69,9 +71,12 @@ namespace Backend.Migrations
                     b.Property<int>("NumeroDeCreditos")
                         .HasColumnType("integer");
 
+                    b.Property<string>("curso_id")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CurriculoModelId");
+                    b.HasIndex("curso_id");
 
                     b.ToTable("curso");
                 });
@@ -84,20 +89,8 @@ namespace Backend.Migrations
                     b.Property<int?>("AlunoModelNumeroDePessoa")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("AlunoModelNumeroDePessoa1")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Campus")
                         .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("CurriculoModelId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CursoModelId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("DisciplinaModelId")
                         .HasColumnType("text");
 
                     b.Property<bool>("IsActive")
@@ -117,22 +110,32 @@ namespace Backend.Migrations
                     b.Property<int>("Preco")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ProfessorNumeroDePessoa")
+                    b.Property<int>("QuantAlunos")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("disciplina_cursada_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("disciplina_id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("disciplina_necessaria_id")
+                        .HasColumnType("text");
+
+                    b.Property<int>("professor_id")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AlunoModelNumeroDePessoa");
 
-                    b.HasIndex("AlunoModelNumeroDePessoa1");
+                    b.HasIndex("disciplina_cursada_id");
 
-                    b.HasIndex("CurriculoModelId");
+                    b.HasIndex("disciplina_id");
 
-                    b.HasIndex("CursoModelId");
+                    b.HasIndex("disciplina_necessaria_id");
 
-                    b.HasIndex("DisciplinaModelId");
-
-                    b.HasIndex("ProfessorNumeroDePessoa");
+                    b.HasIndex("professor_id");
 
                     b.ToTable("disciplina");
                 });
@@ -160,15 +163,16 @@ namespace Backend.Migrations
                     b.UseTptMappingStrategy();
                 });
 
-            modelBuilder.Entity("Backend.src.models.AlunoModel", b =>
+            modelBuilder.Entity("Backend.src.models.AdminModel", b =>
                 {
                     b.HasBaseType("Backend.src.models.PessoaModel");
 
-                    b.Property<string>("CurriculoModelId")
-                        .HasColumnType("text");
+                    b.ToTable("pessoa_admin");
+                });
 
-                    b.Property<string>("CursoId")
-                        .HasColumnType("text");
+            modelBuilder.Entity("Backend.src.models.AlunoModel", b =>
+                {
+                    b.HasBaseType("Backend.src.models.PessoaModel");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -185,9 +189,15 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasIndex("CurriculoModelId");
+                    b.Property<string>("aluno_id")
+                        .HasColumnType("text");
 
-                    b.HasIndex("CursoId");
+                    b.Property<string>("curso_id")
+                        .HasColumnType("text");
+
+                    b.HasIndex("aluno_id");
+
+                    b.HasIndex("curso_id");
 
                     b.ToTable("aluno");
                 });
@@ -196,14 +206,14 @@ namespace Backend.Migrations
                 {
                     b.HasBaseType("Backend.src.models.PessoaModel");
 
-                    b.Property<string>("CurriculoModelId")
-                        .HasColumnType("text");
-
                     b.Property<string>("NivelEscolar")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasIndex("CurriculoModelId");
+                    b.Property<string>("professor_id")
+                        .HasColumnType("text");
+
+                    b.HasIndex("professor_id");
 
                     b.ToTable("professor");
                 });
@@ -212,13 +222,13 @@ namespace Backend.Migrations
                 {
                     b.HasOne("Backend.src.models.AlunoModel", "Aluno")
                         .WithMany()
-                        .HasForeignKey("AlunoId")
+                        .HasForeignKey("aluno_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Backend.src.models.DisciplinaModel", "Disciplina")
                         .WithMany()
-                        .HasForeignKey("DisciplinaId1")
+                        .HasForeignKey("disciplina_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -231,70 +241,79 @@ namespace Backend.Migrations
                 {
                     b.HasOne("Backend.src.models.CurriculoModel", null)
                         .WithMany("Curso")
-                        .HasForeignKey("CurriculoModelId");
+                        .HasForeignKey("curso_id");
                 });
 
             modelBuilder.Entity("Backend.src.models.DisciplinaModel", b =>
                 {
                     b.HasOne("Backend.src.models.AlunoModel", null)
-                        .WithMany("DisciplinasCursadas")
+                        .WithMany("PlanoDeEnsino")
                         .HasForeignKey("AlunoModelNumeroDePessoa");
 
                     b.HasOne("Backend.src.models.AlunoModel", null)
-                        .WithMany("PlanoDeEnsino")
-                        .HasForeignKey("AlunoModelNumeroDePessoa1");
+                        .WithMany("DisciplinasCursadas")
+                        .HasForeignKey("disciplina_cursada_id");
 
                     b.HasOne("Backend.src.models.CurriculoModel", null)
                         .WithMany("Disciplinas")
-                        .HasForeignKey("CurriculoModelId");
+                        .HasForeignKey("disciplina_id");
 
                     b.HasOne("Backend.src.models.CursoModel", null)
                         .WithMany("Disciplinas")
-                        .HasForeignKey("CursoModelId");
+                        .HasForeignKey("disciplina_id");
 
                     b.HasOne("Backend.src.models.DisciplinaModel", null)
                         .WithMany("DisciplinasNecessarias")
-                        .HasForeignKey("DisciplinaModelId");
+                        .HasForeignKey("disciplina_necessaria_id");
 
                     b.HasOne("Backend.src.models.ProfessorModel", "Professor")
                         .WithMany("Disciplinas")
-                        .HasForeignKey("ProfessorNumeroDePessoa")
+                        .HasForeignKey("professor_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Professor");
                 });
 
+            modelBuilder.Entity("Backend.src.models.AdminModel", b =>
+                {
+                    b.HasOne("Backend.src.models.PessoaModel", null)
+                        .WithOne()
+                        .HasForeignKey("Backend.src.models.AdminModel", "NumeroDePessoa")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Backend.src.models.AlunoModel", b =>
                 {
-                    b.HasOne("Backend.src.models.CurriculoModel", null)
-                        .WithMany("Alunos")
-                        .HasForeignKey("CurriculoModelId");
-
-                    b.HasOne("Backend.src.models.CursoModel", "Curso")
-                        .WithMany("Alunos")
-                        .HasForeignKey("CursoId");
-
                     b.HasOne("Backend.src.models.PessoaModel", null)
                         .WithOne()
                         .HasForeignKey("Backend.src.models.AlunoModel", "NumeroDePessoa")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Backend.src.models.CurriculoModel", null)
+                        .WithMany("Alunos")
+                        .HasForeignKey("aluno_id");
+
+                    b.HasOne("Backend.src.models.CursoModel", "Curso")
+                        .WithMany("Alunos")
+                        .HasForeignKey("curso_id");
+
                     b.Navigation("Curso");
                 });
 
             modelBuilder.Entity("Backend.src.models.ProfessorModel", b =>
                 {
-                    b.HasOne("Backend.src.models.CurriculoModel", null)
-                        .WithMany("Professores")
-                        .HasForeignKey("CurriculoModelId");
-
                     b.HasOne("Backend.src.models.PessoaModel", null)
                         .WithOne()
                         .HasForeignKey("Backend.src.models.ProfessorModel", "NumeroDePessoa")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Backend.src.models.CurriculoModel", null)
+                        .WithMany("Professores")
+                        .HasForeignKey("professor_id");
                 });
 
             modelBuilder.Entity("Backend.src.models.CurriculoModel", b =>

@@ -1,6 +1,7 @@
 using Backend.src.Data;
 using Backend.src.DTOs;
 using Backend.src.Middlewares.Exceptions;
+using Backend.src.models;
 
 namespace Backend.src.services.Auth
 {
@@ -23,6 +24,16 @@ namespace Backend.src.services.Auth
             {
                 throw new UnauthorizedException("Credenciais incorretas");
             }
+        }
+
+        public async Task<AdminModel> FindAdminByNumero(int NumeroDePessoa)
+        {
+            AdminModel admin =
+                await _context.Admins.FindAsync(NumeroDePessoa)
+                ?? throw new NotFoundException(
+                    $"Admin com o número de pessoa {NumeroDePessoa} não encontrado"
+                );
+            return admin;
         }
     }
 }

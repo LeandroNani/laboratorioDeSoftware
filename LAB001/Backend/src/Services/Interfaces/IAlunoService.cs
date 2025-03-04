@@ -1,4 +1,5 @@
 using Backend.src.DTOs;
+using Backend.src.DTOs.AlunoDTO;
 using Backend.src.models;
 
 namespace Backend.src.services.interfaces
@@ -11,6 +12,7 @@ namespace Backend.src.services.interfaces
         Task<AlunoModel> EfetuarMatricula(EfetuarMatriculaRequest efetuarMatriculaRequest);
         Task CancelarMatricula();
         List<AlunoModel> ListarAlunos();
+        Task<ResponsePrecoSemestre> GetPrecoSemestre(GetPrecoSemestre getPrecoSemestre);
         // ...
     }
 }

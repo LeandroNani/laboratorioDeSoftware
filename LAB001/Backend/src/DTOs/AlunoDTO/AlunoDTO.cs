@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Backend.src.models;
 
-namespace Backend.src.DTOs
+namespace Backend.src.DTOs.AlunoDTO
 {
     public class EfetuarMatriculaRequest
     {
@@ -10,5 +10,17 @@ namespace Backend.src.DTOs
 
         [Required]
         public required int NumeroDePessoa;
+    }
+
+    public class GetPrecoSemestre
+    {
+        [Required]
+        public int NumeroDePessoa;
+    }
+
+    public class ResponsePrecoSemestre
+    {
+        [Required]
+        public int preco;
     }
 }
