@@ -13,17 +13,32 @@ namespace Backend.src.services
         private readonly AppDbContext _context = context;
         private readonly AuthService _authService = new(context);
         private readonly CurriculoHelper _curriculoHelper = new(context);
+        private readonly ProfessorHelper _professorHelper = new(context);
 
         public async Task<CurriculoModel> AdicionarDisciplina(
             AdicionarDisciplinaRequest adicionarDisciplinaRequest
         )
         {
-            CurriculoModel curriculo = await _curriculoHelper.GetCurriculoById(
+            var curriculoTask = _curriculoHelper.GetCurriculoById(
                 adicionarDisciplinaRequest.CurriculoId
             );
-            await _authService.FindAdminByNumero(adicionarDisciplinaRequest.NumeroDePessoa);
+            var professorTask = _professorHelper.FindProfessorByNumeroDePessoa(
+                adicionarDisciplinaRequest.Disciplina.Professor.NumeroDePessoa
+            );
+            var adminTask = _authService.FindAdminByNumero(
+                adicionarDisciplinaRequest.NumeroDePessoa
+            );
+
+            await Task.WhenAll(curriculoTask, professorTask, adminTask);
+
+            var curriculo = await curriculoTask;
+            var professor = await professorTask;
+
+            adicionarDisciplinaRequest.Disciplina.Professor = professor;
             curriculo.Disciplinas.Add(adicionarDisciplinaRequest.Disciplina);
+
             _curriculoHelper.UpdateCurriculo(curriculo);
+
             return curriculo;
         }
 

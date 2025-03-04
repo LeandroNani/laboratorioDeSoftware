@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Backend.src.Data;
 using Backend.src.DTOs;
 using Backend.src.Middlewares.Exceptions;
@@ -34,6 +35,18 @@ namespace Backend.src.services.Auth
                     $"Admin com o número de pessoa {NumeroDePessoa} não encontrado"
                 );
             return admin;
+        }
+
+        public async Task CreateAdmin(AdminModel admin)
+        {
+            AdminModel? exisitingAdmin = await _context.Admins.FindAsync(admin.NumeroDePessoa);
+            if (exisitingAdmin != null)
+            {
+                throw new Middlewares.Exceptions.InvalidOperationException(
+                    $"Admin com numero de pessoa {admin.NumeroDePessoa} ja existe"
+                );
+            }
+            _context.Admins.Add(admin);
         }
     }
 }

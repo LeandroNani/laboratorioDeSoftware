@@ -12,9 +12,16 @@ namespace Backend.src.services
         private readonly AppDbContext _context = context;
         private readonly ProfessorHelper _professorHelper = new(context);
 
-        public void AdicionarProfessor()
+        public async Task AdicionarProfessor(ProfessorModel professor)
         {
-            throw new NotImplementedException();
+            ProfessorModel? existingProfessor = await _context.Professores.FindAsync(
+                professor.NumeroDePessoa
+            );
+            if (existingProfessor != null)
+                throw new Middlewares.Exceptions.InvalidOperationException(
+                    $"Professor com o Numero de Pessoa {professor.NumeroDePessoa} já existe"
+                );
+            _context.Professores.Add(professor);
         }
 
         public async Task<DisciplinaModel> AlocarDisciplina(

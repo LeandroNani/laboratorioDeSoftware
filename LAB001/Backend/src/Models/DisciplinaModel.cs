@@ -7,7 +7,7 @@ namespace Backend.src.models
     public class DisciplinaModel
     {
         [Key]
-        public required string Id { get; set; }
+        public required string Id { get; set; } = Guid.NewGuid().ToString();
         public required string Nome { get; set; }
         public required bool IsActive { get; set; } = false;
 
@@ -17,10 +17,10 @@ namespace Backend.src.models
         public required string Periodo { get; set; }
 
         [ForeignKey("disciplina_necessaria_id")]
-        public required List<DisciplinaModel> DisciplinasNecessarias { get; set; }
+        public required List<DisciplinaModel> DisciplinasNecessarias { get; set; } = [];
         public required string Campus { get; set; }
         public required bool Optativa { get; set; }
-        private int _quantAlunos;
+        private int _quantAlunos = 0;
         public required int QuantAlunos
         {
             get => _quantAlunos;

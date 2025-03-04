@@ -5,7 +5,7 @@ namespace Backend.src.services.interfaces
 {
     public interface IProfessorService
     {
-        void AdicionarProfessor();
+        Task AdicionarProfessor(ProfessorModel professor);
         void AtualizarProfessor();
         void RemoverProfessor();
         Task<DisciplinaModel> AlocarDisciplina(AlocarDisciplinaRequest alocarDisciplinaRequest);

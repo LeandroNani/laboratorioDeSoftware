@@ -2,6 +2,7 @@
 using Backend.src.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250304043527_change_professor")]
+    partial class change_professor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,12 +57,7 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("curso_id")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("curso_id");
 
                     b.ToTable("curriculo");
                 });
@@ -76,7 +74,12 @@ namespace Backend.Migrations
                     b.Property<int>("NumeroDeCreditos")
                         .HasColumnType("integer");
 
+                    b.Property<string>("curso_id")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("curso_id");
 
                     b.ToTable("curso");
                 });
@@ -237,13 +240,11 @@ namespace Backend.Migrations
                     b.Navigation("Disciplina");
                 });
 
-            modelBuilder.Entity("Backend.src.models.CurriculoModel", b =>
+            modelBuilder.Entity("Backend.src.models.CursoModel", b =>
                 {
-                    b.HasOne("Backend.src.models.CursoModel", "Curso")
-                        .WithMany()
+                    b.HasOne("Backend.src.models.CurriculoModel", null)
+                        .WithMany("Curso")
                         .HasForeignKey("curso_id");
-
-                    b.Navigation("Curso");
                 });
 
             modelBuilder.Entity("Backend.src.models.DisciplinaModel", b =>
@@ -321,6 +322,8 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.src.models.CurriculoModel", b =>
                 {
                     b.Navigation("Alunos");
+
+                    b.Navigation("Curso");
 
                     b.Navigation("Disciplinas");
 

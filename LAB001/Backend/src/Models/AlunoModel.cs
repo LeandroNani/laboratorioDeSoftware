@@ -11,10 +11,10 @@ namespace Backend.src.models
         public required string Matricula { get; set; }
 
         [ForeignKey("disciplina_cursada_id")]
-        public List<DisciplinaModel>? DisciplinasCursadas { get; set; }
+        public List<DisciplinaModel>? DisciplinasCursadas { get; set; } = [];
 
         [ForeignKey("plano_de_ensino_id")]
-        private List<DisciplinaModel>? planoDeEnsino;
+        private List<DisciplinaModel>? planoDeEnsino = [];
         public required List<DisciplinaModel>? PlanoDeEnsino // Disciplinas que o aluno está cursando atualmene
         {
             get => planoDeEnsino;
