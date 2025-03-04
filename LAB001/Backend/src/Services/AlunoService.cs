@@ -3,12 +3,13 @@ using Backend.src.DTOs;
 using Backend.src.Middlewares.Exceptions;
 using Backend.src.models;
 using Backend.src.services.Helpers;
+using Backend.src.services.interfaces;
 using Microsoft.EntityFrameworkCore;
 using InvalidOperationException = Backend.src.Middlewares.Exceptions.InvalidOperationException;
 
 namespace Backend.src.services
 {
-    public class AlunoService(AppDbContext context)
+    public class AlunoService(AppDbContext context) : IAlunoService
     {
         private readonly AppDbContext _context = context;
         private readonly AlunoHelper _alunoHelper = new(context);

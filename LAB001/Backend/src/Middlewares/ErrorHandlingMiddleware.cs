@@ -25,7 +25,7 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
     private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         int statusCode = (int)HttpStatusCode.InternalServerError;
-        string message = "Something went wrong. Error: " + exception.Message;
+        string message = "Ocorreu um erro inesperado. Error: " + exception.Message;
 
         switch (exception)
         {
@@ -45,13 +45,13 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
                 statusCode = (int)HttpStatusCode.NotFound;
                 message = keyNotFoundEx.Message;
                 break;
-            case InvalidPasswordException invalidPasswordException:
+            case InvalidPasswordException invalidPasswordExceptionEx:
                 statusCode = (int)HttpStatusCode.Unauthorized;
-                message = invalidPasswordException.Message;
+                message = invalidPasswordExceptionEx.Message;
                 break;
-            case Exceptions.InvalidOperationException invalidOperationException:
+            case Exceptions.InvalidOperationException invalidOperationExceptionEx:
                 statusCode = (int)HttpStatusCode.BadRequest;
-                message = invalidOperationException.Message;
+                message = invalidOperationExceptionEx.Message;
                 break;
             default:
                 break;
