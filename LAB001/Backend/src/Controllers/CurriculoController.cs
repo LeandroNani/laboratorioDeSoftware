@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Backend.src.Data;
 using Backend.src.models;
 using Backend.src.services;
@@ -12,9 +13,9 @@ namespace Backend.src.controllers
         private readonly CurriculoService _curriculoService = new(context);
 
         [HttpPost("novo-curriculo")]
-        public IActionResult CriarCurriculo(CurriculoModel curriculo)
+        public async Task<IActionResult> CriarCurriculo(CurriculoModel curriculo)
         {
-            _curriculoService.CriarCurriculo(curriculo);
+            await _curriculoService.CriarCurriculo(curriculo);
             return Ok(curriculo);
         }
     }

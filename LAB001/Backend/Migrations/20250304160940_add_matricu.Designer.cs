@@ -2,6 +2,7 @@
 using Backend.src.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250304160940_add_matricu")]
+    partial class add_matricu
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,30 +23,6 @@ namespace Backend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Backend.src.models.AlunoDisciplina", b =>
-                {
-                    b.Property<int>("AlunoId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("DisciplinaId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("aluno_id")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("disciplina_id")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("AlunoId", "DisciplinaId");
-
-                    b.HasIndex("aluno_id");
-
-                    b.HasIndex("disciplina_id");
-
-                    b.ToTable("aluno_disciplina");
-                });
 
             modelBuilder.Entity("Backend.src.models.CurriculoModel", b =>
                 {
@@ -156,7 +135,7 @@ namespace Backend.Migrations
 
                     b.HasKey("NumeroDeMatricula");
 
-                    b.ToTable("matricula");
+                    b.ToTable("MatriculaModel");
                 });
 
             modelBuilder.Entity("Backend.src.models.PessoaModel", b =>
@@ -233,25 +212,6 @@ namespace Backend.Migrations
                     b.HasIndex("professor_id");
 
                     b.ToTable("professor");
-                });
-
-            modelBuilder.Entity("Backend.src.models.AlunoDisciplina", b =>
-                {
-                    b.HasOne("Backend.src.models.AlunoModel", "Aluno")
-                        .WithMany()
-                        .HasForeignKey("aluno_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Backend.src.models.DisciplinaModel", "Disciplina")
-                        .WithMany()
-                        .HasForeignKey("disciplina_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Aluno");
-
-                    b.Navigation("Disciplina");
                 });
 
             modelBuilder.Entity("Backend.src.models.CurriculoModel", b =>

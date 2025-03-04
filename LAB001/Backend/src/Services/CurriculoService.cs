@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Backend.src.Data;
 using Backend.src.Middlewares.Exceptions;
 using Backend.src.models;
@@ -12,9 +13,10 @@ namespace Backend.src.services
         private readonly AppDbContext _context = context;
         private readonly CurriculoHelper _curriculoHelper = new(context);
 
-        public CurriculoModel CriarCurriculo(CurriculoModel curriculo)
+        public async Task<CurriculoModel> CriarCurriculo(CurriculoModel curriculo)
         {
             _context.Add(curriculo);
+            await _context.SaveChangesAsync();
             return curriculo;
         }
 

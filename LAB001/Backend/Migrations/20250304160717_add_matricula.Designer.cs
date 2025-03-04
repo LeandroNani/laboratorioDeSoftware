@@ -2,6 +2,7 @@
 using Backend.src.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250304160717_add_matricula")]
+    partial class add_matricula
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,7 +24,7 @@ namespace Backend.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Backend.src.models.AlunoDisciplina", b =>
+            modelBuilder.Entity("Backend.src.Models.AlunoDisciplina", b =>
                 {
                     b.Property<int>("AlunoId")
                         .HasColumnType("integer");
@@ -156,7 +159,7 @@ namespace Backend.Migrations
 
                     b.HasKey("NumeroDeMatricula");
 
-                    b.ToTable("matricula");
+                    b.ToTable("MatriculaModel");
                 });
 
             modelBuilder.Entity("Backend.src.models.PessoaModel", b =>
@@ -235,7 +238,7 @@ namespace Backend.Migrations
                     b.ToTable("professor");
                 });
 
-            modelBuilder.Entity("Backend.src.models.AlunoDisciplina", b =>
+            modelBuilder.Entity("Backend.src.Models.AlunoDisciplina", b =>
                 {
                     b.HasOne("Backend.src.models.AlunoModel", "Aluno")
                         .WithMany()

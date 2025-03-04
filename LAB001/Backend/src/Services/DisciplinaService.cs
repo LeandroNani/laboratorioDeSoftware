@@ -37,7 +37,7 @@ namespace Backend.src.services
             curriculo.Disciplinas.Add(adicionarDisciplinaRequest.Disciplina);
 
             _curriculoHelper.UpdateCurriculo(curriculo);
-
+            await _context.SaveChangesAsync();
             return curriculo;
         }
 

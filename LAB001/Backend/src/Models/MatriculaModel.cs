@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.src.models
 {
+    [Table("matricula")]
     public class MatriculaModel
     {
         [Key]

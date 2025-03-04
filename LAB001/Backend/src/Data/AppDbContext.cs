@@ -1,5 +1,4 @@
 using Backend.src.models;
-using Backend.src.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.src.Data
@@ -13,6 +12,7 @@ namespace Backend.src.Data
         public DbSet<CurriculoModel> Curriculos { get; set; }
         public DbSet<PessoaModel> Pessoas { get; set; }
         public DbSet<AdminModel> Admins { get; set; }
+        public DbSet<MatriculaModel> Matriculas { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -26,5 +26,21 @@ namespace Backend.src.controllers
             ResponsePrecoSemestre response = await _alunoService.GetPrecoSemestre(getPrecoSemestre);
             return Ok(response);
         }
+
+        [HttpPatch("cancelar-matricula")]
+        public async Task<IActionResult> CancelarMatricula(
+            CancelarMatriculaRequest cancelarMatriculaRequest
+        )
+        {
+            AlunoModel aluno = await _alunoService.CancelarMatricula(cancelarMatriculaRequest);
+            return Ok(aluno);
+        }
+
+        [HttpPatch("listar-alunos")]
+        public async Task<IActionResult> ListarAlunos()
+        {
+            List<AlunoModel> alunos = await _alunoService.ListarAlunos();
+            return Ok(alunos);
+        }
     }
 }

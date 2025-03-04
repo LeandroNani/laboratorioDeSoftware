@@ -21,6 +21,7 @@ namespace Backend.src.services
                     $"Professor com o Numero de Pessoa {professor.NumeroDePessoa} já existe"
                 );
             _context.Professores.Add(professor);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<DisciplinaModel> AlocarDisciplina(
@@ -38,6 +39,7 @@ namespace Backend.src.services
             Disciplina.Professor = professor;
             _context.Disciplinas.Update(Disciplina);
             _context.Professores.Update(professor);
+            await _context.SaveChangesAsync();
             return Disciplina;
         }
 

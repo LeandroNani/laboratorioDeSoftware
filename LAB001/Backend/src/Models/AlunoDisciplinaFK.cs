@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Backend.src.models;
 
-namespace Backend.src.Models
+namespace Backend.src.models
 {
     [Table("aluno_disciplina")]
     public class AlunoDisciplina

@@ -1,14 +1,14 @@
 using Backend.src.Data;
 using Backend.src.DTOs;
+using Backend.src.Middlewares.Exceptions;
 using Backend.src.models;
 using Backend.src.services.Helpers;
-using Backend.src.services.interfaces;
 using Microsoft.EntityFrameworkCore;
 using InvalidOperationException = Backend.src.Middlewares.Exceptions.InvalidOperationException;
 
 namespace Backend.src.services
 {
-    public class AlunoService(AppDbContext context) : IAlunoService
+    public class AlunoService(AppDbContext context)
     {
         private readonly AppDbContext _context = context;
         private readonly AlunoHelper _alunoHelper = new(context);
@@ -24,17 +24,33 @@ namespace Backend.src.services
             await _context.SaveChangesAsync();
         }
 
-        // TODO: Fazer a lógica correta para atualização genérica de um aluno
-        public async Task AtualizarAluno(int numeroDePessoa)
+        public async Task<AlunoModel> CancelarMatricula(
+            CancelarMatriculaRequest cancelarMatriculaRequest
+        )
         {
-            AlunoModel aluno = await _alunoHelper.FindAlunoByNumeroDePessoa(numeroDePessoa);
+            if (
+                !cancelarMatriculaRequest.NumeroDeMatricula.HasValue
+                && !cancelarMatriculaRequest.NumeroDePessoa.HasValue
+            )
+            {
+                throw new BadRequestException(
+                    "É obrigatorio o número de matricula ou o número de pessoa do aluno."
+                );
+            }
+
+            AlunoModel aluno = cancelarMatriculaRequest.NumeroDePessoa.HasValue
+                ? await _alunoHelper.FindAlunoByNumeroDePessoa(
+                    cancelarMatriculaRequest.NumeroDePessoa.Value
+                )
+                : await _alunoHelper.FindAlunoByNumeroDeMatricula(
+                    cancelarMatriculaRequest.NumeroDeMatricula.GetValueOrDefault()
+                );
+
+            aluno.Matricula.Ativa = false;
             _context.Alunos.Update(aluno);
             await _context.SaveChangesAsync();
-        }
 
-        public Task CancelarMatricula()
-        {
-            throw new NotImplementedException();
+            return aluno;
         }
 
         public async Task<AlunoModel> EfetuarMatricula(
@@ -83,6 +99,8 @@ namespace Backend.src.services
                 removerAlunoRequest.NumeroDePessoa
             );
             _context.Alunos.Remove(aluno);
+            await _context.SaveChangesAsync();
+
             return aluno;
         }
 

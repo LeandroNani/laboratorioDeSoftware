@@ -10,6 +10,7 @@ namespace Backend.src.services
         public CursoModel CriarCurso(CursoModel curso)
         {
             _context.Cursos.Add(curso);
+            _context.SaveChanges();
             return curso;
         }
     }

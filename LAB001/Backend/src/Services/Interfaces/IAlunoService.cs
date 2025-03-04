@@ -6,7 +6,6 @@ namespace Backend.src.services.interfaces
     public interface IAlunoService
     {
         Task AdicionarAluno(AlunoModel aluno);
-        Task AtualizarAluno(int id);
         Task<AlunoModel> RemoverAluno(RemoverAlunoRequest removerAlunoRequest);
         Task<AlunoModel> EfetuarMatricula(EfetuarMatriculaRequest efetuarMatriculaRequest);
         Task CancelarMatricula();
