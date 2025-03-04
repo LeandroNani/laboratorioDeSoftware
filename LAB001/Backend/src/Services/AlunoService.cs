@@ -105,11 +105,9 @@ namespace Backend.src.services
             return aluno;
         }
 
-        public async Task<ResponsePrecoSemestre> GetPrecoSemestre(GetPrecoSemestre getPrecoSemestre)
+        public async Task<ResponsePrecoSemestre> GetPrecoSemestre(int NumeroDePessoa)
         {
-            AlunoModel aluno = await _alunoHelper.FindAlunoByNumeroDePessoa(
-                getPrecoSemestre.NumeroDePessoa
-            );
+            AlunoModel aluno = await _alunoHelper.FindAlunoByNumeroDePessoa(NumeroDePessoa);
 
             int preco = aluno.Matricula.PlanoDeEnsino?.Sum(disciplina => disciplina.Preco) ?? 0;
 

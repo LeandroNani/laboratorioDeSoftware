@@ -1,3 +1,4 @@
+using System.Reflection;
 using Backend.src.Data;
 using Backend.src.Middlewares;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddSwaggerGen(c =>
 {
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Sistema de Matriculas", Version = "v1" });
 });
 builder.Services.AddSwaggerGen();
