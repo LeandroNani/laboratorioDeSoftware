@@ -25,6 +25,12 @@ namespace Backend.src.services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<AlunoModel> GetAlunoByNumeroDePessoa(int numeroDePessoa)
+        {
+            AlunoModel aluno = await _alunoHelper.FindAlunoByNumeroDePessoa(numeroDePessoa);
+            return aluno;
+        }
+
         public async Task<AlunoModel> CancelarMatricula(
             CancelarMatriculaRequest cancelarMatriculaRequest
         )

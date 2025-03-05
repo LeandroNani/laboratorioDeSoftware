@@ -5,79 +5,8 @@ import { Aluno } from "@/types/aluno.type";
 import { FiUser, FiBook } from "react-icons/fi";
 import Navbar from "@/components/Navbar";
 
-const PerfilPage = () => {
+export default function Page(aluno: Aluno) {
   const [selectedTab, setSelectedTab] = useState("perfil");
-  const aluno: Aluno = {
-    numeroDePessoa: 456,
-    nome: "Aluno Exemplo",
-    senha: "senha123",
-    matricula: "20250001",
-    email: "aluno@example.com",
-    mensalidade: 1500,
-    curso: {
-      id: "1",
-      nome: "Engenharia de Software",
-      numeroDeCreditos: 180,
-      alunos: [],
-      disciplinas: [],
-    },
-    planoDeEnsino: [
-      {
-        id: "1",
-        nome: "Algoritmos Avançados",
-        isActive: true,
-        preco: 500,
-        periodo: "2025.1",
-        campus: "Campus Principal",
-        alunos: [],
-        disciplinasNecessarias: [],
-        professor: {
-          numeroDePessoa: 123,
-          nome: "Professor Example",
-          senha: "password",
-          disciplinas: [],
-          nivelEscolar: "Doutor",
-        },
-      },
-      {
-        id: "2",
-        nome: "Sistemas Distribuídos",
-        isActive: true,
-        preco: 600,
-        periodo: "2025.1",
-        campus: "Campus Principal",
-        alunos: [],
-        disciplinasNecessarias: [],
-        professor: {
-          numeroDePessoa: 123,
-          nome: "Professor Example",
-          senha: "password",
-          disciplinas: [],
-          nivelEscolar: "Doutor",
-        },
-      },
-    ],
-    disciplinasCursadas: [
-      {
-        id: "3",
-        nome: "Introdução à Programação",
-        isActive: true,
-        preco: 400,
-        periodo: "2024.2",
-        campus: "Campus Principal",
-        alunos: [],
-        disciplinasNecessarias: [],
-        professor: {
-          numeroDePessoa: 124,
-          nome: "Professor Example 2",
-          senha: "password",
-          disciplinas: [],
-          nivelEscolar: "Mestre",
-        },
-      },
-    ],
-  };
-
   return (
     <>
       <Navbar />
@@ -86,21 +15,19 @@ const PerfilPage = () => {
         <aside className="w-72 bg-zinc-900 shadow-lg min-h-screen p-6 flex flex-col">
           <nav className="mt-6">
             <button
-              className={`flex items-center gap-3 p-3 w-full rounded-lg text-lg transition ${
-                selectedTab === "perfil"
-                  ? "bg-white text-black font-semibold"
-                  : "hover:bg-gray-700"
-              }`}
+              className={`flex items-center gap-3 p-3 w-full rounded-lg text-lg transition ${selectedTab === "perfil"
+                ? "bg-white text-black font-semibold"
+                : "hover:bg-gray-700"
+                }`}
               onClick={() => setSelectedTab("perfil")}
             >
               <FiUser size={20} /> Perfil
             </button>
             <button
-              className={`flex items-center gap-3 p-3 w-full rounded-lg text-lg mt-2 transition ${
-                selectedTab === "disciplinas"
-                  ? "bg-white text-black font-semibold"
-                  : "hover:bg-zinc-700"
-              }`}
+              className={`flex items-center gap-3 p-3 w-full rounded-lg text-lg mt-2 transition ${selectedTab === "disciplinas"
+                ? "bg-white text-black font-semibold"
+                : "hover:bg-zinc-700"
+                }`}
               onClick={() => setSelectedTab("disciplinas")}
             >
               <FiBook size={20} /> Disciplinas
@@ -117,7 +44,7 @@ const PerfilPage = () => {
                   <strong className="text-white">Nome:</strong> {aluno.nome}
                 </p>
                 <p className="text-lg text-gray-300">
-                  <strong className="text-white">Matrícula:</strong> {aluno.matricula}
+                  <strong className="text-white">Matrícula:</strong> {aluno.matricula.numeroDeMatricula}
                 </p>
                 <p className="text-lg text-gray-300">
                   <strong className="text-white">Email:</strong> {aluno.email}
@@ -126,7 +53,7 @@ const PerfilPage = () => {
                   <strong className="text-white">Curso:</strong> {aluno.curso?.nome}
                 </p>
                 <p className="text-lg text-gray-300">
-                  <strong className="text-white">Mensalidade:</strong> R$ {aluno.mensalidade}
+                  <strong className="text-white">Mensalidade:</strong> R$ {aluno.matricula.mensalidade}
                 </p>
               </div>
             </div>
@@ -138,7 +65,7 @@ const PerfilPage = () => {
                   Disciplinas Matriculadas
                 </h2>
                 <ul className="mt-4 space-y-4">
-                  {aluno.planoDeEnsino.map((disciplina) => (
+                  {aluno.matricula.planoDeEnsino.map((disciplina) => (
                     <li
                       key={disciplina.id}
                       className="border border-gray-600 rounded-lg p-4 bg-gray-900 shadow-sm"
@@ -192,5 +119,3 @@ const PerfilPage = () => {
     </>
   );
 };
-
-export default PerfilPage;

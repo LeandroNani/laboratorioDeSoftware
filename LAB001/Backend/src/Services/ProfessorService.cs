@@ -46,13 +46,11 @@ namespace Backend.src.services
 
         public async Task AtualizarProfessor(ProfessorModel professorAtualizado)
         {
-            ProfessorModel? professorExistente = await _context.Professores.FindAsync(professorAtualizado.NumeroDePessoa);
-
-            if (professorExistente == null)
-            {
-                throw new Middlewares.Exceptions.NotFoundException($"Professor com NumeroDePessoa {professorAtualizado.NumeroDePessoa} não encontrado.");
-            }
-
+            ProfessorModel? professorExistente =
+                await _context.Professores.FindAsync(professorAtualizado.NumeroDePessoa)
+                ?? throw new Middlewares.Exceptions.NotFoundException(
+                    $"Professor com NumeroDePessoa {professorAtualizado.NumeroDePessoa} não encontrado."
+                );
             _context.Entry(professorExistente).CurrentValues.SetValues(professorAtualizado);
 
             await _context.SaveChangesAsync();
@@ -60,21 +58,19 @@ namespace Backend.src.services
 
         public async Task<List<ProfessorModel>> ListarProfessores()
         {
-            return await _context.Professores
-                .Include(p => p.Disciplinas)
+            return await _context
+                .Professores.Include(p => p.Disciplinas)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
         public async Task RemoverProfessor(int numeroDePessoa)
         {
-            ProfessorModel? professor = await _context.Professores.FindAsync(numeroDePessoa);
-
-            if (professor == null)
-            {
-                throw new Middlewares.Exceptions.NotFoundException($"Professor com NumeroDePessoa {numeroDePessoa} não encontrado.");
-            }
-
+            ProfessorModel? professor =
+                await _context.Professores.FindAsync(numeroDePessoa)
+                ?? throw new Middlewares.Exceptions.NotFoundException(
+                    $"Professor com NumeroDePessoa {numeroDePessoa} não encontrado."
+                );
             _context.Professores.Remove(professor);
             await _context.SaveChangesAsync();
         }

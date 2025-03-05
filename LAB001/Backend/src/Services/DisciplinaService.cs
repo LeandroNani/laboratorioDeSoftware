@@ -44,18 +44,16 @@ namespace Backend.src.services
 
         public async Task AlocarProfessor(int disciplinaId, int numeroDePessoa)
         {
-            var disciplina = await _context.Disciplinas.FindAsync(disciplinaId);
-            if (disciplina == null)
-            {
-                throw new Middlewares.Exceptions.NotFoundException($"Disciplina com ID {disciplinaId} não encontrada.");
-            }
-
-            var professor = await _professorHelper.FindProfessorByNumeroDePessoa(numeroDePessoa);
-            if (professor == null)
-            {
-                throw new Middlewares.Exceptions.NotFoundException($"Professor com NumeroDePessoa {numeroDePessoa} não encontrado.");
-            }
-
+            var disciplina =
+                await _context.Disciplinas.FindAsync(disciplinaId)
+                ?? throw new Middlewares.Exceptions.NotFoundException(
+                    $"Disciplina com ID {disciplinaId} não encontrada."
+                );
+            var professor =
+                await _professorHelper.FindProfessorByNumeroDePessoa(numeroDePessoa)
+                ?? throw new Middlewares.Exceptions.NotFoundException(
+                    $"Professor com NumeroDePessoa {numeroDePessoa} não encontrado."
+                );
             disciplina.Professor = professor;
             _context.Disciplinas.Update(disciplina);
             await _context.SaveChangesAsync();
@@ -63,34 +61,30 @@ namespace Backend.src.services
 
         public async Task AtualizarDisciplina(DisciplinaModel disciplinaAtualizada)
         {
-            var disciplinaExistente = await _context.Disciplinas.FindAsync(disciplinaAtualizada.Id);
-
-            if (disciplinaExistente == null)
-            {
-                throw new Middlewares.Exceptions.NotFoundException($"Disciplina com ID {disciplinaAtualizada.Id} não encontrada.");
-            }
-
+            var disciplinaExistente =
+                await _context.Disciplinas.FindAsync(disciplinaAtualizada.Id)
+                ?? throw new Middlewares.Exceptions.NotFoundException(
+                    $"Disciplina com ID {disciplinaAtualizada.Id} não encontrada."
+                );
             _context.Entry(disciplinaExistente).CurrentValues.SetValues(disciplinaAtualizada);
             await _context.SaveChangesAsync();
         }
 
         public async Task<List<DisciplinaModel>> ListarDisciplinas()
         {
-            return await _context.Disciplinas
-                .Include(d => d.Professor)
+            return await _context
+                .Disciplinas.Include(d => d.Professor)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
         public async Task RemoverDisciplina(int disciplinaId)
         {
-            var disciplina = await _context.Disciplinas.FindAsync(disciplinaId);
-
-            if (disciplina == null)
-            {
-                throw new Middlewares.Exceptions.NotFoundException($"Disciplina com ID {disciplinaId} não encontrada.");
-            }
-
+            var disciplina =
+                await _context.Disciplinas.FindAsync(disciplinaId)
+                ?? throw new Middlewares.Exceptions.NotFoundException(
+                    $"Disciplina com ID {disciplinaId} não encontrada."
+                );
             _context.Disciplinas.Remove(disciplina);
             await _context.SaveChangesAsync();
         }

@@ -82,5 +82,21 @@ namespace Backend.src.controllers
             List<AlunoModel> alunos = await _alunoService.ListarAlunos();
             return Ok(alunos);
         }
+
+        /// <summary>
+        /// Obtém os dados de um aluno específico.
+        /// </summary>
+        /// <param name="numeroDePessoa">Número identificador da pessoa</param>
+        /// <returns>Retorna os dados do aluno</returns>
+        /// <response code="200">Retorna os dados do aluno</response>
+        /// <response code="404">Se o aluno não for encontrado</response>
+        /// <response code="500">Erro interno do servidor</response>
+        [HttpGet("get-aluno/{numeroDePessoa}")]
+        [ProducesResponseType(typeof(List<AlunoModel>), 200)]
+        public async Task<IActionResult> GetAluno(int numeroDePessoa)
+        {
+            AlunoModel aluno = await _alunoService.GetAlunoByNumeroDePessoa(numeroDePessoa);
+            return Ok(aluno);
+        }
     }
 }

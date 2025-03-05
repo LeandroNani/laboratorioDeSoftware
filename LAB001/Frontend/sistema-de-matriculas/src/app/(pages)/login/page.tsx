@@ -25,7 +25,7 @@ export default function LoginPage() {
       const response = await login({ ...formData, numeroDePessoa: Number(formData.numeroDePessoa) })
 
       if (response.status === 200) {
-        window.location.href = "/"
+        window.location.href = `/profile/${response.data.numeroDePessoa}`
       }
     } catch (error) {
       if (error instanceof AxiosError && error.response && error.status === 401) {

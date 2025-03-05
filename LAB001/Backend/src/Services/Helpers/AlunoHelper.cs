@@ -11,7 +11,9 @@ namespace Backend.src.services.Helpers
 
         public async Task<AlunoModel> FindAlunoByNumeroDePessoa(int numeroDePessoa)
         {
-            return await _context.Alunos.FindAsync(numeroDePessoa)
+            return await _context
+                    .Alunos.Include(a => a.Matricula)
+                    .FirstOrDefaultAsync(a => a.NumeroDePessoa == numeroDePessoa)
                 ?? throw new NotFoundException(
                     $"Aluno com o numero de pessoa {numeroDePessoa} não encontrado"
                 );

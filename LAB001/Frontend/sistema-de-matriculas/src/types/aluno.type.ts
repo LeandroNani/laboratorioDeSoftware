@@ -3,10 +3,15 @@ import { Disciplina } from "./disciplina.type";
 import { Pessoa } from "./pessoa.type";
 
 export type Aluno = Pessoa & {
-    matricula: string;
-    mensalidade: number;
     email?: string;
+    matricula: Matricula;
     curso?: Curso;
-    planoDeEnsino: Disciplina[];
     disciplinasCursadas: Disciplina[];
+}
+
+export type Matricula = {
+    numeroDeMatricula: number,
+    ativa: boolean,
+    planoDeEnsino: Disciplina[],
+    mensalidade: number
 }
