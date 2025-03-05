@@ -3,6 +3,7 @@ using Backend.src.DTOs;
 using Backend.src.models;
 using Backend.src.services.Helpers;
 using Backend.src.services.interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.src.services
 {
@@ -43,19 +44,39 @@ namespace Backend.src.services
             return Disciplina;
         }
 
-        public void AtualizarProfessor()
+        public async Task AtualizarProfessor(ProfessorModel professorAtualizado)
         {
-            throw new NotImplementedException();
+            ProfessorModel? professorExistente = await _context.Professores.FindAsync(professorAtualizado.NumeroDePessoa);
+
+            if (professorExistente == null)
+            {
+                throw new Middlewares.Exceptions.NotFoundException($"Professor com NumeroDePessoa {professorAtualizado.NumeroDePessoa} não encontrado.");
+            }
+
+            _context.Entry(professorExistente).CurrentValues.SetValues(professorAtualizado);
+
+            await _context.SaveChangesAsync();
         }
 
-        public List<ProfessorModel> ListarProfessores()
+        public async Task<List<ProfessorModel>> ListarProfessores()
         {
-            throw new NotImplementedException();
+            return await _context.Professores
+                .Include(p => p.Disciplinas)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public void RemoverProfessor()
+        public async Task RemoverProfessor(int numeroDePessoa)
         {
-            throw new NotImplementedException();
+            ProfessorModel? professor = await _context.Professores.FindAsync(numeroDePessoa);
+
+            if (professor == null)
+            {
+                throw new Middlewares.Exceptions.NotFoundException($"Professor com NumeroDePessoa {numeroDePessoa} não encontrado.");
+            }
+
+            _context.Professores.Remove(professor);
+            await _context.SaveChangesAsync();
         }
     }
 }
