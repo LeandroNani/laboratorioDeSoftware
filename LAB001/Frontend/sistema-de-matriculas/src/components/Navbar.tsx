@@ -5,14 +5,11 @@ const Navbar: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <nav className="bg-white shadow-md">
+        <nav className="bg-zinc-900 shadow-md text-white">
             <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-                <div className="text-2xl font-bold text-gray-800">Matriculas</div>
-
-                <div className="hidden md:flex space-x-6">
-                    <a href="#" className="text-gray-600 hover:text-gray-800">Home</a>
+                <div className="text-2xl font-bold ">
+                    <a href="#" className=" hover:text-gray-300">Matriculas</a>
                 </div>
-
                 <div className="md:hidden">
                     <button
                         onClick={() => setIsOpen(!isOpen)}
@@ -28,14 +25,6 @@ const Navbar: React.FC = () => {
                     </button>
                 </div>
             </div>
-
-            {isOpen && (
-                <div className="md:hidden bg-white">
-                    <div className="px-2 pt-2 pb-3 space-y-1">
-                        <a href="#" className="block text-gray-600 hover:text-gray-800">Home</a>
-                    </div>
-                </div>
-            )}
         </nav>
     );
 };
