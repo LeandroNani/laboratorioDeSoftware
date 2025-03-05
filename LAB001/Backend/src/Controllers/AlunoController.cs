@@ -98,5 +98,12 @@ namespace Backend.src.controllers
             AlunoModel aluno = await _alunoService.GetAlunoByNumeroDePessoa(numeroDePessoa);
             return Ok(aluno);
         }
+
+        [HttpPut("atualizar-aluno")]
+        public IActionResult UpdateAluno(AlunoModel aluno)
+        {
+            _alunoService.UpdateAluno(aluno);
+            return Ok(aluno);
+        }
     }
 }

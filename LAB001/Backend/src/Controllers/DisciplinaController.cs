@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Backend.src.Data;
 using Backend.src.DTOs;
 using Backend.src.models;
@@ -13,14 +14,10 @@ namespace Backend.src.controllers
         private readonly DisciplinaService _disciplinaService = new(context);
 
         [HttpPost("nova-disciplina")]
-        public async Task<IActionResult> NovaDisciplina(
-            AdicionarDisciplinaRequest adicionarDisciplinaRequest
-        )
+        public async Task<IActionResult> NovaDisciplina(DisciplinaModel disciplina)
         {
-            CurriculoModel curriculo = await _disciplinaService.AdicionarDisciplina(
-                adicionarDisciplinaRequest
-            );
-            return Ok(curriculo);
+            await _disciplinaService.AdicionarDisciplina(disciplina);
+            return Ok(disciplina);
         }
 
         [HttpGet("listar")]
@@ -34,6 +31,13 @@ namespace Backend.src.controllers
         public async Task<IActionResult> GetDisciplina(string id)
         {
             DisciplinaModel disciplina = await _disciplinaService.GetDisciplinaById(id);
+            return Ok(disciplina);
+        }
+
+        [HttpPut("atualizar-disciplina")]
+        public async Task<IActionResult> AtualizarDisciplina(DisciplinaModel disciplina)
+        {
+            await _disciplinaService.AtualizarDisciplina(disciplina);
             return Ok(disciplina);
         }
     }

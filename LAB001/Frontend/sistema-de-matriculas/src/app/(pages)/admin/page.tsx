@@ -1,12 +1,17 @@
 'use client'
-import { createAluno, createCurso } from '@/api/admin';
-import React, { useState } from 'react';
-import { useEffect } from 'react';
-import { getCursos } from '@/api/admin';
-import { Curso } from '@/@types/curso.type';
+import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
+import {
+    createAluno, createCurso, createProfessor,
+    createDisciplina, updateAluno, updateCurso, updateDisciplina,
+    getCursos, getAlunos, getProfessores, getDisciplinas
+} from '@/api/admin';
+import { Curso } from '@/@types/curso.type';
+import { Aluno } from '@/@types/aluno.type';
+import { Professor } from '@/@types/professor.type';
+import { Disciplina } from '@/@types/disciplina.type';
 
-type MenuItem = 'alunos' | 'curriculos' | 'cursos' | 'disciplinas' | 'matriculas' | 'professores';
+type MenuItem = 'alunos' | 'curriculos' | 'cursos' | 'disciplinas' | 'professores';
 
 const AdminDashboard: React.FC = () => {
     const [selectedMenu, setSelectedMenu] = useState<MenuItem>('alunos');
@@ -14,7 +19,7 @@ const AdminDashboard: React.FC = () => {
     return (
         <>
             <Navbar />
-                <div className="flex h-screen">
+            <div className="flex h-screen">
                 {/* Sidebar */}
                 <aside className="w-64 bg-zinc-800 text-white p-4">
                     <h1 className="text-2xl font-bold text-yellow-500 mb-6">Painel Administrativo</h1>
@@ -45,12 +50,6 @@ const AdminDashboard: React.FC = () => {
                                 Disciplinas
                             </li>
                             <li
-                                className={`cursor-pointer p-2 rounded hover:bg-zinc-700 ${selectedMenu === 'matriculas' ? 'bg-zinc-700' : ''}`}
-                                onClick={() => setSelectedMenu('matriculas')}
-                            >
-                                Matrículas
-                            </li>
-                            <li
                                 className={`cursor-pointer p-2 rounded hover:bg-zinc-700 ${selectedMenu === 'professores' ? 'bg-zinc-700' : ''}`}
                                 onClick={() => setSelectedMenu('professores')}
                             >
@@ -60,13 +59,11 @@ const AdminDashboard: React.FC = () => {
                     </nav>
                 </aside>
 
-                {/* Área de conteúdo */}
+                {/* Main Content */}
                 <main className="flex-1 p-8 overflow-y-auto bg-gray-100">
-                    {selectedMenu === 'alunos' && <AlunoForm />}
-                    {selectedMenu === 'curriculos' && <CurriculoForm />}
-                    {selectedMenu === 'cursos' && <CursoForm />}
-                    {selectedMenu === 'disciplinas' && <DisciplinaForm />}
-                    {selectedMenu === 'matriculas' && <MatriculaForm />}
+                    {selectedMenu === 'alunos' && <AlunoManager />}
+                    {selectedMenu === 'cursos' && <CursoManager />}
+                    {selectedMenu === 'disciplinas' && <DisciplinaManager />}
                     {selectedMenu === 'professores' && <ProfessorForm />}
                 </main>
             </div>
@@ -74,172 +71,319 @@ const AdminDashboard: React.FC = () => {
     );
 };
 
-const AlunoForm: React.FC = () => {
+//
+// ALUNO MANAGER: Handles creating, listing and editing alunos
+//
+const AlunoManager: React.FC = () => {
+    type ViewMode = "create" | "list" | "edit";
+    const [viewMode, setViewMode] = useState<ViewMode>("create");
+
     const [nome, setNome] = useState("");
     const [senha, setSenha] = useState("");
     const [email, setEmail] = useState("");
     const [cursoId, setCursoId] = useState("");
     const [cursos, setCursos] = useState<Curso[]>([]);
+    const [alunos, setAlunos] = useState<Aluno[]>([]);
+    const [editingAluno, setEditingAluno] = useState<Aluno>({} as Aluno);
 
     useEffect(() => {
         const fetchCursos = async () => {
             const response = await getCursos();
             setCursos(response);
         };
-
         fetchCursos();
     }, []);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const fetchAlunos = async () => {
+        const response = await getAlunos();
+        setAlunos(response);
+    };
+
+    useEffect(() => {
+        if (viewMode === "list") fetchAlunos();
+    }, [viewMode]);
+
+    const handleCreate = async (e: React.FormEvent) => {
         e.preventDefault();
         const selectedCurso = cursos.find(curso => curso.id === cursoId);
         if (selectedCurso) {
             const aluno = {
-                nome, senha, email, curso: selectedCurso,
+                nome,
+                senha,
+                email,
+                curso: selectedCurso,
                 matricula: {
-                    numeroDeMatricula: "1234",
+                    numeroDeMatricula: "1234", // generated automatically on backend
                     ativa: false,
                     planoDeEnsino: [],
                     mensalidade: 0
                 },
                 matriculaId: "1234",
                 disciplinasCursadas: []
-            }
-            createAluno(aluno);
+            };
+            await createAluno(aluno);
+            setNome(""); setSenha(""); setEmail(""); setCursoId("");
+            fetchAlunos();
+            setViewMode("list");
         } else {
             console.error("Curso não selecionado");
         }
     };
 
-    return (
-        <div className="max-w-lg mx-auto bg-white p-6 rounded shadow">
-            <h2 className="text-2xl font-bold mb-4 text-zinc-800">Cadastrar Aluno</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                    <label className="block text-zinc-800">Nome</label>
-                    <input
-                        type="text"
-                        value={nome}
-                        onChange={(e) => setNome(e.target.value)}
-                        className="w-full border border-zinc-300 p-2 rounded"
-                    />
-                </div>
-                <div>
-                    <label className="block text-zinc-800">Senha</label>
-                    <input
-                        type="password"
-                        value={senha}
-                        onChange={(e) => setSenha(e.target.value)}
-                        className="w-full border border-zinc-300 p-2 rounded"
-                    />
-                </div>
-                <div>
-                    <label className="block text-zinc-800">Email</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="w-full border border-zinc-300 p-2 rounded"
-                    />
-                </div>
-                <div>
-                    <label className="block text-zinc-800">Curso</label>
-                    <select
-                        value={cursoId}
-                        onChange={(e) => setCursoId(e.target.value)}
-                        className="w-full border border-zinc-300 p-2 rounded"
-                    >
-                        <option value="">Selecione um curso</option>
-                        {cursos.map(curso => (
-                            <option key={curso.id} value={curso.id}>
-                                {curso.nome}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <button type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
-                    Cadastrar
-                </button>
-            </form>
-        </div>
-    );
-};
-
-const CurriculoForm: React.FC = () => {
-    const [semestre, setSemestre] = useState("");
-
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleEdit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Integre com a API para cadastrar o currículo
-        console.log({ semestre });
+        await updateAluno(editingAluno);
+        setEditingAluno({} as Aluno);
+        fetchAlunos();
+        setViewMode("list");
     };
 
     return (
-        <div className="max-w-lg mx-auto bg-white p-6 rounded shadow">
-            <h2 className="text-2xl font-bold mb-4 text-zinc-800">Cadastrar Currículo</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                    <label className="block text-zinc-800">Semestre</label>
-                    <input
-                        type="text"
-                        value={semestre}
-                        onChange={(e) => setSemestre(e.target.value)}
-                        className="w-full border border-zinc-300 p-2 rounded"
-                        placeholder="Ex: 2023.1"
-                    />
-                </div>
-                <button type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
-                    Cadastrar
+        <div className="max-w-3xl mx-auto bg-white p-6 rounded shadow">
+            <div className="flex justify-between mb-4">
+                <button onClick={() => setViewMode("create")} className="px-4 py-2 bg-yellow-500 text-white rounded">
+                    Novo Aluno
                 </button>
-            </form>
+                <button onClick={() => setViewMode("list")} className="px-4 py-2 bg-yellow-500 text-white rounded">
+                    Listar Alunos
+                </button>
+            </div>
+
+            {viewMode === "create" && (
+                <form onSubmit={handleCreate} className="space-y-4">
+                    <h2 className="text-2xl font-bold mb-4 text-zinc-800">Cadastrar Aluno</h2>
+                    <div>
+                        <label className="block text-zinc-800">Nome</label>
+                        <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} className="w-full border border-zinc-300 p-2 rounded" />
+                    </div>
+                    <div>
+                        <label className="block text-zinc-800">Senha</label>
+                        <input type="password" value={senha} onChange={(e) => setSenha(e.target.value)} className="w-full border border-zinc-300 p-2 rounded" />
+                    </div>
+                    <div>
+                        <label className="block text-zinc-800">Email</label>
+                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full border border-zinc-300 p-2 rounded" />
+                    </div>
+                    <div>
+                        <label className="block text-zinc-800">Curso</label>
+                        <select value={cursoId} onChange={(e) => setCursoId(e.target.value)} className="w-full border border-zinc-300 p-2 rounded">
+                            <option value="">Selecione um curso</option>
+                            {cursos.map(curso => (
+                                <option key={curso.id} value={curso.id}>
+                                    {curso.nome}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <button type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+                        Cadastrar
+                    </button>
+                </form>
+            )}
+
+            {viewMode === "list" && (
+                <div>
+                    <h2 className="text-2xl font-bold mb-4 text-zinc-800">Listagem de Alunos</h2>
+                    <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                            <tr>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Curso</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                            {alunos.map(aluno => (
+                                <tr key={aluno.matricula.numeroDeMatricula}>
+                                    <td className="px-6 py-4 whitespace-nowrap">{aluno.nome}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap">{aluno.email}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap">{aluno.curso?.nome}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <button
+                                            onClick={() => {
+                                                setEditingAluno(aluno);
+                                                setViewMode("edit");
+                                            }}
+                                            className="px-2 py-1 bg-blue-500 text-white rounded"
+                                        >
+                                            Editar
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+
+            {viewMode === "edit" && editingAluno && (
+                <form onSubmit={handleEdit} className="space-y-4">
+                    <h2 className="text-2xl font-bold mb-4 text-zinc-800">Editar Aluno</h2>
+                    <div>
+                        <label className="block text-zinc-800">Nome</label>
+                        <input type="text" value={editingAluno.nome} onChange={(e) => setEditingAluno({ ...editingAluno, nome: e.target.value })} className="w-full border border-zinc-300 p-2 rounded" />
+                    </div>
+                    <div>
+                        <label className="block text-zinc-800">Email</label>
+                        <input type="email" value={editingAluno.email} onChange={(e) => setEditingAluno({ ...editingAluno, email: e.target.value })} className="w-full border border-zinc-300 p-2 rounded" />
+                    </div>
+                    <div className="flex space-x-4">
+                        <button type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+                            Salvar Alterações
+                        </button>
+                        <button type="button" onClick={() => setViewMode("list")} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            )}
         </div>
     );
 };
 
-const CursoForm: React.FC = () => {
+//
+// CURSO MANAGER: Handles creating, listing and editing cursos
+//
+const CursoManager: React.FC = () => {
+    type ViewMode = "create" | "list" | "edit";
+    const [viewMode, setViewMode] = useState<ViewMode>("create");
+
     const [nome, setNome] = useState("");
     const [numeroDeCreditos, setNumeroDeCreditos] = useState(0);
+    const [cursos, setCursos] = useState<Curso[]>([]);
+    const [editingCurso, setEditingCurso] = useState<Curso>({} as Curso);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const fetchCursosList = async () => {
+        const response = await getCursos();
+        setCursos(response);
+    };
+
+    useEffect(() => {
+        if (viewMode === "list") fetchCursosList();
+    }, [viewMode]);
+
+    const handleCreate = async (e: React.FormEvent) => {
         e.preventDefault();
-        createCurso({ nome, numeroDeCreditos, alunos: [], disciplinas: [], id: Math.floor(100000 + Math.random() * 900000).toString() });
-        console.log({ nome, numeroDeCreditos });
+        const novoCurso = {
+            nome,
+            numeroDeCreditos,
+            alunos: [],
+            disciplinas: [],
+            id: Math.floor(100000 + Math.random() * 900000).toString()
+        };
+        await createCurso(novoCurso);
+        setNome(""); setNumeroDeCreditos(0);
+        fetchCursosList();
+        setViewMode("list");
+    };
+
+    const handleEdit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        await updateCurso(editingCurso);
+        setEditingCurso({} as Curso);
+        fetchCursosList();
+        setViewMode("list");
     };
 
     return (
-        <div className="max-w-lg mx-auto bg-white p-6 rounded shadow">
-            <h2 className="text-2xl font-bold mb-4 text-zinc-800">Cadastrar Curso</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                    <label className="block text-zinc-800">Nome</label>
-                    <input
-                        type="text"
-                        value={nome}
-                        onChange={(e) => setNome(e.target.value)}
-                        className="w-full border border-zinc-300 p-2 rounded"
-                    />
-                </div>
-                <div>
-                    <label className="block text-zinc-800">Número de Créditos</label>
-                    <input
-                        type="number"
-                        value={numeroDeCreditos}
-                        onChange={(e) => setNumeroDeCreditos(Number(e.target.value))}
-                        className="w-full border border-zinc-300 p-2 rounded"
-                    />
-                </div>
-                <button type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
-                    Cadastrar
+        <div className="max-w-3xl mx-auto bg-white p-6 rounded shadow">
+            <div className="flex justify-between mb-4">
+                <button onClick={() => setViewMode("create")} className="px-4 py-2 bg-yellow-500 text-white rounded">
+                    Novo Curso
                 </button>
-            </form>
+                <button onClick={() => setViewMode("list")} className="px-4 py-2 bg-yellow-500 text-white rounded">
+                    Listar Cursos
+                </button>
+            </div>
+
+            {viewMode === "create" && (
+                <form onSubmit={handleCreate} className="space-y-4">
+                    <h2 className="text-2xl font-bold mb-4 text-zinc-800">Cadastrar Curso</h2>
+                    <div>
+                        <label className="block text-zinc-800">Nome</label>
+                        <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} className="w-full border border-zinc-300 p-2 rounded" />
+                    </div>
+                    <div>
+                        <label className="block text-zinc-800">Número de Créditos</label>
+                        <input type="number" value={numeroDeCreditos} onChange={(e) => setNumeroDeCreditos(Number(e.target.value))} className="w-full border border-zinc-300 p-2 rounded" />
+                    </div>
+                    <button type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+                        Cadastrar
+                    </button>
+                </form>
+            )}
+
+            {viewMode === "list" && (
+                <div>
+                    <h2 className="text-2xl font-bold mb-4 text-zinc-800">Listagem de Cursos</h2>
+                    <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                            <tr>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Créditos</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                            {cursos.map(curso => (
+                                <tr key={curso.id}>
+                                    <td className="px-6 py-4 whitespace-nowrap">{curso.nome}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap">{curso.numeroDeCreditos}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <button
+                                            onClick={() => {
+                                                setEditingCurso(curso);
+                                                setViewMode("edit");
+                                            }}
+                                            className="px-2 py-1 bg-blue-500 text-white rounded"
+                                        >
+                                            Editar
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+
+            {viewMode === "edit" && editingCurso && (
+                <form onSubmit={handleEdit} className="space-y-4">
+                    <h2 className="text-2xl font-bold mb-4 text-zinc-800">Editar Curso</h2>
+                    <div>
+                        <label className="block text-zinc-800">Nome</label>
+                        <input type="text" value={editingCurso.nome} onChange={(e) => setEditingCurso({ ...editingCurso, nome: e.target.value })} className="w-full border border-zinc-300 p-2 rounded" />
+                    </div>
+                    <div>
+                        <label className="block text-zinc-800">Número de Créditos</label>
+                        <input type="number" value={editingCurso.numeroDeCreditos} onChange={(e) => setEditingCurso({ ...editingCurso, numeroDeCreditos: Number(e.target.value) })} className="w-full border border-zinc-300 p-2 rounded" />
+                    </div>
+                    <div className="flex space-x-4">
+                        <button type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+                            Salvar Alterações
+                        </button>
+                        <button type="button" onClick={() => setViewMode("list")} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            )}
         </div>
     );
 };
 
-const DisciplinaForm: React.FC = () => {
+//
+// DISCIPLINA MANAGER: Handles creating, listing and editing disciplinas,
+// including allocating a professor and multiple alunos.
+//
+const DisciplinaManager: React.FC = () => {
+    type ViewMode = "create" | "list" | "edit";
+    const [viewMode, setViewMode] = useState<ViewMode>("create");
+
+    // Fields for Disciplina
     const [nome, setNome] = useState("");
     const [isActive, setIsActive] = useState(false);
-    const [professorId, setProfessorId] = useState("");
     const [preco, setPreco] = useState(0);
     const [periodo, setPeriodo] = useState("");
     const [campus, setCampus] = useState("");
@@ -247,147 +391,232 @@ const DisciplinaForm: React.FC = () => {
     const [descricao, setDescricao] = useState("");
     const [quantAlunos, setQuantAlunos] = useState(0);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    // Allocation: professor and alunos
+    const [professorId, setProfessorId] = useState("");
+    const [professores, setProfessores] = useState<Professor[]>([]);
+
+    const [disciplinas, setDisciplinas] = useState<Disciplina[]>([]);
+    const [editingDisciplina, setEditingDisciplina] = useState<Disciplina | null>(null);
+
+    // Fetch professors and alunos once on mount
+    useEffect(() => {
+        const fetchProfessores = async () => {
+            const response = await getProfessores();
+            setProfessores(response);
+        };
+        fetchProfessores();
+    }, []);
+
+    // Fetch disciplinas when in list mode
+    useEffect(() => {
+        if (viewMode === "list") {
+            const fetchDisciplinas = async () => {
+                const response = await getDisciplinas();
+                setDisciplinas(response);
+            };
+            fetchDisciplinas();
+        }
+    }, [viewMode]);
+
+    const handleCreate = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Integre com a API para cadastrar a disciplina
-        console.log({ nome, isActive, professorId, preco, periodo, campus, optativa, descricao, quantAlunos });
+        const selectedProfessor = professores.find(prof => prof.numeroDePessoa === professorId);
+
+        const novaDisciplina = {
+            nome,
+            isActive,
+            preco,
+            periodo,
+            campus,
+            optativa,
+            descricao,
+            quantAlunos,
+            professorId,
+            id: Math.floor(100000 + Math.random() * 900000).toString(),
+            disciplinasNecessarias: [],
+            professor: selectedProfessor || {} as Professor
+        };
+
+        await createDisciplina(novaDisciplina);
+        // Reset fields
+        setNome("");
+        setIsActive(false);
+        setPreco(0);
+        setPeriodo("");
+        setCampus("");
+        setOptativa(false);
+        setDescricao("");
+        setQuantAlunos(0);
+        setProfessorId("");
+        setViewMode("list");
+    };
+
+    const handleEdit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (editingDisciplina) {
+            await updateDisciplina(editingDisciplina);
+            setEditingDisciplina(null);
+            setViewMode("list");
+        }
     };
 
     return (
-        <div className="max-w-lg mx-auto bg-white p-6 rounded shadow">
-            <h2 className="text-2xl font-bold mb-4 text-zinc-800">Cadastrar Disciplina</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                    <label className="block text-zinc-800">Nome</label>
-                    <input
-                        type="text"
-                        value={nome}
-                        onChange={(e) => setNome(e.target.value)}
-                        className="w-full border border-zinc-300 p-2 rounded"
-                    />
-                </div>
-                <div className="flex items-center">
-                    <input
-                        type="checkbox"
-                        checked={isActive}
-                        onChange={(e) => setIsActive(e.target.checked)}
-                        className="mr-2"
-                    />
-                    <label className="text-zinc-800">Ativo</label>
-                </div>
-                <div>
-                    <label className="block text-zinc-800">Professor ID</label>
-                    <input
-                        type="text"
-                        value={professorId}
-                        onChange={(e) => setProfessorId(e.target.value)}
-                        className="w-full border border-zinc-300 p-2 rounded"
-                        placeholder="Informe o ID do professor"
-                    />
-                </div>
-                <div>
-                    <label className="block text-zinc-800">Preço</label>
-                    <input
-                        type="number"
-                        value={preco}
-                        onChange={(e) => setPreco(Number(e.target.value))}
-                        className="w-full border border-zinc-300 p-2 rounded"
-                    />
-                </div>
-                <div>
-                    <label className="block text-zinc-800">Período</label>
-                    <input
-                        type="text"
-                        value={periodo}
-                        onChange={(e) => setPeriodo(e.target.value)}
-                        className="w-full border border-zinc-300 p-2 rounded"
-                        placeholder="Ex: Matutino, Vespertino, Noturno"
-                    />
-                </div>
-                <div>
-                    <label className="block text-zinc-800">Campus</label>
-                    <input
-                        type="text"
-                        value={campus}
-                        onChange={(e) => setCampus(e.target.value)}
-                        className="w-full border border-zinc-300 p-2 rounded"
-                    />
-                </div>
-                <div className="flex items-center">
-                    <input
-                        type="checkbox"
-                        checked={optativa}
-                        onChange={(e) => setOptativa(e.target.checked)}
-                        className="mr-2"
-                    />
-                    <label className="text-zinc-800">Optativa</label>
-                </div>
-                <div>
-                    <label className="block text-zinc-800">Descrição</label>
-                    <textarea
-                        value={descricao}
-                        onChange={(e) => setDescricao(e.target.value)}
-                        className="w-full border border-zinc-300 p-2 rounded"
-                    />
-                </div>
-                <div>
-                    <label className="block text-zinc-800">Quantidade de Alunos</label>
-                    <input
-                        type="number"
-                        value={quantAlunos}
-                        onChange={(e) => setQuantAlunos(Number(e.target.value))}
-                        className="w-full border border-zinc-300 p-2 rounded"
-                        max={60}
-                    />
-                </div>
-                <button type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
-                    Cadastrar
+        <div className="max-w-3xl mx-auto bg-white p-6 rounded shadow">
+            <div className="flex justify-between mb-4">
+                <button onClick={() => setViewMode("create")} className="px-4 py-2 bg-yellow-500 text-white rounded">
+                    Nova Disciplina
                 </button>
-            </form>
+                <button onClick={() => setViewMode("list")} className="px-4 py-2 bg-yellow-500 text-white rounded">
+                    Listar Disciplinas
+                </button>
+            </div>
+
+            {viewMode === "create" && (
+                <form onSubmit={handleCreate} className="space-y-4">
+                    <h2 className="text-2xl font-bold mb-4 text-zinc-800">Cadastrar Disciplina</h2>
+                    <div>
+                        <label className="block text-zinc-800">Nome</label>
+                        <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} className="w-full border border-zinc-300 p-2 rounded" />
+                    </div>
+                    <div className="flex items-center">
+                        <input type="checkbox" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} className="mr-2" />
+                        <label className="text-zinc-800">Ativa</label>
+                    </div>
+                    <div>
+                        <label className="block text-zinc-800">Preço</label>
+                        <input type="number" value={preco} onChange={(e) => setPreco(Number(e.target.value))} className="w-full border border-zinc-300 p-2 rounded" />
+                    </div>
+                    <div>
+                        <label className="block text-zinc-800">Período</label>
+                        <input type="text" value={periodo} onChange={(e) => setPeriodo(e.target.value)} className="w-full border border-zinc-300 p-2 rounded" placeholder="Ex: Matutino, Vespertino, Noturno" />
+                    </div>
+                    <div>
+                        <label className="block text-zinc-800">Campus</label>
+                        <input type="text" value={campus} onChange={(e) => setCampus(e.target.value)} className="w-full border border-zinc-300 p-2 rounded" />
+                    </div>
+                    <div className="flex items-center">
+                        <input type="checkbox" checked={optativa} onChange={(e) => setOptativa(e.target.checked)} className="mr-2" />
+                        <label className="text-zinc-800">Optativa</label>
+                    </div>
+                    <div>
+                        <label className="block text-zinc-800">Descrição</label>
+                        <textarea value={descricao} onChange={(e) => setDescricao(e.target.value)} className="w-full border border-zinc-300 p-2 rounded" />
+                    </div>
+                    <div>
+                        <label className="block text-zinc-800">Quantidade de Alunos</label>
+                        <input type="number" value={quantAlunos} onChange={(e) => setQuantAlunos(Number(e.target.value))} className="w-full border border-zinc-300 p-2 rounded" max={60} />
+                    </div>
+                    <div>
+                        <label className="block text-zinc-800">Professor</label>
+                        <select value={professorId} onChange={(e) => setProfessorId(e.target.value)} className="w-full border border-zinc-300 p-2 rounded">
+                            <option value="">Selecione um professor</option>
+                            {professores.map(prof => (
+                                <option key={prof.numeroDePessoa} value={prof.numeroDePessoa}>{prof.nome}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <button type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+                        Cadastrar
+                    </button>
+                </form>
+            )}
+
+            {viewMode === "list" && (
+                <div>
+                    <h2 className="text-2xl font-bold mb-4 text-zinc-800">Listagem de Disciplinas</h2>
+                    <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                            <tr>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Professor</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Alunos Alocados</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                            {disciplinas.map(disciplina => (
+                                <tr key={disciplina.id}>
+                                    <td className="px-6 py-4 whitespace-nowrap">{disciplina.nome}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap">{disciplina.professor?.nome}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <button
+                                            onClick={() => {
+                                                setEditingDisciplina(disciplina);
+                                                setViewMode("edit");
+                                            }}
+                                            className="px-2 py-1 bg-blue-500 text-white rounded"
+                                        >
+                                            Editar
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+
+            {viewMode === "edit" && editingDisciplina && (
+                <form onSubmit={handleEdit} className="space-y-4">
+                    <h2 className="text-2xl font-bold mb-4 text-zinc-800">Editar Disciplina</h2>
+                    <div>
+                        <label className="block text-zinc-800">Nome</label>
+                        <input type="text" value={editingDisciplina.nome} onChange={(e) => setEditingDisciplina({ ...editingDisciplina, nome: e.target.value })} className="w-full border border-zinc-300 p-2 rounded" />
+                    </div>
+                    <div className="flex items-center">
+                        <input type="checkbox" checked={editingDisciplina.isActive} onChange={(e) => setEditingDisciplina({ ...editingDisciplina, isActive: e.target.checked })} className="mr-2" />
+                        <label className="text-zinc-800">Ativa</label>
+                    </div>
+                    <div>
+                        <label className="block text-zinc-800">Preço</label>
+                        <input type="number" value={editingDisciplina.preco} onChange={(e) => setEditingDisciplina({ ...editingDisciplina, preco: Number(e.target.value) })} className="w-full border border-zinc-300 p-2 rounded" />
+                    </div>
+                    <div>
+                        <label className="block text-zinc-800">Período</label>
+                        <input type="text" value={editingDisciplina.periodo} onChange={(e) => setEditingDisciplina({ ...editingDisciplina, periodo: e.target.value })} className="w-full border border-zinc-300 p-2 rounded" placeholder="Ex: Matutino, Vespertino, Noturno" />
+                    </div>
+                    <div>
+                        <label className="block text-zinc-800">Campus</label>
+                        <input type="text" value={editingDisciplina.campus} onChange={(e) => setEditingDisciplina({ ...editingDisciplina, campus: e.target.value })} className="w-full border border-zinc-300 p-2 rounded" />
+                    </div>
+                    <div className="flex items-center">
+                        <input type="checkbox" checked={editingDisciplina.optativa} onChange={(e) => setEditingDisciplina({ ...editingDisciplina, optativa: e.target.checked })} className="mr-2" />
+                        <label className="text-zinc-800">Optativa</label>
+                    </div>
+                    <div>
+                        <label className="block text-zinc-800">Descrição</label>
+                        <textarea value={editingDisciplina.descricao} onChange={(e) => setEditingDisciplina({ ...editingDisciplina, descricao: e.target.value })} className="w-full border border-zinc-300 p-2 rounded" />
+                    </div>
+                    <div>
+                        <label className="block text-zinc-800">Quantidade de Alunos</label>
+                        <input type="number" value={editingDisciplina.quantAlunos} onChange={(e) => setEditingDisciplina({ ...editingDisciplina, quantAlunos: Number(e.target.value) })} className="w-full border border-zinc-300 p-2 rounded" max={60} />
+                    </div>
+                    <div>
+                        <label className="block text-zinc-800">Professor</label>
+                        <select value={editingDisciplina.professor.numeroDePessoa} onChange={(e) => setEditingDisciplina({ ...editingDisciplina, id: e.target.value })} className="w-full border border-zinc-300 p-2 rounded">
+                            <option value="">Selecione um professor</option>
+                            {professores.map(prof => (
+                                <option key={prof.numeroDePessoa} value={prof.numeroDePessoa}>{prof.nome}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="flex space-x-4">
+                        <button type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+                            Salvar Alterações
+                        </button>
+                        <button type="button" onClick={() => setViewMode("list")} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            )}
         </div>
     );
 };
 
-const MatriculaForm: React.FC = () => {
-    const [ativa, setAtiva] = useState(false);
-    const [mensalidade, setMensalidade] = useState(0);
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        // Integre com a API para cadastrar a matrícula
-        console.log({ ativa, mensalidade });
-    };
-
-    return (
-        <div className="max-w-lg mx-auto bg-white p-6 rounded shadow">
-            <h2 className="text-2xl font-bold mb-4 text-zinc-800">Cadastrar Matrícula</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="flex items-center">
-                    <input
-                        type="checkbox"
-                        checked={ativa}
-                        onChange={(e) => setAtiva(e.target.checked)}
-                        className="mr-2"
-                    />
-                    <label className="text-zinc-800">Ativa</label>
-                </div>
-                <div>
-                    <label className="block text-zinc-800">Mensalidade</label>
-                    <input
-                        type="number"
-                        value={mensalidade}
-                        onChange={(e) => setMensalidade(Number(e.target.value))}
-                        className="w-full border border-zinc-300 p-2 rounded"
-                    />
-                </div>
-                <button type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
-                    Cadastrar
-                </button>
-            </form>
-        </div>
-    );
-};
-
+//
+// PROFESSOR FORM: Simple form to create a professor
+//
 const ProfessorForm: React.FC = () => {
     const [nome, setNome] = useState("");
     const [senha, setSenha] = useState("");
@@ -395,8 +624,9 @@ const ProfessorForm: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Integre com a API para cadastrar o professor
-        console.log({ nome, senha, nivelEscolar });
+        createProfessor({
+            nome, senha, nivelEscolar, disciplinas: []
+        });
     };
 
     return (
@@ -405,31 +635,15 @@ const ProfessorForm: React.FC = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                     <label className="block text-zinc-800">Nome</label>
-                    <input
-                        type="text"
-                        value={nome}
-                        onChange={(e) => setNome(e.target.value)}
-                        className="w-full border border-zinc-300 p-2 rounded"
-                    />
+                    <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} className="w-full border border-zinc-300 p-2 rounded" />
                 </div>
                 <div>
                     <label className="block text-zinc-800">Senha</label>
-                    <input
-                        type="password"
-                        value={senha}
-                        onChange={(e) => setSenha(e.target.value)}
-                        className="w-full border border-zinc-300 p-2 rounded"
-                    />
+                    <input type="password" value={senha} onChange={(e) => setSenha(e.target.value)} className="w-full border border-zinc-300 p-2 rounded" />
                 </div>
                 <div>
                     <label className="block text-zinc-800">Nível Escolar</label>
-                    <input
-                        type="text"
-                        value={nivelEscolar}
-                        onChange={(e) => setNivelEscolar(e.target.value)}
-                        className="w-full border border-zinc-300 p-2 rounded"
-                        placeholder="Ex: Mestrado, Doutorado"
-                    />
+                    <input type="text" value={nivelEscolar} onChange={(e) => setNivelEscolar(e.target.value)} className="w-full border border-zinc-300 p-2 rounded" placeholder="Ex: Mestrado, Doutorado" />
                 </div>
                 <button type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
                     Cadastrar

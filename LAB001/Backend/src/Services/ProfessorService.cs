@@ -35,8 +35,6 @@ namespace Backend.src.services
             ProfessorModel professor = await _professorHelper.FindProfessorByNumeroDePessoa(
                 numeroDePessoa
             );
-
-            professor.Disciplinas.Add(Disciplina);
             Disciplina.Professor = professor;
             _context.Disciplinas.Update(Disciplina);
             _context.Professores.Update(professor);
@@ -58,10 +56,7 @@ namespace Backend.src.services
 
         public async Task<List<ProfessorModel>> ListarProfessores()
         {
-            return await _context
-                .Professores.Include(p => p.Disciplinas)
-                .AsNoTracking()
-                .ToListAsync();
+            return await _context.Professores.ToListAsync();
         }
 
         public async Task RemoverProfessor(string numeroDePessoa)

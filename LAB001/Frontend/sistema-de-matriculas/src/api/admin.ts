@@ -11,7 +11,7 @@ export async function createCurso(curso: Curso) {
 }
 
 export async function createDisciplina(disciplina: Disciplina) {
-    console.log(disciplina)
+    console.log("DISCIPLINA ->", disciplina)
     const response = await api.post("/disciplina/nova-disciplina", disciplina);
     return response;
 }
@@ -56,5 +56,21 @@ export async function getProfessores() {
 
 export async function getAlunos() {
     const response = await api.get("/aluno/listar");
+    console.log(response.data)
     return response.data as Aluno[]
+}
+
+export async function updateAluno(aluno: Aluno) {
+    const response = await api.put("/aluno/atualizar-aluno", aluno);
+    return response.data as Aluno;
+}
+
+export async function updateCurso(curso: Curso) {
+    const response = await api.put("/curso/atualizar-curso", curso);
+    return response.data as Curso;
+}
+
+export async function updateDisciplina(disciplina: Disciplina) {
+    const response = await api.put("/disciplina/atualizar-disciplina", disciplina);
+    return response.data as Disciplina;
 }

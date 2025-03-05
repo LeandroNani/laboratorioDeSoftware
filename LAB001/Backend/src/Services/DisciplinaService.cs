@@ -16,31 +16,19 @@ namespace Backend.src.services
         private readonly ProfessorHelper _professorHelper = new(context);
         private readonly DisciplinaHelper _disciplinaHelper = new(context);
 
-        public async Task<CurriculoModel> AdicionarDisciplina(
-            AdicionarDisciplinaRequest adicionarDisciplinaRequest
-        )
+        public async Task<DisciplinaModel> AdicionarDisciplina(DisciplinaModel disciplina)
         {
-            var curriculoTask = _curriculoHelper.GetCurriculoById(
-                adicionarDisciplinaRequest.CurriculoId
-            );
-            var professorTask = _professorHelper.FindProfessorByNumeroDePessoa(
-                adicionarDisciplinaRequest.Disciplina.Professor.NumeroDePessoa
-            );
-            var adminTask = _authService.FindAdminByNumero(
-                adicionarDisciplinaRequest.NumeroDePessoa
-            );
+            var professor =
+                await _context.Professores.FindAsync(disciplina.ProfessorId)
+                ?? throw new Middlewares.Exceptions.NotFoundException(
+                    $"Professor com ID {disciplina.ProfessorId} não encontrado."
+                );
 
-            await Task.WhenAll(curriculoTask, professorTask, adminTask);
+            disciplina.Professor = professor;
 
-            var curriculo = await curriculoTask;
-            var professor = await professorTask;
-
-            adicionarDisciplinaRequest.Disciplina.Professor = professor;
-            curriculo.Disciplinas.Add(adicionarDisciplinaRequest.Disciplina);
-
-            _curriculoHelper.UpdateCurriculo(curriculo);
+            _context.Disciplinas.Add(disciplina);
             await _context.SaveChangesAsync();
-            return curriculo;
+            return disciplina;
         }
 
         public async Task AlocarProfessor(string disciplinaId, string numeroDePessoa)

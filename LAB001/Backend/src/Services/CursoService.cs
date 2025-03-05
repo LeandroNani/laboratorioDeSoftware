@@ -23,5 +23,11 @@ namespace Backend.src.services
                 .ToListAsync();
             return cursos;
         }
+
+        public CursoModel UpdateCurso(CursoModel curso)
+        {
+            _context.Cursos.Update(curso);
+            return curso;
+        }
     }
 }

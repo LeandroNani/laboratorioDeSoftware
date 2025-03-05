@@ -24,5 +24,12 @@ namespace Backend.src.controllers
             List<CursoModel> cursos = await _cursoService.GetCursos();
             return Ok(cursos);
         }
+
+        [HttpPut("atualizar-curso")]
+        public IActionResult UpdateCurso(CursoModel curso)
+        {
+            _cursoService.UpdateCurso(curso);
+            return Ok(curso);
+        }
     }
 }

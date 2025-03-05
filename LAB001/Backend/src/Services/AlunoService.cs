@@ -104,7 +104,7 @@ namespace Backend.src.services
 
         public async Task<List<AlunoModel>> ListarAlunos()
         {
-            List<AlunoModel> alunos = await _context.Alunos.ToListAsync();
+            List<AlunoModel> alunos = await _context.Alunos.Include(m => m.Matricula).ToListAsync();
             return alunos;
         }
 
@@ -126,6 +126,12 @@ namespace Backend.src.services
             int preco = aluno.Matricula.PlanoDeEnsino?.Sum(disciplina => disciplina.Preco) ?? 0;
 
             return new ResponsePrecoSemestre { Preco = preco };
+        }
+
+        public AlunoModel UpdateAluno(AlunoModel aluno)
+        {
+            _context.Alunos.Update(aluno);
+            return aluno;
         }
     }
 }

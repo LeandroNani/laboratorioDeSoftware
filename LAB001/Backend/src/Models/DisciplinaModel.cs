@@ -10,7 +10,6 @@ namespace Backend.src.models
         public required string Id { get; set; } = new Random().Next(100000, 999999).ToString();
         public required string Nome { get; set; }
         public required bool IsActive { get; set; } = false;
-
         public string ProfessorId { get; set; } = null!;
         public required ProfessorModel Professor { get; set; }
         public required int Preco { get; set; }
