@@ -1,11 +1,12 @@
 'use client';
 
 import { useState } from "react";
-import { Aluno } from "@/types/aluno.type";
+import { Aluno } from "@/@types/aluno.type";
 import { FiUser, FiBook } from "react-icons/fi";
 import Navbar from "@/components/Navbar";
 
 export default function Page(aluno: Aluno) {
+  console.log(aluno)
   const [selectedTab, setSelectedTab] = useState("perfil");
   return (
     <>
@@ -50,7 +51,7 @@ export default function Page(aluno: Aluno) {
                   <strong className="text-white">Email:</strong> {aluno.email}
                 </p>
                 <p className="text-lg text-gray-300">
-                  <strong className="text-white">Curso:</strong> {aluno.curso?.nome}
+                  <strong className="text-white">Curso:</strong> {aluno.curso.nome}
                 </p>
                 <p className="text-lg text-gray-300">
                   <strong className="text-white">Mensalidade:</strong> R$ {aluno.matricula.mensalidade}

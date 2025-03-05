@@ -4,13 +4,13 @@ import { Pessoa } from "./pessoa.type";
 
 export type Aluno = Pessoa & {
     email?: string;
+    curso: Curso
     matricula: Matricula;
-    curso?: Curso;
     disciplinasCursadas: Disciplina[];
 }
 
 export type Matricula = {
-    numeroDeMatricula: number,
+    numeroDeMatricula: string,
     ativa: boolean,
     planoDeEnsino: Disciplina[],
     mensalidade: number

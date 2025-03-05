@@ -1,6 +1,6 @@
-import { LoginRequest } from "@/types/login.type";
-import apiService from "./lib/api";
+import { LoginRequest } from "@/@types/login.type";
+import api from "./lib/api";
 
 export async function login({numeroDePessoa, senha}: LoginRequest ) {
-    return apiService.post('/auth/login', { numeroDePessoa, senha });
+    return api.post('/auth/login', { numeroDePessoa, senha });
 };

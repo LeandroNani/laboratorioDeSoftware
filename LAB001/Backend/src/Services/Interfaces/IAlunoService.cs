@@ -10,7 +10,7 @@ namespace Backend.src.services.interfaces
         Task<AlunoModel> EfetuarMatricula(EfetuarMatriculaRequest efetuarMatriculaRequest);
         Task<AlunoModel> CancelarMatricula(CancelarMatriculaRequest cancelarMatriculaRequest);
         Task<List<AlunoModel>> ListarAlunos();
-        Task<ResponsePrecoSemestre> GetPrecoSemestre(int NumeroDePessoa);
+        Task<ResponsePrecoSemestre> GetPrecoSemestre(string NumeroDePessoa);
         // ...
     }
 }

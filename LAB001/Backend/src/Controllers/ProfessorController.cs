@@ -27,5 +27,12 @@ namespace Backend.src.controllers
             await _professorService.AdicionarProfessor(professor);
             return Ok(professor);
         }
+
+        [HttpGet("listar")]
+        public async Task<IActionResult> GetProfessores()
+        {
+            List<ProfessorModel> professores = await _professorService.ListarProfessores();
+            return Ok(professores);
+        }
     }
 }

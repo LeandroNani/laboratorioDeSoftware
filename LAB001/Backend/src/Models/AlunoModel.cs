@@ -6,13 +6,11 @@ namespace Backend.src.models
     [Table("aluno")]
     public class AlunoModel : PessoaModel
     {
-        [ForeignKey("curso_id")]
-        public CursoModel? Curso { get; set; }
+        public string MatriculaId { get; set; } = null!;
 
-        [ForeignKey("numero_matricula")]
+        [ForeignKey("MatriculaId")]
         public required MatriculaModel Matricula { get; set; }
-
-        [ForeignKey("disciplina_cursada_id")]
+        public required CursoModel Curso { get; set; }
         public List<DisciplinaModel>? DisciplinasCursadas { get; set; } = [];
         public required string Email { get; set; }
         public string Type { get; set; } = RoleExtensions.ToString(Role.STUDENT);

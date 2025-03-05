@@ -18,5 +18,12 @@ namespace Backend.src.controllers
             await _curriculoService.CriarCurriculo(curriculo);
             return Ok(curriculo);
         }
+
+        [HttpGet("get-curriculo")]
+        public async Task<IActionResult> GetCurriculo(string id)
+        {
+            CurriculoModel curriculo = await _curriculoService.GetCurriculo(id);
+            return Ok(curriculo);
+        }
     }
 }

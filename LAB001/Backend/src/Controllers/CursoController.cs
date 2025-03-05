@@ -17,5 +17,12 @@ namespace Backend.src.controllers
             _cursoService.CriarCurso(curso);
             return Ok(curso);
         }
+
+        [HttpGet("listar")]
+        public async Task<IActionResult> GetCursos()
+        {
+            List<CursoModel> cursos = await _cursoService.GetCursos();
+            return Ok(cursos);
+        }
     }
 }

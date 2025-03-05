@@ -7,7 +7,7 @@ namespace Backend.src.services.interfaces
     {
         Task AdicionarProfessor(ProfessorModel professor);
         Task AtualizarProfessor(ProfessorModel professorAtualizado);
-        Task RemoverProfessor(int numeroDePessoa);
+        Task RemoverProfessor(string numeroDePessoa);
         Task<DisciplinaModel> AlocarDisciplina(AlocarDisciplinaRequest alocarDisciplinaRequest);
         Task<List<ProfessorModel>> ListarProfessores();
     }

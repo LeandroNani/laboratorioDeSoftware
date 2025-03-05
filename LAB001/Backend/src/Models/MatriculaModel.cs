@@ -7,7 +7,8 @@ namespace Backend.src.models
     public class MatriculaModel
     {
         [Key]
-        public required int NumeroDeMatricula { get; set; } = new Random().Next(100000, 999999);
+        public required string NumeroDeMatricula { get; set; } =
+            new Random().Next(100000, 999999).ToString();
 
         public required bool Ativa { get; set; }
 

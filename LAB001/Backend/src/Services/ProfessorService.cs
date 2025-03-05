@@ -30,7 +30,7 @@ namespace Backend.src.services
         )
         {
             DisciplinaModel Disciplina = alocarDisciplinaRequest.Disciplina;
-            int numeroDePessoa = alocarDisciplinaRequest.NumeroDePessoa;
+            string numeroDePessoa = alocarDisciplinaRequest.NumeroDePessoa;
 
             ProfessorModel professor = await _professorHelper.FindProfessorByNumeroDePessoa(
                 numeroDePessoa
@@ -64,7 +64,7 @@ namespace Backend.src.services
                 .ToListAsync();
         }
 
-        public async Task RemoverProfessor(int numeroDePessoa)
+        public async Task RemoverProfessor(string numeroDePessoa)
         {
             ProfessorModel? professor =
                 await _context.Professores.FindAsync(numeroDePessoa)

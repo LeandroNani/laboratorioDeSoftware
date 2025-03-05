@@ -22,5 +22,19 @@ namespace Backend.src.controllers
             );
             return Ok(curriculo);
         }
+
+        [HttpGet("listar")]
+        public async Task<IActionResult> ListarDisciplinas()
+        {
+            List<DisciplinaModel> disciplinas = await _disciplinaService.ListarDisciplinas();
+            return Ok(disciplinas);
+        }
+
+        [HttpGet("get-disciplina/{id}")]
+        public async Task<IActionResult> GetDisciplina(string id)
+        {
+            DisciplinaModel disciplina = await _disciplinaService.GetDisciplinaById(id);
+            return Ok(disciplina);
+        }
     }
 }

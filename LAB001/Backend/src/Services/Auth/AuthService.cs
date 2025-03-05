@@ -30,7 +30,7 @@ namespace Backend.src.services.Auth
             }
         }
 
-        public async Task<AdminModel> FindAdminByNumero(int NumeroDePessoa)
+        public async Task<AdminModel> FindAdminByNumero(string NumeroDePessoa)
         {
             AdminModel admin =
                 await _context.Admins.FindAsync(NumeroDePessoa)

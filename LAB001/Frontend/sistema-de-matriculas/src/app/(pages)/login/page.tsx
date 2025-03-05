@@ -22,7 +22,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
-      const response = await login({ ...formData, numeroDePessoa: Number(formData.numeroDePessoa) })
+      const response = await login({ ...formData, numeroDePessoa: String(formData.numeroDePessoa) })
 
       if (response.status === 200) {
         window.location.href = `/profile/${response.data.numeroDePessoa}`

@@ -6,7 +6,7 @@ namespace Backend.src.DTOs
     public class AdicionarDisciplinaRequest
     {
         [Required]
-        public required int NumeroDePessoa;
+        public required string NumeroDePessoa;
 
         [Required]
         public required DisciplinaModel Disciplina;

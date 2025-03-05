@@ -7,8 +7,8 @@ namespace Backend.src.services.interfaces
     {
         Task<CurriculoModel> AdicionarDisciplina(AdicionarDisciplinaRequest disciplina);
         Task AtualizarDisciplina(DisciplinaModel disciplinaAtualizada);
-        Task RemoverDisciplina(int disciplinaId);
-        Task AlocarProfessor(int disciplinaId, int numeroDePessoa);
+        Task RemoverDisciplina(string disciplinaId);
+        Task AlocarProfessor(string disciplinaId, string numeroDePessoa);
         Task<List<DisciplinaModel>> ListarDisciplinas();
         // ...
     }

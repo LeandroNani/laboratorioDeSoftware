@@ -23,7 +23,7 @@ namespace Backend.src.controllers
         /// <response code="200">Aluno adicionado com sucesso</response>
         /// <response code="400">Dados inválidos</response>
         /// <response code="500">Erro interno do servidor</response>
-        [HttpPost("adicionar")]
+        [HttpPost("novo-aluno")]
         [ProducesResponseType(typeof(AlunoModel), 200)]
         public async Task<IActionResult> AdicionarAluno(AlunoModel aluno)
         {
@@ -45,7 +45,7 @@ namespace Backend.src.controllers
             Summary = "Obtém o preço do semestre de um aluno",
             Description = "Retorna o preço do semestre baseado no número da pessoa."
         )]
-        public async Task<IActionResult> GetPrecoSemestre(int numeroDePessoa)
+        public async Task<IActionResult> GetPrecoSemestre(string numeroDePessoa)
         {
             ResponsePrecoSemestre response = await _alunoService.GetPrecoSemestre(numeroDePessoa);
             return Ok(response);
@@ -75,7 +75,7 @@ namespace Backend.src.controllers
         /// <returns>Retorna uma lista de alunos</returns>
         /// <response code="200">Lista de alunos retornada com sucesso</response>
         /// <response code="500">Erro interno do servidor</response>
-        [HttpGet("listar-alunos")]
+        [HttpGet("listar")]
         [ProducesResponseType(typeof(List<AlunoModel>), 200)]
         public async Task<IActionResult> ListarAlunos()
         {
@@ -93,7 +93,7 @@ namespace Backend.src.controllers
         /// <response code="500">Erro interno do servidor</response>
         [HttpGet("get-aluno/{numeroDePessoa}")]
         [ProducesResponseType(typeof(List<AlunoModel>), 200)]
-        public async Task<IActionResult> GetAluno(int numeroDePessoa)
+        public async Task<IActionResult> GetAluno(string numeroDePessoa)
         {
             AlunoModel aluno = await _alunoService.GetAlunoByNumeroDePessoa(numeroDePessoa);
             return Ok(aluno);

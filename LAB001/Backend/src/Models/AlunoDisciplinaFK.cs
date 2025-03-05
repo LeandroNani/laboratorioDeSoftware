@@ -8,14 +8,14 @@ namespace Backend.src.models
     public class AlunoDisciplina
     {
         [Key]
-        public int AlunoId { get; set; }
+        public required string AlunoId { get; set; }
 
         [Required]
         [ForeignKey("aluno_id")]
         public required AlunoModel Aluno { get; set; }
 
         [Key]
-        public int DisciplinaId { get; set; }
+        public required string DisciplinaId { get; set; }
 
         [Required]
         [ForeignKey("disciplina_id")]

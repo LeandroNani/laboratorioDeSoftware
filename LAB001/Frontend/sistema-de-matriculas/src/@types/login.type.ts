@@ -1,4 +1,4 @@
 export type LoginRequest = {
-    numeroDePessoa: number;
+    numeroDePessoa: string;
     senha: string;
 }

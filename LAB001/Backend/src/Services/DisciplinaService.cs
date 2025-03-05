@@ -14,6 +14,7 @@ namespace Backend.src.services
         private readonly AuthService _authService = new(context);
         private readonly CurriculoHelper _curriculoHelper = new(context);
         private readonly ProfessorHelper _professorHelper = new(context);
+        private readonly DisciplinaHelper _disciplinaHelper = new(context);
 
         public async Task<CurriculoModel> AdicionarDisciplina(
             AdicionarDisciplinaRequest adicionarDisciplinaRequest
@@ -42,7 +43,7 @@ namespace Backend.src.services
             return curriculo;
         }
 
-        public async Task AlocarProfessor(int disciplinaId, int numeroDePessoa)
+        public async Task AlocarProfessor(string disciplinaId, string numeroDePessoa)
         {
             var disciplina =
                 await _context.Disciplinas.FindAsync(disciplinaId)
@@ -78,7 +79,7 @@ namespace Backend.src.services
                 .ToListAsync();
         }
 
-        public async Task RemoverDisciplina(int disciplinaId)
+        public async Task RemoverDisciplina(string disciplinaId)
         {
             var disciplina =
                 await _context.Disciplinas.FindAsync(disciplinaId)
@@ -87,6 +88,12 @@ namespace Backend.src.services
                 );
             _context.Disciplinas.Remove(disciplina);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<DisciplinaModel> GetDisciplinaById(string id)
+        {
+            DisciplinaModel disciplina = await _disciplinaHelper.FindDisciplinaByid(id);
+            return disciplina;
         }
     }
 }

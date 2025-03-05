@@ -9,17 +9,18 @@ namespace Backend.src.services.Helpers
     {
         private readonly AppDbContext _context = context;
 
-        public async Task<AlunoModel> FindAlunoByNumeroDePessoa(int numeroDePessoa)
+        public async Task<AlunoModel> FindAlunoByNumeroDePessoa(string numeroDePessoa)
         {
             return await _context
                     .Alunos.Include(a => a.Matricula)
+                    .Include(c => c.Curso)
                     .FirstOrDefaultAsync(a => a.NumeroDePessoa == numeroDePessoa)
                 ?? throw new NotFoundException(
                     $"Aluno com o numero de pessoa {numeroDePessoa} não encontrado"
                 );
         }
 
-        public async Task<AlunoModel> FindAlunoByNumeroDeMatricula(int numeroDeMatricula)
+        public async Task<AlunoModel> FindAlunoByNumeroDeMatricula(string numeroDeMatricula)
         {
             var aluno = await _context
                 .Alunos.Include(a => a.Matricula)

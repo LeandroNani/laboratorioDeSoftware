@@ -21,11 +21,16 @@ namespace Backend.src.services
                 throw new InvalidOperationException("Aluno com este número de pessoa já existe.");
             }
 
+            var existingCurso =
+                await _context.Cursos.FirstOrDefaultAsync(c => c.Id == aluno.Curso.Id)
+                ?? throw new InvalidOperationException("Curso não encontrado.");
+            aluno.Curso = existingCurso;
+
             await _context.Alunos.AddAsync(aluno);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<AlunoModel> GetAlunoByNumeroDePessoa(int numeroDePessoa)
+        public async Task<AlunoModel> GetAlunoByNumeroDePessoa(string numeroDePessoa)
         {
             AlunoModel aluno = await _alunoHelper.FindAlunoByNumeroDePessoa(numeroDePessoa);
             return aluno;
@@ -36,8 +41,8 @@ namespace Backend.src.services
         )
         {
             if (
-                !cancelarMatriculaRequest.NumeroDeMatricula.HasValue
-                && !cancelarMatriculaRequest.NumeroDePessoa.HasValue
+                string.IsNullOrEmpty(cancelarMatriculaRequest.NumeroDeMatricula)
+                && string.IsNullOrEmpty(cancelarMatriculaRequest.NumeroDePessoa)
             )
             {
                 throw new BadRequestException(
@@ -45,12 +50,15 @@ namespace Backend.src.services
                 );
             }
 
-            AlunoModel aluno = cancelarMatriculaRequest.NumeroDePessoa.HasValue
+            AlunoModel aluno = !string.IsNullOrEmpty(cancelarMatriculaRequest.NumeroDePessoa)
                 ? await _alunoHelper.FindAlunoByNumeroDePessoa(
-                    cancelarMatriculaRequest.NumeroDePessoa.Value
+                    cancelarMatriculaRequest.NumeroDePessoa
                 )
                 : await _alunoHelper.FindAlunoByNumeroDeMatricula(
-                    cancelarMatriculaRequest.NumeroDeMatricula.GetValueOrDefault()
+                    cancelarMatriculaRequest.NumeroDeMatricula
+                        ?? throw new BadRequestException(
+                            nameof(cancelarMatriculaRequest.NumeroDeMatricula)
+                        )
                 );
 
             aluno.Matricula.Ativa = false;
@@ -111,7 +119,7 @@ namespace Backend.src.services
             return aluno;
         }
 
-        public async Task<ResponsePrecoSemestre> GetPrecoSemestre(int NumeroDePessoa)
+        public async Task<ResponsePrecoSemestre> GetPrecoSemestre(string NumeroDePessoa)
         {
             AlunoModel aluno = await _alunoHelper.FindAlunoByNumeroDePessoa(NumeroDePessoa);
 

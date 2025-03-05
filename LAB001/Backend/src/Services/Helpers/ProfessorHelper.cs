@@ -8,7 +8,7 @@ namespace Backend.src.services.Helpers
     {
         private readonly AppDbContext _context = context;
 
-        public async Task<ProfessorModel> FindProfessorByNumeroDePessoa(int numeroDePessoa)
+        public async Task<ProfessorModel> FindProfessorByNumeroDePessoa(string numeroDePessoa)
         {
             return await _context.Professores.FindAsync(numeroDePessoa)
                 ?? throw new NotFoundException(

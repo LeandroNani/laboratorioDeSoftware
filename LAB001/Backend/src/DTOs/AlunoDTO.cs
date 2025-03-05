@@ -9,7 +9,7 @@ namespace Backend.src.DTOs
         public required List<DisciplinaModel> Disciplinas;
 
         [Required]
-        public required int NumeroDePessoa;
+        public required string NumeroDePessoa;
     }
 
     public class GetPrecoSemestre
@@ -27,6 +27,6 @@ namespace Backend.src.DTOs
     public class RemoverAlunoRequest
     {
         [Required]
-        public int NumeroDePessoa;
+        public required string NumeroDePessoa;
     }
 }

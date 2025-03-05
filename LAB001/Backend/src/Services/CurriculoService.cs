@@ -24,5 +24,11 @@ namespace Backend.src.services
         {
             return await _context.Curriculos.ToListAsync();
         }
+
+        public async Task<CurriculoModel> GetCurriculo(string id)
+        {
+            CurriculoModel curriculo = await _curriculoHelper.GetCurriculoById(id);
+            return curriculo;
+        }
     }
 }
