@@ -105,5 +105,12 @@ namespace Backend.src.controllers
             _alunoService.UpdateAluno(aluno);
             return Ok(aluno);
         }
+
+        [HttpPut("efetuar-matricula")]
+        public async Task<IActionResult> EfetuarMatricula(AlunoModel aluno)
+        {
+            await _alunoService.EfetuarMatricula(aluno);
+            return Ok(aluno);
+        }
     }
 }

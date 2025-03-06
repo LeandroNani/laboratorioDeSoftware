@@ -11,6 +11,7 @@ namespace Backend.src.services
 
         public CursoModel CriarCurso(CursoModel curso)
         {
+            curso.Disciplinas = _context.Disciplinas.ToList();
             _context.Cursos.Add(curso);
             _context.SaveChanges();
             return curso;
@@ -18,15 +19,15 @@ namespace Backend.src.services
 
         public async Task<List<CursoModel>> GetCursos()
         {
-            List<CursoModel> cursos = await _context
-                .Cursos.Include(d => d.Disciplinas)
-                .ToListAsync();
+            List<CursoModel> cursos = await _context.Cursos.ToListAsync();
             return cursos;
         }
 
         public CursoModel UpdateCurso(CursoModel curso)
         {
+            curso.Disciplinas = _context.Disciplinas.ToList();
             _context.Cursos.Update(curso);
+            _context.SaveChanges();
             return curso;
         }
     }

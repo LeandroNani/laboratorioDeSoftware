@@ -25,6 +25,7 @@ const atualizarCurriculo = async () => {
         id: '2025.1',
         semestre: '2025.1'
     };
+    console.log("CURRICULO --->", curriculoAtual)
     await updateCurriculo(curriculoAtual);
 };
 
@@ -97,6 +98,8 @@ const CursoManager: React.FC = () => {
     const [nome, setNome] = useState("");
     const [numeroDeCreditos, setNumeroDeCreditos] = useState(0);
     const [cursos, setCursos] = useState<Curso[]>([]);
+    const [disciplinas, setDisciplinas] = useState<Disciplina[]>([]);
+    const [selectedDisciplinas, setSelectedDisciplinas] = useState<string[]>([]);
     const [editingCurso, setEditingCurso] = useState<Curso>({} as Curso);
 
     const fetchCursosList = async () => {
@@ -104,8 +107,14 @@ const CursoManager: React.FC = () => {
         setCursos(response);
     };
 
+    const fetchDisciplinasList = async () => {
+        const response = await getDisciplinas();
+        setDisciplinas(response);
+    };
+
     useEffect(() => {
         if (viewMode === "list") fetchCursosList();
+        fetchDisciplinasList();
     }, [viewMode]);
 
     const handleCreate = async (e: React.FormEvent) => {
@@ -114,18 +123,21 @@ const CursoManager: React.FC = () => {
             nome,
             numeroDeCreditos,
             alunos: [],
-            disciplinas: [],
+            disciplinas: selectedDisciplinas.map(id => disciplinas.find(d => d.id === id) as Disciplina),
             id: Math.floor(100000 + Math.random() * 900000).toString()
         };
         await createCurso(novoCurso);
-        setNome(""); setNumeroDeCreditos(0);
+        setNome(""); setNumeroDeCreditos(0); setSelectedDisciplinas([]);
         fetchCursosList();
         setViewMode("list");
     };
 
     const handleEdit = async (e: React.FormEvent) => {
         e.preventDefault();
-        await updateCurso(editingCurso);
+        await updateCurso({
+            ...editingCurso,
+            disciplinas: selectedDisciplinas.map(id => disciplinas.find(d => d.id === id) as Disciplina)
+        });
         setEditingCurso({} as Curso);
         fetchCursosList();
         setViewMode("list");
@@ -153,6 +165,14 @@ const CursoManager: React.FC = () => {
                         <label className="block text-zinc-800">Número de Créditos</label>
                         <input type="number" value={numeroDeCreditos} onChange={(e) => setNumeroDeCreditos(Number(e.target.value))} className="w-full border border-zinc-300 p-2 rounded" />
                     </div>
+                    <div>
+                        <label className="block text-zinc-800">Disciplinas</label>
+                        <select multiple value={selectedDisciplinas} onChange={(e) => setSelectedDisciplinas(Array.from(e.target.selectedOptions, option => option.value))} className="w-full border border-zinc-300 p-2 rounded">
+                            {disciplinas.map(disciplina => (
+                                <option key={disciplina.id} value={disciplina.id}>{disciplina.nome}</option>
+                            ))}
+                        </select>
+                    </div>
                     <button type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
                         Cadastrar
                     </button>
@@ -179,6 +199,7 @@ const CursoManager: React.FC = () => {
                                         <button
                                             onClick={() => {
                                                 setEditingCurso(curso);
+                                                setSelectedDisciplinas(curso.disciplinas.map(d => d.id));
                                                 setViewMode("edit");
                                             }}
                                             className="px-2 py-1 bg-blue-500 text-white rounded"
@@ -203,6 +224,14 @@ const CursoManager: React.FC = () => {
                     <div>
                         <label className="block text-zinc-800">Número de Créditos</label>
                         <input type="number" value={editingCurso.numeroDeCreditos} onChange={(e) => setEditingCurso({ ...editingCurso, numeroDeCreditos: Number(e.target.value) })} className="w-full border border-zinc-300 p-2 rounded" />
+                    </div>
+                    <div>
+                        <label className="block text-zinc-800">Disciplinas</label>
+                        <select multiple value={selectedDisciplinas} onChange={(e) => setSelectedDisciplinas(Array.from(e.target.selectedOptions, option => option.value))} className="w-full border border-zinc-300 p-2 rounded">
+                            {disciplinas.map(disciplina => (
+                                <option key={disciplina.id} value={disciplina.id}>{disciplina.nome}</option>
+                            ))}
+                        </select>
                     </div>
                     <div className="flex space-x-4">
                         <button type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
@@ -478,7 +507,36 @@ const CurriculoView: React.FC = () => {
         <div className="max-w-3xl mx-auto bg-white p-6 rounded shadow">
             <h2 className="text-2xl font-bold mb-4 text-zinc-800">Currículo Atual</h2>
             {curriculo ? (
-                <pre>{JSON.stringify(curriculo, null, 2)}</pre>
+                <div>
+                    <h3 className="text-xl font-bold mb-2 text-zinc-800">Semestre</h3>
+                    <ul className="mb-4">
+                        {curriculo.semestre}
+                    </ul>
+                    <h3 className="text-xl font-bold mb-2 text-zinc-800">Alunos</h3>
+                    <ul className="mb-4">
+                        {curriculo.alunos?.map(aluno => (
+                            <li key={aluno.numeroDePessoa}>{aluno.nome}</li>
+                        ))}
+                    </ul>
+                    <h3 className="text-xl font-bold mb-2 text-zinc-800">Professores</h3>
+                    <ul className="mb-4">
+                        {curriculo.professores?.map(professor => (
+                            <li key={professor.numeroDePessoa}>{professor.nome}</li>
+                        ))}
+                    </ul>
+                    <h3 className="text-xl font-bold mb-2 text-zinc-800">Disciplinas</h3>
+                    <ul className="mb-4">
+                        {curriculo.disciplinas?.map(disciplina => (
+                            <li key={disciplina.id}>{disciplina.nome}</li>
+                        ))}
+                    </ul>
+                    <h3 className="text-xl font-bold mb-2 text-zinc-800">Cursos</h3>
+                    <ul>
+                        {curriculo.cursos?.map(curso => (
+                            <li key={curso.id}>{curso.nome}</li>
+                        ))}
+                    </ul>
+                </div>
             ) : (
                 <p>Carregando...</p>
             )}
@@ -522,6 +580,7 @@ const AlunoManager: React.FC = () => {
     const handleCreate = async (e: React.FormEvent) => {
         e.preventDefault();
         const selectedCurso = cursos.find(curso => curso.id === cursoId);
+        const numeroDeMatricula = Math.floor(100000 + Math.random() * 900000).toString();
         if (selectedCurso) {
             const aluno = {
                 nome,
@@ -529,15 +588,15 @@ const AlunoManager: React.FC = () => {
                 email,
                 curso: selectedCurso,
                 matricula: {
-                    ativa: false,
+                    numeroDeMatricula: numeroDeMatricula,
+                    ativa: true,
                     planoDeEnsino: [],
                     mensalidade: 0
                 },
-                matriculaId: "1234",
+                MatriculaId: numeroDeMatricula,
                 disciplinasCursadas: []
             };
             await createAluno(aluno);
-            // Após criar o aluno, atualize o currículo
             await atualizarCurriculo();
             setNome("");
             setSenha("");

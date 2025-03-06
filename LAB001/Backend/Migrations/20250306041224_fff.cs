@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class fix : Migration
+    public partial class fff : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -157,12 +156,13 @@ namespace Backend.Migrations
                     ProfessorId = table.Column<string>(type: "text", nullable: false),
                     Preco = table.Column<int>(type: "integer", nullable: false),
                     Periodo = table.Column<string>(type: "text", nullable: false),
-                    DisciplinasNecessarias = table.Column<List<string>>(type: "text[]", nullable: true),
+                    DisciplinasNecessarias = table.Column<string>(type: "text", nullable: true),
                     Campus = table.Column<string>(type: "text", nullable: false),
                     Optativa = table.Column<bool>(type: "boolean", nullable: false),
                     Descricao = table.Column<string>(type: "text", nullable: true),
                     QuantAlunos = table.Column<int>(type: "integer", nullable: false),
                     AlunoModelNumeroDePessoa = table.Column<string>(type: "text", nullable: true),
+                    CursoModelId = table.Column<string>(type: "text", nullable: true),
                     MatriculaModelNumeroDeMatricula = table.Column<string>(type: "text", nullable: true),
                     disciplina_id = table.Column<string>(type: "text", nullable: true)
                 },
@@ -180,8 +180,8 @@ namespace Backend.Migrations
                         principalTable: "curriculo",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_disciplina_curso_disciplina_id",
-                        column: x => x.disciplina_id,
+                        name: "FK_disciplina_curso_CursoModelId",
+                        column: x => x.CursoModelId,
                         principalTable: "curso",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -194,32 +194,6 @@ namespace Backend.Migrations
                         column: x => x.ProfessorId,
                         principalTable: "professor",
                         principalColumn: "NumeroDePessoa",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "aluno_disciplina",
-                columns: table => new
-                {
-                    AlunoId = table.Column<string>(type: "text", nullable: false),
-                    DisciplinaId = table.Column<string>(type: "text", nullable: false),
-                    aluno_id = table.Column<string>(type: "text", nullable: false),
-                    disciplina_id = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_aluno_disciplina", x => new { x.AlunoId, x.DisciplinaId });
-                    table.ForeignKey(
-                        name: "FK_aluno_disciplina_aluno_aluno_id",
-                        column: x => x.aluno_id,
-                        principalTable: "aluno",
-                        principalColumn: "NumeroDePessoa",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_aluno_disciplina_disciplina_disciplina_id",
-                        column: x => x.disciplina_id,
-                        principalTable: "disciplina",
-                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -239,16 +213,6 @@ namespace Backend.Migrations
                 column: "MatriculaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_aluno_disciplina_aluno_id",
-                table: "aluno_disciplina",
-                column: "aluno_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_aluno_disciplina_disciplina_id",
-                table: "aluno_disciplina",
-                column: "disciplina_id");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_curso_CurriculoModelId",
                 table: "curso",
                 column: "CurriculoModelId");
@@ -257,6 +221,11 @@ namespace Backend.Migrations
                 name: "IX_disciplina_AlunoModelNumeroDePessoa",
                 table: "disciplina",
                 column: "AlunoModelNumeroDePessoa");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_disciplina_CursoModelId",
+                table: "disciplina",
+                column: "CursoModelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_disciplina_disciplina_id",
@@ -283,13 +252,10 @@ namespace Backend.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "aluno_disciplina");
+                name: "disciplina");
 
             migrationBuilder.DropTable(
                 name: "pessoa_admin");
-
-            migrationBuilder.DropTable(
-                name: "disciplina");
 
             migrationBuilder.DropTable(
                 name: "aluno");

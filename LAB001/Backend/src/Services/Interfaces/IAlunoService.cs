@@ -7,7 +7,7 @@ namespace Backend.src.services.interfaces
     {
         Task AdicionarAluno(AlunoModel aluno);
         Task<AlunoModel> RemoverAluno(RemoverAlunoRequest removerAlunoRequest);
-        Task<AlunoModel> EfetuarMatricula(EfetuarMatriculaRequest efetuarMatriculaRequest);
+        Task<AlunoModel> EfetuarMatricula(AlunoModel aluno);
         Task<AlunoModel> CancelarMatricula(CancelarMatriculaRequest cancelarMatriculaRequest);
         Task<List<AlunoModel>> ListarAlunos();
         Task<ResponsePrecoSemestre> GetPrecoSemestre(string NumeroDePessoa);

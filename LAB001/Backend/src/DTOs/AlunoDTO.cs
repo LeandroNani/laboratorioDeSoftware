@@ -6,10 +6,10 @@ namespace Backend.src.DTOs
     public class EfetuarMatriculaRequest
     {
         [Required]
-        public required List<DisciplinaModel> Disciplinas;
+        public required List<DisciplinaModel> disciplinas;
 
         [Required]
-        public required string NumeroDePessoa;
+        public required string numeroDePessoa;
     }
 
     public class GetPrecoSemestre

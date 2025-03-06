@@ -4,7 +4,6 @@ import { Professor } from "@/@types/professor.type";
 import { Aluno } from "@/@types/aluno.type";
 import { Curriculo } from "@/@types/curriculo.type";
 import api from "./lib/api";
-
 export async function createCurso(curso: Curso) {
     const response = await api.post("/curso/novo-curso", curso)
     return response
@@ -16,15 +15,20 @@ export async function createDisciplina(disciplina: Disciplina) {
     return response;
 }
 
-export async function createProfessor(professor: Professor) {
+export async function createProfessor(professor: Partial<Professor>) {
     console.log(professor)
     const response = await api.post("/professor/novo-professor", professor);
     return response;
 }
 
-export function createAluno(aluno: Aluno) {
+export function createAluno(aluno: Partial<Aluno>) {
     console.log(aluno)
     const response = api.post("/aluno/novo-aluno", aluno);
+    return response;
+}
+
+export async function efetuarMatricula(aluno: Aluno){
+    const response = await api.put("/aluno/efetuar-matricula", aluno);
     return response;
 }
 
@@ -35,7 +39,6 @@ export async function createCurriculo(curriculo: Curriculo) {
 }
 
 export async function updateCurriculo(curriculo: Curriculo){
-    console.log(curriculo)
     const response = await api.put("/curriculo/atualizar-curriculo", curriculo);
     return response.data as Curriculo;
 }

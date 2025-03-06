@@ -98,6 +98,36 @@ namespace Backend.src.services.Helpers
                 }
             }
 
+            // Atualização e adição de cursos
+            foreach (var curso in curriculo.Cursos)
+            {
+                var cursoExistenteNoContexto =
+                    _context.Cursos.Local.FirstOrDefault(c => c.Id == curso.Id)
+                    ?? await _context.Cursos.FindAsync(curso.Id);
+                if (cursoExistenteNoContexto != null)
+                {
+                    _context.Entry(cursoExistenteNoContexto).CurrentValues.SetValues(curso);
+                    // Se necessário, adicione ao currículo se ainda não estiver presente
+                    if (!curriculoExistente.Cursos.Any(c => c.Id == curso.Id))
+                    {
+                        curriculoExistente.Cursos.Add(cursoExistenteNoContexto);
+                    }
+                }
+                else
+                {
+                    curriculoExistente.Cursos.Add(curso);
+                }
+            }
+
+            // Remoção de cursos que não estão na lista de entrada
+            foreach (var cursoExistente in curriculoExistente.Cursos.ToList())
+            {
+                if (!curriculo.Cursos.Any(c => c.Id == cursoExistente.Id))
+                {
+                    _context.Cursos.Remove(cursoExistente);
+                }
+            }
+
             // --- Atualização de Alunos ---
             var alunosUnicos = curriculo
                 .Alunos.GroupBy(a => a.NumeroDePessoa)
@@ -154,58 +184,48 @@ namespace Backend.src.services.Helpers
                 }
             }
 
-            // --- Atualização de Disciplinas ---
-            var disciplinasUnicas = curriculo
-                .Disciplinas.GroupBy(d => d.Id)
-                .Select(g => g.First())
-                .ToList();
-
-            foreach (var disciplina in disciplinasUnicas)
-            {
-                var existingDisciplina = curriculoExistente.Disciplinas.FirstOrDefault(d =>
-                    d.Id == disciplina.Id
-                );
-                if (existingDisciplina != null)
-                {
-                    _context.Entry(existingDisciplina).CurrentValues.SetValues(disciplina);
-                }
-                else
-                {
-                    var trackedDisciplina = _context.Disciplinas.Local.FirstOrDefault(d =>
-                        d.Id == disciplina.Id
-                    );
-                    if (trackedDisciplina != null)
-                    {
-                        _context.Entry(trackedDisciplina).CurrentValues.SetValues(disciplina);
-                        if (!curriculoExistente.Disciplinas.Any(d => d.Id == disciplina.Id))
-                        {
-                            curriculoExistente.Disciplinas.Add(trackedDisciplina);
-                        }
-                    }
-                    else
-                    {
-                        var dbDisciplina = await _context.Disciplinas.FindAsync(disciplina.Id);
-                        if (dbDisciplina != null)
-                        {
-                            _context.Entry(dbDisciplina).CurrentValues.SetValues(disciplina);
-                            curriculoExistente.Disciplinas.Add(dbDisciplina);
-                        }
-                        else
-                        {
-                            curriculoExistente.Disciplinas.Add(disciplina);
-                        }
-                    }
-                }
-            }
-            // Remove disciplinas que não estão na lista de entrada
-            foreach (var disciplinaExistente in curriculoExistente.Disciplinas.ToList())
-            {
-                if (!disciplinasUnicas.Any(d => d.Id == disciplinaExistente.Id))
-                {
-                    _context.Disciplinas.Remove(disciplinaExistente);
-                }
-            }
-
+            // foreach (var disciplina in curriculo.Disciplinas)
+            // {
+            //     var disciplinaExistente = curriculoExistente.Disciplinas.FirstOrDefault(d =>
+            //         d.Id == disciplina.Id
+            //     );
+            //     if (disciplinaExistente != null)
+            //     {
+            //         _context.Entry(disciplinaExistente).CurrentValues.SetValues(disciplina);
+            //         // Certifique-se de atualizar a associação com o curso, se necessário:
+            //         if (disciplina.Curso != null)
+            //         {
+            //             disciplinaExistente.Curso = curriculoExistente.Cursos.FirstOrDefault(c =>
+            //                 c.Id == disciplina.Curso.Id
+            //             );
+            //         }
+            //     }
+            //     else
+            //     {
+            //         var disciplinaLocal =
+            //             _context.Disciplinas.Local.FirstOrDefault(d => d.Id == disciplina.Id)
+            //             ?? await _context.Disciplinas.FindAsync(disciplina.Id);
+            //         if (disciplinaLocal != null)
+            //         {
+            //             _context.Entry(disciplinaLocal).CurrentValues.SetValues(disciplina);
+            //             disciplinaLocal.Curso = curriculoExistente.Cursos.FirstOrDefault(c =>
+            //                 c.Id == disciplina.Curso.Id
+            //             );
+            //             if (!curriculoExistente.Disciplinas.Any(d => d.Id == disciplina.Id))
+            //             {
+            //                 curriculoExistente.Disciplinas.Add(disciplinaLocal);
+            //             }
+            //         }
+            //         else
+            //         {
+            //             // Antes de adicionar, certifique-se que disciplina.Curso está corretamente associado
+            //             disciplina.Curso ??= curriculoExistente.Cursos.FirstOrDefault(c =>
+            //                 c.Id == disciplina.Curso.Id
+            //             );
+            //             curriculoExistente.Disciplinas.Add(disciplina);
+            //         }
+            //     }
+            // }
             await _context.SaveChangesAsync();
         }
     }

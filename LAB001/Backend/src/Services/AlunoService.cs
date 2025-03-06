@@ -68,24 +68,10 @@ namespace Backend.src.services
             return aluno;
         }
 
-        public async Task<AlunoModel> EfetuarMatricula(
-            EfetuarMatriculaRequest efetuarMatriculaRequest
-        )
+        public async Task<AlunoModel> EfetuarMatricula(AlunoModel aluno)
         {
-            AlunoModel aluno = await _alunoHelper.FindAlunoByNumeroDePessoa(
-                efetuarMatriculaRequest.NumeroDePessoa
-            );
-
-            if (
-                efetuarMatriculaRequest.Disciplinas == null
-                || efetuarMatriculaRequest.Disciplinas.Count == 0
-            )
-            {
-                throw new InvalidOperationException("A lista de disciplinas não pode estar vazia");
-            }
-
             aluno.Matricula.PlanoDeEnsino ??= [];
-            List<DisciplinaModel> disciplinas = efetuarMatriculaRequest.Disciplinas;
+            List<DisciplinaModel> disciplinas = aluno.Matricula.PlanoDeEnsino;
             foreach (var disciplina in disciplinas)
             {
                 if (aluno.Matricula.PlanoDeEnsino.Contains(disciplina))
@@ -94,7 +80,15 @@ namespace Backend.src.services
                         $"Aluno já está matriculado na disciplina {disciplina.Nome}"
                     );
                 }
-                aluno.Matricula.PlanoDeEnsino.Add(disciplina);
+                var existingDisciplina = await _context.Disciplinas.FindAsync(disciplina.Id);
+                if (existingDisciplina != null)
+                {
+                    aluno.Matricula.PlanoDeEnsino.Add(existingDisciplina);
+                }
+                else
+                {
+                    aluno.Matricula.PlanoDeEnsino.Add(disciplina);
+                }
             }
             _context.Alunos.Update(aluno);
             await _context.SaveChangesAsync();
@@ -133,6 +127,8 @@ namespace Backend.src.services
 
         public AlunoModel UpdateAluno(AlunoModel aluno)
         {
+            int preco = aluno.Matricula.PlanoDeEnsino?.Sum(disciplina => disciplina.Preco) ?? 0;
+            aluno.Matricula.Mensalidade = preco;
             _context.Alunos.Update(aluno);
             return aluno;
         }

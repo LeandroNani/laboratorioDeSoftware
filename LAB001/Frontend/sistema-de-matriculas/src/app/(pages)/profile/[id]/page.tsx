@@ -1,6 +1,6 @@
 'use server'
 
-import apiService from '@/api/lib/api'
+import api from '@/api/lib/api'
 import Page from '../Profile'
 import { Aluno } from '@/@types/aluno.type'
 
@@ -10,7 +10,7 @@ export default async function RedirectToProfilePage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params;
-  const response = await apiService.get(`/aluno/get-aluno/${id}`);
+  const response = await api.get(`/aluno/get-aluno/${id}`);
   if (response.status == 200) {
     const aluno: Aluno = response.data as Aluno;
     return <Page {...aluno} />
