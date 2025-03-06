@@ -81,9 +81,10 @@ namespace Backend.src.services
                 .Disciplinas.Where(d => d.Professor.NumeroDePessoa == numeroDePessoa)
                 .ToListAsync();
             List<AlunoModel> alunos = await _context
-                .Alunos.Where(a =>
-                    a.Curso.Disciplinas != null
-                    && a.Curso.Disciplinas.Any(di => disciplinas.Select(d => d.Id).Contains(di.Id))
+                .Alunos.Include(m => m.Matricula)
+                .Include(c => c.Curso)
+                .Where(a =>
+                    a.Curso.Disciplinas.Any(d => d.Professor.NumeroDePessoa == numeroDePessoa)
                 )
                 .ToListAsync();
             ProfessorResponse response = new(professor, disciplinas, alunos);
