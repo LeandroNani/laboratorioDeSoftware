@@ -20,9 +20,16 @@ namespace Backend.src.controllers
         }
 
         [HttpGet("get-curriculo")]
-        public async Task<IActionResult> GetCurriculo(string id)
+        public async Task<IActionResult> GetCurriculo()
         {
-            CurriculoModel curriculo = await _curriculoService.GetCurriculo(id);
+            CurriculoModel curriculo = await _curriculoService.GetCurriculo();
+            return Ok(curriculo);
+        }
+
+        [HttpPut("atualizar-curriculo")]
+        public async Task<IActionResult> UpdateCurriculo(CurriculoModel curriculo)
+        {
+            await _curriculoService.UpdateCurriculo(curriculo);
             return Ok(curriculo);
         }
     }

@@ -45,9 +45,6 @@ export default function Page(aluno: Aluno) {
                   <strong className="text-white">Nome:</strong> {aluno.nome}
                 </p>
                 <p className="text-lg text-gray-300">
-                  <strong className="text-white">Matrícula:</strong> {aluno.matricula.numeroDeMatricula}
-                </p>
-                <p className="text-lg text-gray-300">
                   <strong className="text-white">Email:</strong> {aluno.email}
                 </p>
                 <p className="text-lg text-gray-300">

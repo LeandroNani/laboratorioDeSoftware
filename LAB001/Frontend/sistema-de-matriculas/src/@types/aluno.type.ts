@@ -10,7 +10,6 @@ export type Aluno = Pessoa & {
 }
 
 export type Matricula = {
-    numeroDeMatricula: string,
     ativa: boolean,
     planoDeEnsino: Disciplina[],
     mensalidade: number

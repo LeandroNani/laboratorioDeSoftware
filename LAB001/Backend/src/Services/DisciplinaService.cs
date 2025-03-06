@@ -1,5 +1,4 @@
 using Backend.src.Data;
-using Backend.src.DTOs;
 using Backend.src.models;
 using Backend.src.services.Auth;
 using Backend.src.services.Helpers;

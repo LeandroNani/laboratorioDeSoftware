@@ -31,11 +31,18 @@ export function createAluno(aluno: Aluno) {
 export async function createCurriculo(curriculo: Curriculo) {
     console.log(curriculo)
     const response = await api.post("/curriculo/novo-curriculo", curriculo);
-    return response;
+    return response.data as Curriculo;
+}
+
+export async function updateCurriculo(curriculo: Curriculo){
+    console.log(curriculo)
+    const response = await api.put("/curriculo/atualizar-curriculo", curriculo);
+    return response.data as Curriculo;
 }
 
 export async function getCurriculo() {
-    const response = await api.get("")
+    const response = await api.get("/curriculo/get-curriculo")
+    console.log(response.data)
     return response.data as Curriculo
 }
 

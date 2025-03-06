@@ -104,7 +104,10 @@ namespace Backend.src.services
 
         public async Task<List<AlunoModel>> ListarAlunos()
         {
-            List<AlunoModel> alunos = await _context.Alunos.Include(m => m.Matricula).ToListAsync();
+            List<AlunoModel> alunos = await _context
+                .Alunos.Include(m => m.Matricula)
+                .Include(a => a.Curso)
+                .ToListAsync();
             return alunos;
         }
 

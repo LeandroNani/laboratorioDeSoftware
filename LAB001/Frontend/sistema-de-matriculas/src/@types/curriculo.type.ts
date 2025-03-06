@@ -8,5 +8,4 @@ export type Curriculo = {
     disciplinas: Disciplina[];
     professores: Professor[];
     cursos: Curso[];
-    semestre: string;
 }

@@ -1,6 +1,4 @@
-using System.Threading.Tasks;
 using Backend.src.Data;
-using Backend.src.Middlewares.Exceptions;
 using Backend.src.models;
 using Backend.src.services.Helpers;
 using Backend.src.services.interfaces;
@@ -25,10 +23,15 @@ namespace Backend.src.services
             return await _context.Curriculos.ToListAsync();
         }
 
-        public async Task<CurriculoModel> GetCurriculo(string id)
+        public async Task<CurriculoModel> GetCurriculo()
         {
-            CurriculoModel curriculo = await _curriculoHelper.GetCurriculoById(id);
+            CurriculoModel curriculo = await _curriculoHelper.GetCurriculoById("2025.1");
             return curriculo;
+        }
+
+        public async Task UpdateCurriculo(CurriculoModel curriculo)
+        {
+            await _curriculoHelper.UpdateCurriculo(curriculo);
         }
     }
 }

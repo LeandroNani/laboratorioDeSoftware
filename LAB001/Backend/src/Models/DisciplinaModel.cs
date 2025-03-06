@@ -14,7 +14,7 @@ namespace Backend.src.models
         public required ProfessorModel Professor { get; set; }
         public required int Preco { get; set; }
         public required string Periodo { get; set; }
-        public required List<DisciplinaModel>? DisciplinasNecessarias { get; set; } = [];
+        public required List<string>? DisciplinasNecessarias { get; set; } = [];
         public required string Campus { get; set; }
         public required bool Optativa { get; set; }
         public string? Descricao { get; set; }
