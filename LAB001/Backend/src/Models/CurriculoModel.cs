@@ -9,13 +9,15 @@ namespace Backend.src.models
     public class CurriculoModel
     {
         [Key]
-        public required string Id { get; set; }
-        public required List<AlunoModel> Alunos { get; set; }
-        public required List<DisciplinaModel> Disciplinas { get; set; }
-        public required List<ProfessorModel> Professores { get; set; }
-        public required List<CursoModel> Curso { get; set; }
-        public required string Semestre { get; set; }
+        public required string Id { get; set; } = new Random().Next(100000, 999999).ToString();
 
-        public CurriculoModel() { }
+        [ForeignKey("aluno_id")]
+        public required List<AlunoModel> Alunos { get; set; } = [];
+
+        [ForeignKey("disciplina_id")]
+        public required List<DisciplinaModel> Disciplinas { get; set; } = [];
+        public required List<ProfessorModel> Professores { get; set; } = [];
+        public required List<CursoModel> Cursos { get; set; }
+        public required string Semestre { get; set; }
     }
 }

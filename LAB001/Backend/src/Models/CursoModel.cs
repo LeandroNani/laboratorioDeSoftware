@@ -7,12 +7,9 @@ namespace Backend.src.models
     public class CursoModel
     {
         [Key]
-        public required string Id { get; set; }
+        public required string Id { get; set; } = new Random().Next(100000, 999999).ToString();
         public required string Nome { get; set; }
-        public required List<DisciplinaModel> Disciplinas { get; set; }
-        public required List<AlunoModel> Alunos { get; set; }
+        public List<DisciplinaModel> Disciplinas { get; set; } = new List<DisciplinaModel>();
         public required int NumeroDeCreditos { get; set; }
-
-        public CursoModel() { }
     }
 }

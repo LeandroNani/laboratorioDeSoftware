@@ -1,14 +1,14 @@
+using Backend.src.DTOs;
 using Backend.src.models;
 
 namespace Backend.src.services.interfaces
 {
     public interface IProfessorService
     {
-        void AdicionarProfessor();
-        void AtualizarProfessor();
-        void RemoverProfessor();
-        void AlocarDisciplina();
-        List<ProfessorModel> ListarProfessores();
-        // ...
+        Task AdicionarProfessor(ProfessorModel professor);
+        Task AtualizarProfessor(ProfessorModel professorAtualizado);
+        Task RemoverProfessor(string numeroDePessoa);
+        Task<DisciplinaModel> AlocarDisciplina(AlocarDisciplinaRequest alocarDisciplinaRequest);
+        Task<List<ProfessorModel>> ListarProfessores();
     }
 }

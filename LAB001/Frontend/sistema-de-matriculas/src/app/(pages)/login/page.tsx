@@ -5,6 +5,12 @@ import { Eye, EyeOff } from "lucide-react"
 import { Button } from "react-bootstrap"
 import { Form } from "react-bootstrap"
 import { login } from "@/api/login"
+import Image from 'next/image'
+import { toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import { AxiosError } from "axios"
+import { ToastContainer } from "react-toastify"
+
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -15,9 +21,55 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const response = await login({ ...formData, numeroDePessoa: Number(formData.numeroDePessoa) });
-    if(response.status === 200) window.location.href = "/"
+    try {
+      const response = await login({ ...formData, numeroDePessoa: String(formData.numeroDePessoa) })
+
+      if (response.status === 200) {
+        window.location.href = `/profile/${response.data.numeroDePessoa}`
+      }
+    } catch (error) {
+      if (error instanceof AxiosError && error.response && error.status === 401) {
+        toast.error(error.response.data.error, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        })
+        return;
+      }
+      if (error instanceof AxiosError && error.response && error.status === 404) {
+        toast.error(error.response.data.error, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        })
+        return;
+      }
+      else {
+        toast.error("Erro ao tentar fazer login. Tente novamente.", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        })
+        return
+      }
+    }
   }
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -29,6 +81,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 to-red-100/50 flex items-center justify-center p-4">
+      <ToastContainer />
       <div className="w-full max-w-4xl bg-white rounded-3xl shadow-xl overflow-hidden">
         <div className="grid lg:grid-cols-2">
           <div className="p-8 lg:p-12">
@@ -81,28 +134,14 @@ export default function LoginPage() {
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </Button>
               </div>
-
-              <div className="flex items-center justify-between">
-                <label className="flex items-center gap-2">
-                  <input type="checkbox" className="rounded border-gray-300 text-red-500 focus:ring-red-500" />
-                  <span className="text-sm text-gray-600">Remember me</span>
-                </label>
-                <a href="#" className="text-sm font-medium text-red-600 hover:text-red-500">
-                  Esqueceu a senha
-                </a>
-              </div>
-
               <Button type="submit" className="w-full h-12 bg-red-500 hover:bg-red-600">
                 Login
               </Button>
             </form>
           </div>
-
-          {/* Image Section */}
           <div className="hidden lg:block relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-red-100 to-red-50/90" />
-            <div className="absolute inset-0 flex items-center justify-center p-8">
-              {/* <Image src="/images/image.png" alt="Login" width={400} height={400} /> */}
+            <div className="absolute inset-0 bg-gradient-to-br from-red-100 to-red-50/90 z-0 flex items-center justify-center">
+              <Image src="/brasao-escaladecinza.png" alt="Login" width={400} height={400} className="relative z-10" />
             </div>
           </div>
         </div>

@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250223230803_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250306041224_fff")]
+    partial class fff
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,21 +23,6 @@ namespace Backend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("AlunoModelDisciplinaModel", b =>
-                {
-                    b.Property<int>("AlunosNumeroDePessoa")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("DisciplinasFeitasId")
-                        .HasColumnType("text");
-
-                    b.HasKey("AlunosNumeroDePessoa", "DisciplinasFeitasId");
-
-                    b.HasIndex("DisciplinasFeitasId");
-
-                    b.ToTable("AlunoModelDisciplinaModel");
-                });
 
             modelBuilder.Entity("Backend.src.models.CurriculoModel", b =>
                 {
@@ -80,56 +65,87 @@ namespace Backend.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
-                    b.Property<string>("Campus")
-                        .IsRequired()
+                    b.Property<string>("AlunoModelNumeroDePessoa")
                         .HasColumnType("text");
 
-                    b.Property<string>("CurriculoModelId")
+                    b.Property<string>("Campus")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("CursoModelId")
                         .HasColumnType("text");
 
-                    b.Property<string>("DisciplinaModelId")
+                    b.Property<string>("Descricao")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DisciplinasNecessarias")
                         .HasColumnType("text");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("MatriculaModelNumeroDeMatricula")
+                        .HasColumnType("text");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("Optativa")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Periodo")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Precos")
+                    b.Property<int>("Preco")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ProfessorNumeroDePessoa")
+                    b.Property<string>("ProfessorId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("QuantAlunos")
                         .HasColumnType("integer");
+
+                    b.Property<string>("disciplina_id")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CurriculoModelId");
+                    b.HasIndex("AlunoModelNumeroDePessoa");
 
                     b.HasIndex("CursoModelId");
 
-                    b.HasIndex("DisciplinaModelId");
+                    b.HasIndex("MatriculaModelNumeroDeMatricula");
 
-                    b.HasIndex("ProfessorNumeroDePessoa");
+                    b.HasIndex("ProfessorId");
+
+                    b.HasIndex("disciplina_id");
 
                     b.ToTable("disciplina");
                 });
 
-            modelBuilder.Entity("Backend.src.models.PessoaModel", b =>
+            modelBuilder.Entity("Backend.src.models.MatriculaModel", b =>
                 {
-                    b.Property<int>("NumeroDePessoa")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("NumeroDeMatricula")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("Ativa")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("Mensalidade")
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("NumeroDePessoa"));
+                    b.HasKey("NumeroDeMatricula");
+
+                    b.ToTable("matricula");
+                });
+
+            modelBuilder.Entity("Backend.src.models.PessoaModel", b =>
+                {
+                    b.Property<string>("NumeroDePessoa")
+                        .HasColumnType("text");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -141,17 +157,21 @@ namespace Backend.Migrations
 
                     b.HasKey("NumeroDePessoa");
 
-                    b.ToTable("pessoa");
+                    b.ToTable("Pessoas");
 
                     b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("Backend.src.models.AdminModel", b =>
+                {
+                    b.HasBaseType("Backend.src.models.PessoaModel");
+
+                    b.ToTable("pessoa_admin");
                 });
 
             modelBuilder.Entity("Backend.src.models.AlunoModel", b =>
                 {
                     b.HasBaseType("Backend.src.models.PessoaModel");
-
-                    b.Property<string>("CurriculoModelId")
-                        .HasColumnType("text");
 
                     b.Property<string>("CursoId")
                         .HasColumnType("text");
@@ -160,16 +180,22 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Matricula")
+                    b.Property<string>("MatriculaId")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Mensalidade")
-                        .HasColumnType("integer");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.HasIndex("CurriculoModelId");
+                    b.Property<string>("aluno_id")
+                        .HasColumnType("text");
 
                     b.HasIndex("CursoId");
+
+                    b.HasIndex("MatriculaId");
+
+                    b.HasIndex("aluno_id");
 
                     b.ToTable("aluno");
                 });
@@ -190,60 +216,60 @@ namespace Backend.Migrations
                     b.ToTable("professor");
                 });
 
-            modelBuilder.Entity("AlunoModelDisciplinaModel", b =>
-                {
-                    b.HasOne("Backend.src.models.AlunoModel", null)
-                        .WithMany()
-                        .HasForeignKey("AlunosNumeroDePessoa")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Backend.src.models.DisciplinaModel", null)
-                        .WithMany()
-                        .HasForeignKey("DisciplinasFeitasId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Backend.src.models.CursoModel", b =>
                 {
                     b.HasOne("Backend.src.models.CurriculoModel", null)
-                        .WithMany("Curso")
+                        .WithMany("Cursos")
                         .HasForeignKey("CurriculoModelId");
                 });
 
             modelBuilder.Entity("Backend.src.models.DisciplinaModel", b =>
                 {
-                    b.HasOne("Backend.src.models.CurriculoModel", null)
-                        .WithMany("Disciplinas")
-                        .HasForeignKey("CurriculoModelId");
+                    b.HasOne("Backend.src.models.AlunoModel", null)
+                        .WithMany("DisciplinasCursadas")
+                        .HasForeignKey("AlunoModelNumeroDePessoa");
 
                     b.HasOne("Backend.src.models.CursoModel", null)
                         .WithMany("Disciplinas")
                         .HasForeignKey("CursoModelId");
 
-                    b.HasOne("Backend.src.models.DisciplinaModel", null)
-                        .WithMany("DisciplinasNecessarias")
-                        .HasForeignKey("DisciplinaModelId");
+                    b.HasOne("Backend.src.models.MatriculaModel", null)
+                        .WithMany("PlanoDeEnsino")
+                        .HasForeignKey("MatriculaModelNumeroDeMatricula");
 
                     b.HasOne("Backend.src.models.ProfessorModel", "Professor")
-                        .WithMany("Disciplinas")
-                        .HasForeignKey("ProfessorNumeroDePessoa")
+                        .WithMany()
+                        .HasForeignKey("ProfessorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Backend.src.models.CurriculoModel", null)
+                        .WithMany("Disciplinas")
+                        .HasForeignKey("disciplina_id");
 
                     b.Navigation("Professor");
                 });
 
+            modelBuilder.Entity("Backend.src.models.AdminModel", b =>
+                {
+                    b.HasOne("Backend.src.models.PessoaModel", null)
+                        .WithOne()
+                        .HasForeignKey("Backend.src.models.AdminModel", "NumeroDePessoa")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Backend.src.models.AlunoModel", b =>
                 {
-                    b.HasOne("Backend.src.models.CurriculoModel", null)
-                        .WithMany("Alunos")
-                        .HasForeignKey("CurriculoModelId");
-
                     b.HasOne("Backend.src.models.CursoModel", "Curso")
-                        .WithMany("Alunos")
+                        .WithMany()
                         .HasForeignKey("CursoId");
+
+                    b.HasOne("Backend.src.models.MatriculaModel", "Matricula")
+                        .WithMany()
+                        .HasForeignKey("MatriculaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Backend.src.models.PessoaModel", null)
                         .WithOne()
@@ -251,7 +277,13 @@ namespace Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Backend.src.models.CurriculoModel", null)
+                        .WithMany("Alunos")
+                        .HasForeignKey("aluno_id");
+
                     b.Navigation("Curso");
+
+                    b.Navigation("Matricula");
                 });
 
             modelBuilder.Entity("Backend.src.models.ProfessorModel", b =>
@@ -271,7 +303,7 @@ namespace Backend.Migrations
                 {
                     b.Navigation("Alunos");
 
-                    b.Navigation("Curso");
+                    b.Navigation("Cursos");
 
                     b.Navigation("Disciplinas");
 
@@ -280,19 +312,17 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Backend.src.models.CursoModel", b =>
                 {
-                    b.Navigation("Alunos");
-
                     b.Navigation("Disciplinas");
                 });
 
-            modelBuilder.Entity("Backend.src.models.DisciplinaModel", b =>
+            modelBuilder.Entity("Backend.src.models.MatriculaModel", b =>
                 {
-                    b.Navigation("DisciplinasNecessarias");
+                    b.Navigation("PlanoDeEnsino");
                 });
 
-            modelBuilder.Entity("Backend.src.models.ProfessorModel", b =>
+            modelBuilder.Entity("Backend.src.models.AlunoModel", b =>
                 {
-                    b.Navigation("Disciplinas");
+                    b.Navigation("DisciplinasCursadas");
                 });
 #pragma warning restore 612, 618
         }

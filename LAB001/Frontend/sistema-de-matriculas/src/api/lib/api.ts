@@ -41,6 +41,6 @@ class ApiService {
     }
 }
 
-const apiService = new ApiService('http://localhost:5148');
+const api = new ApiService('http://localhost:5148');
 
-export default apiService;
+export default api;
