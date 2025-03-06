@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Backend.src.Data;
 using Backend.src.DTOs;
 using Backend.src.models;
@@ -68,6 +69,25 @@ namespace Backend.src.services
                 );
             _context.Professores.Remove(professor);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<ProfessorResponse> GetProfessorByNumeroDePessoa(string numeroDePessoa)
+        {
+            Console.WriteLine(numeroDePessoa);
+            ProfessorModel professor = await _professorHelper.FindProfessorByNumeroDePessoa(
+                numeroDePessoa
+            );
+            List<DisciplinaModel> disciplinas = await _context
+                .Disciplinas.Where(d => d.Professor.NumeroDePessoa == numeroDePessoa)
+                .ToListAsync();
+            List<AlunoModel> alunos = await _context
+                .Alunos.Where(a =>
+                    a.Curso.Disciplinas != null
+                    && a.Curso.Disciplinas.Any(di => disciplinas.Select(d => d.Id).Contains(di.Id))
+                )
+                .ToListAsync();
+            ProfessorResponse response = new(professor, disciplinas, alunos);
+            return response;
         }
     }
 }

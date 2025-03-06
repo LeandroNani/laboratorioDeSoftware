@@ -6,6 +6,7 @@ export type Aluno = Pessoa & {
     email?: string;
     curso: Curso
     matricula: Matricula;
+    type?: string
     disciplinasCursadas: Disciplina[];
 }
 
@@ -13,4 +14,5 @@ export type Matricula = {
     ativa: boolean,
     planoDeEnsino: Disciplina[],
     mensalidade: number
+    numeroDeMatricula?: string
 }

@@ -10,7 +10,7 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { AxiosError } from "axios"
 import { ToastContainer } from "react-toastify"
-
+import { Pessoa } from "@/@types/pessoa.type"
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -23,10 +23,16 @@ export default function LoginPage() {
     e.preventDefault()
     try {
       const response = await login({ ...formData, numeroDePessoa: String(formData.numeroDePessoa) })
+      const pessoa: Partial<Pessoa> = response.data
 
-      if (response.status === 200) {
+      if (response.status === 200 && pessoa.type === "STUDENT") {
         window.location.href = `/profile/${response.data.numeroDePessoa}`
+      } else if (pessoa.type === "ADMIN") {
+        window.location.href = "/admin"
+      } else {
+        window.location.href = `/professor/${response.data.numeroDePessoa}`
       }
+      
     } catch (error) {
       if (error instanceof AxiosError && error.response && error.status === 401) {
         toast.error(error.response.data.error, {
