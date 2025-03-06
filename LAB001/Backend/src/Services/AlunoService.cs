@@ -70,26 +70,70 @@ namespace Backend.src.services
 
         public async Task<AlunoModel> EfetuarMatricula(AlunoModel aluno)
         {
-            aluno.Matricula.PlanoDeEnsino ??= [];
-            List<DisciplinaModel> disciplinas = aluno.Matricula.PlanoDeEnsino;
-            foreach (var disciplina in disciplinas)
+            var disciplinasNovas = aluno.Matricula.PlanoDeEnsino ??= new List<DisciplinaModel>();
+            aluno.Matricula.PlanoDeEnsino?.Clear();
+
+            foreach (var disciplina in disciplinasNovas)
             {
-                if (aluno.Matricula.PlanoDeEnsino.Contains(disciplina))
+                var localDisciplina = _context.Disciplinas.Local.FirstOrDefault(d =>
+                    d.Id == disciplina.Id
+                );
+                var disciplinaToAdd =
+                    localDisciplina ?? await _context.Disciplinas.FindAsync(disciplina.Id);
+
+                if (disciplinaToAdd == null)
+                {
+                    disciplinaToAdd = disciplina;
+                }
+                else if (_context.Entry(disciplinaToAdd).State == EntityState.Detached)
+                {
+                    _context.Disciplinas.Attach(disciplinaToAdd);
+                }
+
+                if (
+                    aluno.Matricula.PlanoDeEnsino != null
+                    && aluno.Matricula.PlanoDeEnsino.Any(d => d.Id == disciplinaToAdd.Id)
+                )
                 {
                     throw new InvalidOperationException(
-                        $"Aluno já está matriculado na disciplina {disciplina.Nome}"
+                        $"Aluno já está matriculado na disciplina {disciplinaToAdd.Nome}"
                     );
                 }
-                var existingDisciplina = await _context.Disciplinas.FindAsync(disciplina.Id);
-                if (existingDisciplina != null)
+                aluno.Matricula.PlanoDeEnsino?.Add(disciplinaToAdd);
+                if (disciplinaToAdd.Professor != null)
                 {
-                    aluno.Matricula.PlanoDeEnsino.Add(existingDisciplina);
-                }
-                else
-                {
-                    aluno.Matricula.PlanoDeEnsino.Add(disciplina);
+                    var professorKey = disciplinaToAdd.Professor.NumeroDePessoa;
+
+                    var trackedProfessor = _context
+                        .ChangeTracker.Entries<ProfessorModel>()
+                        .Select(e => e.Entity)
+                        .FirstOrDefault(p => p.NumeroDePessoa == professorKey);
+
+                    if (trackedProfessor != null)
+                    {
+                        disciplinaToAdd.Professor = trackedProfessor;
+                    }
+                    else
+                    {
+                        trackedProfessor =
+                            _context.Professores.Local.FirstOrDefault(p =>
+                                p.NumeroDePessoa == professorKey
+                            ) ?? await _context.Professores.FindAsync(professorKey);
+
+                        if (trackedProfessor != null)
+                        {
+                            disciplinaToAdd.Professor = trackedProfessor;
+                        }
+                        else
+                        {
+                            _context.Professores.Attach(disciplinaToAdd.Professor);
+                        }
+                    }
                 }
             }
+
+            aluno.Matricula.Mensalidade = aluno.Matricula.PlanoDeEnsino?.Sum(d => d.Preco) ?? 0;
+
             _context.Alunos.Update(aluno);
             await _context.SaveChangesAsync();
 
