@@ -40,7 +40,7 @@ namespace Backend.src.services
             await _context.SaveChangesAsync();
 
             MailerService mailer = new();
-            mailer.SendEmail(aluno.NumeroDePessoa, aluno.Email);
+            mailer.SendEmail(aluno.NumeroDePessoa, aluno.Email, aluno.Nome, aluno.Type);
         }
 
         public async Task<AlunoModel> GetAlunoByNumeroDePessoa(string numeroDePessoa)
