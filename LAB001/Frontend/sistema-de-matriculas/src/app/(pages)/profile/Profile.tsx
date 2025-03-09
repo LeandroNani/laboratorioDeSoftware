@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { Aluno } from "@/@types/aluno.type";
-
-import { FiUser, FiBook, FiLayers } from "react-icons/fi";
+import { FiUser, FiBook, FiLayers, FiHelpCircle } from "react-icons/fi";
 import Navbar from "@/components/Navbar";
+
 import { Disciplina } from "@/@types/disciplina.type";
 import { efetuarMatricula } from "@/api/admin";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 export default function Page(aluno: Aluno) {
   const [selectedTab, setSelectedTab] = useState("perfil");
@@ -33,31 +34,28 @@ export default function Page(aluno: Aluno) {
         <aside className="w-72 bg-zinc-900 shadow-lg min-h-screen p-6 flex flex-col">
           <nav className="mt-6">
             <button
-              className={`flex items-center gap-3 p-3 w-full rounded-lg text-lg transition ${
-                selectedTab === "perfil"
-                  ? "bg-white text-black font-semibold"
-                  : "hover:bg-gray-700"
-              }`}
+              className={`flex items-center gap-3 p-3 w-full rounded-lg text-lg transition ${selectedTab === "perfil"
+                ? "bg-white text-black font-semibold"
+                : "hover:bg-gray-700"
+                }`}
               onClick={() => setSelectedTab("perfil")}
             >
               <FiUser size={20} /> Perfil
             </button>
             <button
-              className={`flex items-center gap-3 p-3 w-full rounded-lg text-lg mt-2 transition ${
-                selectedTab === "disciplinas"
-                  ? "bg-white text-black font-semibold"
-                  : "hover:bg-zinc-700"
-              }`}
+              className={`flex items-center gap-3 p-3 w-full rounded-lg text-lg mt-2 transition ${selectedTab === "disciplinas"
+                ? "bg-white text-black font-semibold"
+                : "hover:bg-zinc-700"
+                }`}
               onClick={() => setSelectedTab("disciplinas")}
             >
               <FiBook size={20} /> Disciplinas
             </button>
             <button
-              className={`flex items-center gap-3 p-3 w-full rounded-lg text-lg mt-2 transition ${
-                selectedTab === "disponiveis"
-                  ? "bg-white text-black font-semibold"
-                  : "hover:bg-zinc-700"
-              }`}
+              className={`flex items-center gap-3 p-3 w-full rounded-lg text-lg mt-2 transition ${selectedTab === "disponiveis"
+                ? "bg-white text-black font-semibold"
+                : "hover:bg-zinc-700"
+                }`}
               onClick={() => setSelectedTab("disponiveis")}
             >
               <FiLayers size={20} /> Disponíveis
@@ -102,9 +100,21 @@ export default function Page(aluno: Aluno) {
                         key={disciplina.id}
                         className="border border-gray-600 rounded-lg p-4 bg-gray-900 shadow-sm"
                       >
-                        <p className="text-lg font-semibold text-white">
-                          {disciplina.nome}
-                        </p>
+                        <div className="flex items-center">
+                          <p className="text-lg font-semibold text-white">
+                            {disciplina.nome}
+                          </p>
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip className="bg-blue-600 text-white rounded-md shadow-lg p-2" id={`tooltip-${disciplina.id}`}>
+                                {disciplina.descricao}
+                              </Tooltip>
+                            }
+                          >
+                            <FiHelpCircle className="ml-2 text-gray-400 cursor-pointer" />
+                          </OverlayTrigger>
+                        </div>
                         <p className="text-sm text-gray-300">
                           <strong className="text-white">Período:</strong>{" "}
                           {disciplina.periodo}
@@ -165,9 +175,23 @@ export default function Page(aluno: Aluno) {
                     key={disciplina.id}
                     className="border border-gray-600 rounded-lg p-4 bg-gray-900 shadow-sm"
                   >
-                    <p className="text-lg font-semibold text-white">
-                      {disciplina.nome}
-                    </p>
+                    <div className="flex items-center">
+                      <p className="text-lg font-semibold text-white">
+                        {disciplina.nome}
+                      </p>
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={
+                          <Tooltip className="bg-blue-600 text-white rounded-md shadow-lg p-2" id={`tooltip-${disciplina.id}`}
+                          >
+                            {disciplina.descricao}
+
+                          </Tooltip>
+                        }
+                      >
+                        <FiHelpCircle className="ml-2 text-gray-400 cursor-pointer" />
+                      </OverlayTrigger>
+                    </div>
                     <p className="text-sm text-gray-300">
                       <strong className="text-white">Período:</strong>{" "}
                       {disciplina.periodo}
@@ -181,11 +205,10 @@ export default function Page(aluno: Aluno) {
                       {disciplina.professor.nome} ({disciplina.professor.nivelEscolar})
                     </p>
                     <button
-                      className={`mt-2 px-4 py-2 rounded-lg text-sm ${
-                        selectedDisciplinas.some((d) => d.id === disciplina.id)
-                          ? "bg-red-500 text-white"
-                          : "bg-green-500 text-white"
-                      }`}
+                      className={`mt-2 px-4 py-2 rounded-lg text-sm ${selectedDisciplinas.some((d) => d.id === disciplina.id)
+                        ? "bg-red-500 text-white"
+                        : "bg-green-500 text-white"
+                        }`}
                       onClick={() => handleSelectDisciplina(disciplina)}
                     >
                       {selectedDisciplinas.some((d) => d.id === disciplina.id)

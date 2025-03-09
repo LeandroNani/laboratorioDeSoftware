@@ -20,7 +20,6 @@ export async function createProfessor(professor: Partial<Professor>) {
 }
 
 export async function createAluno(aluno: Partial<Aluno>) {
-    console.log("ALUNO -->", aluno)
     const response = await api.post("/aluno/novo-aluno", aluno);
     return response;
 }
@@ -52,7 +51,6 @@ export async function getDisciplinas() {
 
 export async function getCursos() {
     const response = await api.get("/curso/listar");
-    console.log("CURSOS ->", response.data)
     return response.data as Curso[]
 }
 
