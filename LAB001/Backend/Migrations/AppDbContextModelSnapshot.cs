@@ -177,8 +177,7 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("MatriculaId")
-                        .IsRequired()
+                    b.Property<string>("MatriculaNumeroDeMatricula")
                         .HasColumnType("text");
 
                     b.Property<string>("Type")
@@ -190,7 +189,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("CursoId");
 
-                    b.HasIndex("MatriculaId");
+                    b.HasIndex("MatriculaNumeroDeMatricula");
 
                     b.HasIndex("aluno_id");
 
@@ -264,9 +263,7 @@ namespace Backend.Migrations
 
                     b.HasOne("Backend.src.models.MatriculaModel", "Matricula")
                         .WithMany()
-                        .HasForeignKey("MatriculaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MatriculaNumeroDeMatricula");
 
                     b.HasOne("Backend.src.models.PessoaModel", null)
                         .WithOne()

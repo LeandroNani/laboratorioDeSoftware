@@ -10,10 +10,12 @@ namespace Backend.src.services.Helpers
 
         public async Task<ProfessorModel> FindProfessorByNumeroDePessoa(string numeroDePessoa)
         {
-            return await _context.Professores.FindAsync(numeroDePessoa)
+            ProfessorModel professor =
+                await _context.Professores.FindAsync(numeroDePessoa)
                 ?? throw new NotFoundException(
                     $"Professor com o numero de pessoa {numeroDePessoa} não encontrado"
                 );
+            return professor;
         }
     }
 }

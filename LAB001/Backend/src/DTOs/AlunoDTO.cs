@@ -8,8 +8,7 @@ namespace Backend.src.DTOs
         [Required]
         public required List<DisciplinaModel> disciplinas;
 
-        [Required]
-        public required string numeroDePessoa;
+        public string? numeroDePessoa;
     }
 
     public class GetPrecoSemestre

@@ -34,5 +34,14 @@ namespace Backend.src.controllers
             List<ProfessorModel> professores = await _professorService.ListarProfessores();
             return Ok(professores);
         }
+
+        [HttpGet("get-professor/{numeroDePessoa}")]
+        public async Task<IActionResult> GetProfessores(string numeroDePessoa)
+        {
+            ProfessorResponse response = await _professorService.GetProfessorByNumeroDePessoa(
+                numeroDePessoa
+            );
+            return Ok(response);
+        }
     }
 }

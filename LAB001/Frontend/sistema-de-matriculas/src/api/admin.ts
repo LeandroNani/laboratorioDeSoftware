@@ -10,20 +10,18 @@ export async function createCurso(curso: Curso) {
 }
 
 export async function createDisciplina(disciplina: Disciplina) {
-    console.log("DISCIPLINA ->", disciplina)
     const response = await api.post("/disciplina/nova-disciplina", disciplina);
     return response;
 }
 
 export async function createProfessor(professor: Partial<Professor>) {
-    console.log(professor)
     const response = await api.post("/professor/novo-professor", professor);
     return response;
 }
 
-export function createAluno(aluno: Partial<Aluno>) {
-    console.log(aluno)
-    const response = api.post("/aluno/novo-aluno", aluno);
+export async function createAluno(aluno: Partial<Aluno>) {
+    console.log("ALUNO -->", aluno)
+    const response = await api.post("/aluno/novo-aluno", aluno);
     return response;
 }
 
@@ -33,7 +31,6 @@ export async function efetuarMatricula(aluno: Aluno){
 }
 
 export async function createCurriculo(curriculo: Curriculo) {
-    console.log(curriculo)
     const response = await api.post("/curriculo/novo-curriculo", curriculo);
     return response.data as Curriculo;
 }
@@ -45,7 +42,6 @@ export async function updateCurriculo(curriculo: Curriculo){
 
 export async function getCurriculo() {
     const response = await api.get("/curriculo/get-curriculo")
-    console.log(response.data)
     return response.data as Curriculo
 }
 
@@ -56,6 +52,7 @@ export async function getDisciplinas() {
 
 export async function getCursos() {
     const response = await api.get("/curso/listar");
+    console.log("CURSOS ->", response.data)
     return response.data as Curso[]
 }
 
@@ -66,7 +63,6 @@ export async function getProfessores() {
 
 export async function getAlunos() {
     const response = await api.get("/aluno/listar");
-    console.log(response.data)
     return response.data as Aluno[]
 }
 
