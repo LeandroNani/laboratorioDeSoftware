@@ -5,7 +5,7 @@
 namespace Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class fff : Migration
+    public partial class fix : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -113,7 +113,7 @@ namespace Backend.Migrations
                 columns: table => new
                 {
                     NumeroDePessoa = table.Column<string>(type: "text", nullable: false),
-                    MatriculaId = table.Column<string>(type: "text", nullable: false),
+                    MatriculaNumeroDeMatricula = table.Column<string>(type: "text", nullable: true),
                     CursoId = table.Column<string>(type: "text", nullable: true),
                     Email = table.Column<string>(type: "text", nullable: false),
                     Type = table.Column<string>(type: "text", nullable: false),
@@ -139,11 +139,10 @@ namespace Backend.Migrations
                         principalTable: "curso",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_aluno_matricula_MatriculaId",
-                        column: x => x.MatriculaId,
+                        name: "FK_aluno_matricula_MatriculaNumeroDeMatricula",
+                        column: x => x.MatriculaNumeroDeMatricula,
                         principalTable: "matricula",
-                        principalColumn: "NumeroDeMatricula",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "NumeroDeMatricula");
                 });
 
             migrationBuilder.CreateTable(
@@ -208,9 +207,9 @@ namespace Backend.Migrations
                 column: "CursoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_aluno_MatriculaId",
+                name: "IX_aluno_MatriculaNumeroDeMatricula",
                 table: "aluno",
-                column: "MatriculaId");
+                column: "MatriculaNumeroDeMatricula");
 
             migrationBuilder.CreateIndex(
                 name: "IX_curso_CurriculoModelId",

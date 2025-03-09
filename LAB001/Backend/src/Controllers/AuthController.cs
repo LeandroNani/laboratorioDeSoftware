@@ -1,5 +1,6 @@
 using Backend.src.Data;
 using Backend.src.DTOs;
+using Backend.src.Mailer;
 using Backend.src.models;
 using Backend.src.services.Auth;
 using Microsoft.AspNetCore.Mvc;

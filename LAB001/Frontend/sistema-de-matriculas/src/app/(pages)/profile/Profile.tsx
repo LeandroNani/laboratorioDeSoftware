@@ -9,7 +9,6 @@ import { Disciplina } from "@/@types/disciplina.type";
 import { efetuarMatricula } from "@/api/admin";
 
 export default function Page(aluno: Aluno) {
-  console.log(aluno)
   const [selectedTab, setSelectedTab] = useState("perfil");
   const [selectedDisciplinas, setSelectedDisciplinas] = useState<Disciplina[]>([]);
 
@@ -92,30 +91,36 @@ export default function Page(aluno: Aluno) {
                 <h2 className="text-xl font-semibold text-white">
                   Disciplinas Matriculadas
                 </h2>
-                <ul className="mt-4 space-y-4">
-                  {aluno.matricula.planoDeEnsino.map((disciplina) => (
-                    <li
-                      key={disciplina.id}
-                      className="border border-gray-600 rounded-lg p-4 bg-gray-900 shadow-sm"
-                    >
-                      <p className="text-lg font-semibold text-white">
-                        {disciplina.nome}
-                      </p>
-                      <p className="text-sm text-gray-300">
-                        <strong className="text-white">Período:</strong>{" "}
-                        {disciplina.periodo}
-                      </p>
-                      <p className="text-sm text-gray-300">
-                        <strong className="text-white">Campus:</strong>{" "}
-                        {disciplina.campus}
-                      </p>
-                      <p className="text-sm text-gray-300">
-                        <strong className="text-white">Professor:</strong>{" "}
-                        {disciplina.professor.nome} ({disciplina.professor.nivelEscolar})
-                      </p>
-                    </li>
-                  ))}
-                </ul>
+                {aluno.matricula.planoDeEnsino == null || aluno.matricula.planoDeEnsino.length === 0 ? (
+                  <p className="text-lg text-gray-300 mt-4">
+                    O aluno não está matriculado em nenhuma disciplina.
+                  </p>
+                ) : (
+                  <ul className="mt-4 space-y-4">
+                    {aluno.matricula.planoDeEnsino.map((disciplina) => (
+                      <li
+                        key={disciplina.id}
+                        className="border border-gray-600 rounded-lg p-4 bg-gray-900 shadow-sm"
+                      >
+                        <p className="text-lg font-semibold text-white">
+                          {disciplina.nome}
+                        </p>
+                        <p className="text-sm text-gray-300">
+                          <strong className="text-white">Período:</strong>{" "}
+                          {disciplina.periodo}
+                        </p>
+                        <p className="text-sm text-gray-300">
+                          <strong className="text-white">Campus:</strong>{" "}
+                          {disciplina.campus}
+                        </p>
+                        <p className="text-sm text-gray-300">
+                          <strong className="text-white">Professor:</strong>{" "}
+                          {disciplina.professor.nome} ({disciplina.professor.nivelEscolar})
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
 
               {/* Disciplinas Cursadas */}

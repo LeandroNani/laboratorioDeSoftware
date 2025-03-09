@@ -8,6 +8,7 @@ export type Aluno = Pessoa & {
     matricula: Matricula;
     type?: string
     disciplinasCursadas: Disciplina[];
+    matriculaId?: string
 }
 
 export type Matricula = {

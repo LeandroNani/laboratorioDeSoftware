@@ -25,7 +25,6 @@ const atualizarCurriculo = async () => {
         id: '2025.1',
         semestre: '2025.1'
     };
-    console.log("CURRICULO --->", curriculoAtual)
     await updateCurriculo(curriculoAtual);
 };
 
@@ -123,11 +122,16 @@ const CursoManager: React.FC = () => {
             nome,
             numeroDeCreditos,
             alunos: [],
-            disciplinas: selectedDisciplinas.map(id => disciplinas.find(d => d.id === id) as Disciplina),
-            id: Math.floor(100000 + Math.random() * 900000).toString()
+            disciplinas: selectedDisciplinas.map(
+                (id) => disciplinas.find((d) => d.id === id) as Disciplina
+            ),
+            id: Math.floor(100000 + Math.random() * 900000).toString(),
         };
+
         await createCurso(novoCurso);
-        setNome(""); setNumeroDeCreditos(0); setSelectedDisciplinas([]);
+        setNome("");
+        setNumeroDeCreditos(0);
+        setSelectedDisciplinas([]);
         fetchCursosList();
         setViewMode("list");
     };
@@ -136,20 +140,58 @@ const CursoManager: React.FC = () => {
         e.preventDefault();
         await updateCurso({
             ...editingCurso,
-            disciplinas: selectedDisciplinas.map(id => disciplinas.find(d => d.id === id) as Disciplina)
+            disciplinas: selectedDisciplinas.map(
+                (id) => disciplinas.find((d) => d.id === id) as Disciplina
+            ),
         });
         setEditingCurso({} as Curso);
         fetchCursosList();
         setViewMode("list");
     };
 
+    // Bloco para renderizar a lista de checkboxes para disciplinas
+    const renderDisciplinasCheckbox = () => (
+        <div>
+            <label className="block text-zinc-800 mb-2">Disciplinas</label>
+            <div className="flex flex-col">
+                {disciplinas.map((disciplina) => (
+                    <label key={disciplina.id} className="inline-flex items-center mt-1">
+                        <input
+                            type="checkbox"
+                            value={disciplina.id}
+                            checked={selectedDisciplinas.includes(disciplina.id)}
+                            onChange={(e) => {
+                                const isChecked = e.target.checked;
+                                if (isChecked) {
+                                    setSelectedDisciplinas([...selectedDisciplinas, disciplina.id]);
+                                } else {
+                                    setSelectedDisciplinas(
+                                        selectedDisciplinas.filter((id) => id !== disciplina.id)
+                                    );
+                                }
+                            }}
+                            className="form-checkbox"
+                        />
+                        <span className="ml-2">{disciplina.nome}</span>
+                    </label>
+                ))}
+            </div>
+        </div>
+    );
+
     return (
         <div className="max-w-3xl mx-auto bg-white p-6 rounded shadow">
             <div className="flex justify-between mb-4">
-                <button onClick={() => setViewMode("create")} className="px-4 py-2 bg-yellow-500 text-white rounded">
+                <button
+                    onClick={() => setViewMode("create")}
+                    className="px-4 py-2 bg-yellow-500 text-white rounded"
+                >
                     Novo Curso
                 </button>
-                <button onClick={() => setViewMode("list")} className="px-4 py-2 bg-yellow-500 text-white rounded">
+                <button
+                    onClick={() => setViewMode("list")}
+                    className="px-4 py-2 bg-yellow-500 text-white rounded"
+                >
                     Listar Cursos
                 </button>
             </div>
@@ -159,21 +201,27 @@ const CursoManager: React.FC = () => {
                     <h2 className="text-2xl font-bold mb-4 text-zinc-800">Cadastrar Curso</h2>
                     <div>
                         <label className="block text-zinc-800">Nome</label>
-                        <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} className="w-full border border-zinc-300 p-2 rounded" />
+                        <input
+                            type="text"
+                            value={nome}
+                            onChange={(e) => setNome(e.target.value)}
+                            className="w-full border border-zinc-300 p-2 rounded"
+                        />
                     </div>
                     <div>
                         <label className="block text-zinc-800">Número de Créditos</label>
-                        <input type="number" value={numeroDeCreditos} onChange={(e) => setNumeroDeCreditos(Number(e.target.value))} className="w-full border border-zinc-300 p-2 rounded" />
+                        <input
+                            type="number"
+                            value={numeroDeCreditos}
+                            onChange={(e) => setNumeroDeCreditos(Number(e.target.value))}
+                            className="w-full border border-zinc-300 p-2 rounded"
+                        />
                     </div>
-                    <div>
-                        <label className="block text-zinc-800">Disciplinas</label>
-                        <select multiple value={selectedDisciplinas} onChange={(e) => setSelectedDisciplinas(Array.from(e.target.selectedOptions, option => option.value))} className="w-full border border-zinc-300 p-2 rounded">
-                            {disciplinas.map(disciplina => (
-                                <option key={disciplina.id} value={disciplina.id}>{disciplina.nome}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <button type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+                    {renderDisciplinasCheckbox()}
+                    <button
+                        type="submit"
+                        className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+                    >
                         Cadastrar
                     </button>
                 </form>
@@ -185,13 +233,19 @@ const CursoManager: React.FC = () => {
                     <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Créditos</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Nome
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Créditos
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Ações
+                                </th>
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                            {cursos.map(curso => (
+                            {cursos.map((curso) => (
                                 <tr key={curso.id}>
                                     <td className="px-6 py-4 whitespace-nowrap">{curso.nome}</td>
                                     <td className="px-6 py-4 whitespace-nowrap">{curso.numeroDeCreditos}</td>
@@ -199,7 +253,7 @@ const CursoManager: React.FC = () => {
                                         <button
                                             onClick={() => {
                                                 setEditingCurso(curso);
-                                                setSelectedDisciplinas(curso.disciplinas.map(d => d.id));
+                                                setSelectedDisciplinas(curso.disciplinas.map((d) => d.id));
                                                 setViewMode("edit");
                                             }}
                                             className="px-2 py-1 bg-blue-500 text-white rounded"
@@ -219,25 +273,42 @@ const CursoManager: React.FC = () => {
                     <h2 className="text-2xl font-bold mb-4 text-zinc-800">Editar Curso</h2>
                     <div>
                         <label className="block text-zinc-800">Nome</label>
-                        <input type="text" value={editingCurso.nome} onChange={(e) => setEditingCurso({ ...editingCurso, nome: e.target.value })} className="w-full border border-zinc-300 p-2 rounded" />
+                        <input
+                            type="text"
+                            value={editingCurso.nome}
+                            onChange={(e) =>
+                                setEditingCurso({ ...editingCurso, nome: e.target.value })
+                            }
+                            className="w-full border border-zinc-300 p-2 rounded"
+                        />
                     </div>
                     <div>
                         <label className="block text-zinc-800">Número de Créditos</label>
-                        <input type="number" value={editingCurso.numeroDeCreditos} onChange={(e) => setEditingCurso({ ...editingCurso, numeroDeCreditos: Number(e.target.value) })} className="w-full border border-zinc-300 p-2 rounded" />
+                        <input
+                            type="number"
+                            value={editingCurso.numeroDeCreditos}
+                            onChange={(e) =>
+                                setEditingCurso({
+                                    ...editingCurso,
+                                    numeroDeCreditos: Number(e.target.value),
+                                })
+                            }
+                            className="w-full border border-zinc-300 p-2 rounded"
+                        />
                     </div>
-                    <div>
-                        <label className="block text-zinc-800">Disciplinas</label>
-                        <select multiple value={selectedDisciplinas} onChange={(e) => setSelectedDisciplinas(Array.from(e.target.selectedOptions, option => option.value))} className="w-full border border-zinc-300 p-2 rounded">
-                            {disciplinas.map(disciplina => (
-                                <option key={disciplina.id} value={disciplina.id}>{disciplina.nome}</option>
-                            ))}
-                        </select>
-                    </div>
+                    {renderDisciplinasCheckbox()}
                     <div className="flex space-x-4">
-                        <button type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+                        <button
+                            type="submit"
+                            className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+                        >
                             Salvar Alterações
                         </button>
-                        <button type="button" onClick={() => setViewMode("list")} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                        <button
+                            type="button"
+                            onClick={() => setViewMode("list")}
+                            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                        >
                             Cancelar
                         </button>
                     </div>
@@ -246,6 +317,7 @@ const CursoManager: React.FC = () => {
         </div>
     );
 };
+
 
 //
 // DISCIPLINA MANAGER: Handles creating, listing and editing disciplinas,

@@ -84,7 +84,9 @@ namespace Backend.src.services
                 .Alunos.Include(m => m.Matricula)
                 .Include(c => c.Curso)
                 .Where(a =>
-                    a.Curso.Disciplinas.Any(d => d.Professor.NumeroDePessoa == numeroDePessoa)
+                    a.Curso != null
+                    && a.Curso.Disciplinas != null
+                    && a.Curso.Disciplinas.Any(d => d.Professor.NumeroDePessoa == numeroDePessoa)
                 )
                 .ToListAsync();
             ProfessorResponse response = new(professor, disciplinas, alunos);

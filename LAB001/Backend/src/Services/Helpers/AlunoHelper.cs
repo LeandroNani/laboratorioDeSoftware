@@ -13,10 +13,9 @@ namespace Backend.src.services.Helpers
         {
             AlunoModel aluno =
                 await _context
-                    .Alunos.Include(a => a.Matricula)
+                    .Alunos.Include(m => m.Matricula)
                     .Include(c => c.Curso)
-                    .Include(c => c.Curso.Disciplinas)
-                    .Include(c => c.Curso.Disciplinas)
+                    .Include(c => c.Curso!.Disciplinas!)
                     .ThenInclude(d => d.Professor)
                     .FirstOrDefaultAsync(a => a.NumeroDePessoa == numeroDePessoa)
                 ?? throw new NotFoundException(

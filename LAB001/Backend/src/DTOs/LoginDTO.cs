@@ -15,7 +15,11 @@ namespace Backend.src.DTOs
     }
 
     [method: SetsRequiredMembers]
-    public class ProfessorResponse(ProfessorModel professor, List<DisciplinaModel> disciplinas, List<AlunoModel> alunos)
+    public class ProfessorResponse(
+        ProfessorModel professor,
+        List<DisciplinaModel> disciplinas,
+        List<AlunoModel> alunos
+    )
     {
         public required ProfessorModel Professor { get; set; } = professor;
         public required List<DisciplinaModel> Disciplinas { get; set; } = disciplinas;
