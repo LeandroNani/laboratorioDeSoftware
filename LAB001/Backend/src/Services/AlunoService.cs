@@ -89,39 +89,49 @@ namespace Backend.src.services
         public async Task<AlunoModel> EfetuarMatricula(AlunoModel aluno)
         {
             var existingAluno =
-                await _context.Alunos.FindAsync(aluno.NumeroDePessoa)
+                await _context
+                    .Alunos.Include(a => a.Matricula)
+                    .ThenInclude(m => m.PlanoDeEnsino)
+                    .FirstOrDefaultAsync(a => a.NumeroDePessoa == aluno.NumeroDePessoa)
                 ?? throw new InvalidOperationException("Aluno não encontrado.");
 
-            existingAluno.DisciplinasCursadas = [];
-
-            if (aluno.Matricula?.PlanoDeEnsino != null)
+            if (existingAluno.Matricula == null)
             {
-                if (existingAluno.Matricula == null)
+                existingAluno.Matricula = new MatriculaModel
                 {
-                    existingAluno.Matricula = new MatriculaModel
-                    {
-                        NumeroDeMatricula = new Random().Next(100000, 999999).ToString(),
-                        Ativa = true,
-                        Mensalidade = 0,
-                        PlanoDeEnsino = [],
-                        Paga = false,
-                    };
-                }
-                else if (existingAluno.Matricula.PlanoDeEnsino == null)
+                    NumeroDeMatricula = new Random().Next(100000, 999999).ToString(),
+                    Ativa = true,
+                    Mensalidade = 0,
+                    PlanoDeEnsino = new List<DisciplinaModel>(),
+                    Paga = false,
+                };
+            }
+
+            if (existingAluno.Matricula.PlanoDeEnsino == null)
+            {
+                existingAluno.Matricula.PlanoDeEnsino = new List<DisciplinaModel>();
+            }
+
+            // Adiciona novas disciplinas sem remover as existentes
+            foreach (var disciplina in aluno.Matricula.PlanoDeEnsino)
+            {
+                var disciplinaExistente = await _context.Disciplinas.FindAsync(disciplina.Id);
+                if (
+                    disciplinaExistente != null
+                    && !existingAluno.Matricula.PlanoDeEnsino.Any(d =>
+                        d.Id == disciplinaExistente.Id
+                    )
+                )
                 {
-                    existingAluno.Matricula.PlanoDeEnsino = new List<DisciplinaModel>();
-                }
-                foreach (var disciplina in aluno.Matricula.PlanoDeEnsino)
-                {
-                    var disciplinaExistente = await _context.Disciplinas.FindAsync(disciplina.Id);
-                    if (disciplinaExistente != null)
-                    {
-                        existingAluno.Matricula.PlanoDeEnsino.Add(disciplinaExistente);
-                    }
+                    existingAluno.Matricula.PlanoDeEnsino.Add(disciplinaExistente);
                 }
             }
-            existingAluno.Matricula.Mensalidade =
-                existingAluno.Matricula?.PlanoDeEnsino?.Sum(d => d.Preco) ?? 0;
+
+            // Atualiza a mensalidade
+            existingAluno.Matricula.Mensalidade = existingAluno.Matricula.PlanoDeEnsino.Sum(d =>
+                d.Preco
+            );
+
             await _context.SaveChangesAsync();
             return existingAluno;
         }
@@ -211,6 +221,7 @@ namespace Backend.src.services
                 existingAluno.Matricula?.PlanoDeEnsino?.Sum(d => d.Preco) ?? 0;
             existingAluno.Matricula.Paga = aluno.Matricula.Paga;
             existingAluno.Email = aluno.Email;
+            existingAluno.Matricula.Ativa = aluno.Matricula.Ativa;
             existingAluno.Nome = aluno.Nome;
             await _context.SaveChangesAsync();
             return existingAluno;

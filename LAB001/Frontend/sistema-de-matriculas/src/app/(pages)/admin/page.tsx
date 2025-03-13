@@ -742,7 +742,6 @@ const AlunoManager: React.FC = () => {
                 ...aprovados
             ];
         }
-        console.log("EDITING ALUNO -->", editingAluno)
         await updateAluno(editingAluno);
         await atualizarCurriculo();
         setEditingAluno({} as Aluno);
@@ -809,6 +808,7 @@ const AlunoManager: React.FC = () => {
                             <thead className="bg-gray-50">
                                 <tr>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Matricula</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Curso</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
@@ -818,10 +818,11 @@ const AlunoManager: React.FC = () => {
                                 {alunos.map(aluno => (
                                     <tr key={aluno.numeroDePessoa}>
                                         <td className="px-6 py-4 whitespace-nowrap">{aluno.nome}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap">{aluno.matricula.numeroDeMatricula}</td>
                                         <td className="px-6 py-4 whitespace-nowrap">{aluno.email}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap">{aluno.curso?.nome}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap">{aluno.curso.nome}</td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <button
+                                        <button
                                                 onClick={() => {
                                                     setEditingAluno({
                                                         ...aluno,
@@ -837,7 +838,7 @@ const AlunoManager: React.FC = () => {
                                             >
                                                 Editar
                                             </button>
-                                        </td>
+                                            </td>
                                     </tr>
                                 ))}
                             </tbody>

@@ -72,62 +72,79 @@ namespace Backend.src.services
 
         public CursoModel UpdateCurso(CursoModel curso)
         {
-            // Retrieve the existing course along with its disciplines from the database.
-            var existingCurso = _context
-                .Cursos.Include(c => c.Disciplinas)
-                .ThenInclude(d => d.Professor)
-                .FirstOrDefault(c => c.Id == curso.Id);
+            var existingCurso =
+                _context
+                    .Cursos.Include(c => c.Disciplinas!)
+                    .ThenInclude(d => d.Professor)
+                    .FirstOrDefault(c => c.Id == curso.Id)
+                ?? throw new InvalidOperationException("Curso not found.");
 
-            if (existingCurso == null)
-                throw new InvalidOperationException("Curso not found.");
-
-            // Update the scalar properties of the course.
             _context.Entry(existingCurso).CurrentValues.SetValues(curso);
 
-            // Determine which discipline IDs are sent in the update.
-            var updatedDisciplineIds = curso.Disciplinas?.Select(d => d.Id).ToHashSet() ?? [];
+            var updatedDisciplineIds = new HashSet<string>(
+                curso.Disciplinas?.Select(d => d.Id) ?? Enumerable.Empty<string>()
+            );
 
-            // Remove disciplines from the current course that are not in the update.
-            foreach (var disciplina in existingCurso.Disciplinas.ToList())
+            foreach (
+                var disciplina in (
+                    existingCurso.Disciplinas ?? Enumerable.Empty<DisciplinaModel>()
+                ).ToList()
+            )
             {
                 if (!updatedDisciplineIds.Contains(disciplina.Id))
                 {
-                    existingCurso.Disciplinas.Remove(disciplina);
+                    existingCurso.Disciplinas?.Remove(disciplina);
                 }
             }
 
-            // Add new disciplines or update existing ones.
             foreach (var disciplina in curso.Disciplinas ?? Enumerable.Empty<DisciplinaModel>())
             {
-                var existingDisciplina = existingCurso.Disciplinas.FirstOrDefault(d =>
-                    d.Id == disciplina.Id
-                );
+                var existingDisciplina = (
+                    existingCurso.Disciplinas ?? Enumerable.Empty<DisciplinaModel>()
+                ).FirstOrDefault(d => d.Id == disciplina.Id);
+
                 if (existingDisciplina != null)
                 {
-                    // Update the discipline properties.
                     _context.Entry(existingDisciplina).CurrentValues.SetValues(disciplina);
+                    _context.Entry(existingDisciplina).State = EntityState.Modified;
                 }
                 else
                 {
-                    // If the discipline is new, handle the related professor.
                     if (disciplina.Professor != null)
                     {
-                        var existingProfessor = _context.Pessoas.FirstOrDefault(p =>
-                            p.NumeroDePessoa == disciplina.Professor.NumeroDePessoa
-                        );
+                        var existingProfessor = _context
+                            .Pessoas.OfType<ProfessorModel>()
+                            .FirstOrDefault(p =>
+                                p.NumeroDePessoa == disciplina.Professor.NumeroDePessoa
+                            );
+
                         if (existingProfessor != null)
                         {
-                            disciplina.Professor = (ProfessorModel)existingProfessor;
+                            disciplina.Professor = existingProfessor;
                         }
                         else
                         {
                             _context.Pessoas.Attach(disciplina.Professor);
                         }
                     }
-                    existingCurso.Disciplinas.Add(disciplina);
+
+                    var disciplineInDb = _context.Disciplinas.FirstOrDefault(d =>
+                        d.Id == disciplina.Id
+                    );
+                    if (disciplineInDb != null)
+                    {
+                        _context.Entry(disciplineInDb).CurrentValues.SetValues(disciplina);
+                        existingCurso.Disciplinas.Add(disciplineInDb);
+                    }
+                    else
+                    {
+                        _context.Disciplinas.Add(disciplina);
+                        existingCurso.Disciplinas.Add(disciplina);
+                    }
                 }
             }
 
+            _context.Entry(existingCurso).State = EntityState.Modified;
             _context.SaveChanges();
             return existingCurso;
         }
