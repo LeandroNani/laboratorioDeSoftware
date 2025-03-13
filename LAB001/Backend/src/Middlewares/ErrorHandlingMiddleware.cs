@@ -53,6 +53,10 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
                 statusCode = (int)HttpStatusCode.BadRequest;
                 message = invalidOperationExceptionEx.Message;
                 break;
+            case SmtpException mailerException:
+                statusCode = (int)HttpStatusCode.InternalServerError;
+                message = mailerException.Message;
+                break;
             default:
                 break;
         }
