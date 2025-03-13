@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Backend.src.Data;
 using Backend.src.DTOs;
 using Backend.src.Middlewares.Exceptions;
@@ -100,9 +101,9 @@ namespace Backend.src.controllers
         }
 
         [HttpPut("atualizar-aluno")]
-        public IActionResult UpdateAluno(AlunoModel aluno)
+        public async Task<IActionResult> UpdateAluno(AlunoModel aluno)
         {
-            _alunoService.UpdateAluno(aluno);
+            await _alunoService.UpdateAluno(aluno);
             return Ok(aluno);
         }
 

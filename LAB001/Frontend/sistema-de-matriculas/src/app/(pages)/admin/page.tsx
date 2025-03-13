@@ -16,7 +16,6 @@ import { Curriculo } from '@/@types/curriculo.type';
 import { toast } from "react-toastify"
 import { ToastContainer } from 'react-bootstrap';
 
-
 type MenuItem = 'alunos' | 'curriculos' | 'cursos' | 'disciplinas' | 'professores';
 
 const atualizarCurriculo = async () => {
@@ -668,6 +667,8 @@ const AlunoManager: React.FC = () => {
     const [cursos, setCursos] = useState<Curso[]>([]);
     const [alunos, setAlunos] = useState<Aluno[]>([]);
     const [editingAluno, setEditingAluno] = useState<Aluno>({} as Aluno);
+    const [disciplinasAprovadas, setDisciplinasAprovadas] = useState<string[]>([]);
+
 
     useEffect(() => {
         const fetchCursos = async () => {
@@ -699,9 +700,10 @@ const AlunoManager: React.FC = () => {
                 curso: selectedCurso,
                 matricula: {
                     numeroDeMatricula: numeroDeMatricula,
-                    ativa: true,
+                    ativa: false,
                     planoDeEnsino: [],
-                    mensalidade: 0
+                    mensalidade: 0,
+                    paga: false
                 },
                 MatriculaId: numeroDeMatricula,
                 disciplinasCursadas: []
@@ -727,17 +729,32 @@ const AlunoManager: React.FC = () => {
 
     const handleEdit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (editingAluno.matricula && Array.isArray(editingAluno.matricula.planoDeEnsino)) {
+            const aprovados = editingAluno.matricula.planoDeEnsino.filter((disc: Disciplina) =>
+                disciplinasAprovadas.includes(disc.id)
+            );
+            const novoPlano = editingAluno.matricula.planoDeEnsino.filter((disc: Disciplina) =>
+                !disciplinasAprovadas.includes(disc.id)
+            );
+            editingAluno.matricula.planoDeEnsino = novoPlano;
+            editingAluno.disciplinasCursadas = [
+                ...editingAluno.disciplinasCursadas,
+                ...aprovados
+            ];
+        }
+        console.log("EDITING ALUNO -->", editingAluno)
         await updateAluno(editingAluno);
-        // Após editar, atualize o currículo
         await atualizarCurriculo();
         setEditingAluno({} as Aluno);
         fetchAlunos();
         setViewMode("list");
-        toast.success(`Curso atualizado com sucesso`, {
+        toast.success(`Aluno atualizado com sucesso`, {
             position: "top-right",
             autoClose: 3000,
             theme: "colored",
-        })
+        });
+        // Limpe a seleção
+        setDisciplinasAprovadas([]);
     };
 
     return (
@@ -806,7 +823,14 @@ const AlunoManager: React.FC = () => {
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <button
                                                 onClick={() => {
-                                                    setEditingAluno(aluno);
+                                                    setEditingAluno({
+                                                        ...aluno,
+                                                        matricula: {
+                                                            ...aluno.matricula,
+                                                            planoDeEnsino: aluno.matricula?.planoDeEnsino || []
+                                                        }
+                                                    });
+
                                                     setViewMode("edit");
                                                 }}
                                                 className="px-2 py-1 bg-blue-500 text-white rounded"
@@ -826,12 +850,68 @@ const AlunoManager: React.FC = () => {
                         <h2 className="text-2xl font-bold mb-4 text-zinc-800">Editar Aluno</h2>
                         <div>
                             <label className="block text-zinc-800">Nome</label>
-                            <input type="text" value={editingAluno.nome} onChange={(e) => setEditingAluno({ ...editingAluno, nome: e.target.value })} className="w-full border border-zinc-300 p-2 rounded" />
+                            <input
+                                type="text"
+                                value={editingAluno.nome}
+                                onChange={(e) => setEditingAluno({ ...editingAluno, nome: e.target.value })}
+                                className="w-full border border-zinc-300 p-2 rounded"
+                            />
                         </div>
                         <div>
                             <label className="block text-zinc-800">Email</label>
-                            <input type="email" value={editingAluno.email} onChange={(e) => setEditingAluno({ ...editingAluno, email: e.target.value })} className="w-full border border-zinc-300 p-2 rounded" />
+                            <input
+                                type="email"
+                                value={editingAluno.email}
+                                onChange={(e) => setEditingAluno({ ...editingAluno, email: e.target.value })}
+                                className="w-full border border-zinc-300 p-2 rounded"
+                            />
                         </div>
+                        <div>
+                            <label className="block text-zinc-800">Matrícula Paga</label>
+                            <input
+                                type="checkbox"
+                                checked={editingAluno.matricula?.paga}
+                                onChange={(e) =>
+                                    setEditingAluno({
+                                        ...editingAluno,
+                                        matricula: {
+                                            ...editingAluno.matricula,
+                                            paga: e.target.checked,
+                                        },
+                                    })
+                                }
+                                className="form-checkbox mt-1"
+                            />
+                        </div>
+                        {editingAluno.matricula &&
+                            Array.isArray(editingAluno.matricula.planoDeEnsino) && (
+                                <fieldset className="border p-4 rounded">
+                                    <legend className="font-bold text-zinc-800">Marcar disciplinas aprovadas</legend>
+                                    <div className="flex flex-col">
+                                        {editingAluno.matricula.planoDeEnsino.map((disc: Disciplina) => (
+                                            <label key={disc.id} className="inline-flex items-center mt-1">
+                                                <input
+                                                    type="checkbox"
+                                                    value={disc.id}
+                                                    checked={disciplinasAprovadas.includes(disc.id)}
+                                                    onChange={(e) => {
+                                                        const isChecked = e.target.checked;
+                                                        if (isChecked) {
+                                                            setDisciplinasAprovadas([...disciplinasAprovadas, disc.id]);
+                                                        } else {
+                                                            setDisciplinasAprovadas(
+                                                                disciplinasAprovadas.filter((id) => id !== disc.id)
+                                                            );
+                                                        }
+                                                    }}
+                                                    className="form-checkbox"
+                                                />
+                                                <span className="ml-2">{disc.nome}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </fieldset>
+                            )}
                         <div className="flex space-x-4">
                             <button type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
                                 Salvar Alterações

@@ -16,4 +16,5 @@ export type Matricula = {
     planoDeEnsino: Disciplina[],
     mensalidade: number
     numeroDeMatricula?: string
+    paga: boolean
 }

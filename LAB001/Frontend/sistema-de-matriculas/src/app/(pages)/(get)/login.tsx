@@ -52,9 +52,10 @@ export const Page: React.FC<PageProps> = ({ cursos }) => {
           senha: formData.senha,
           matricula: {
             numeroDeMatricula: numeroDeMatricula,
-            ativa: true,
+            ativa: false,
             planoDeEnsino: curso?.disciplinas || [],
             mensalidade: 0,
+            paga: false
           },
           matriculaId: numeroDeMatricula,
           curso: curso,
