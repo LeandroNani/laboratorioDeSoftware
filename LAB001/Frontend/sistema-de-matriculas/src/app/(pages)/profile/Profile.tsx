@@ -168,6 +168,10 @@ export default function Page(aluno: Aluno) {
                           {disciplina.professor.nome} (
                           {disciplina.professor.nivelEscolar})
                         </p>
+                        <p className="text-sm text-gray-300">
+                          <strong className="text-white">Ativa:</strong>{" "}
+                          {disciplina.isActive}
+                        </p>
                       </li>
                     ))}
                   </ul>
@@ -200,6 +204,9 @@ export default function Page(aluno: Aluno) {
                         <strong className="text-white">Professor:</strong>{" "}
                         {disciplina.professor.nome} (
                         {disciplina.professor.nivelEscolar})
+                      </p>
+                      <p className="text-sm text-gray-300">
+                          <strong className="text-white">Ativa:</strong> {disciplina.isActive ? "Sim" : "Não"}
                       </p>
                     </li>
                   ))}
