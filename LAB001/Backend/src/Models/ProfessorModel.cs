@@ -7,6 +7,7 @@ namespace Backend.src.models
     public class ProfessorModel : PessoaModel
     {
         public required string NivelEscolar { get; set; }
+        public required string Email { get; set; }
         public string Type = RoleExtensions.ToString(Role.PROFESSOR);
     }
 }

@@ -64,6 +64,9 @@ export default function Page(dados: dados) {
                                 <p className="text-lg text-gray-300">
                                     <strong className="text-white">Nível Escolar:</strong> {dados.professor.nivelEscolar}
                                 </p>
+                                <p className="text-lg text-gray-300">
+                                    <strong className="text-white">Número de pessoa:</strong> {dados.professor.numeroDePessoa}
+                                </p>
                             </div>
                         </div>
                     ) : selectedTab === "disciplinas" ? (

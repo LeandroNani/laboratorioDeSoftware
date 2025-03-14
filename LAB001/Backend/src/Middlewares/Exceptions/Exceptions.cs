@@ -11,4 +11,6 @@ namespace Backend.src.Middlewares.Exceptions
     public class InvalidPasswordException(string message) : Exception(message) { }
 
     public class InvalidOperationException(string message) : Exception(message) { }
+
+    public class SmtpException(string message) : Exception(message) { }
 }

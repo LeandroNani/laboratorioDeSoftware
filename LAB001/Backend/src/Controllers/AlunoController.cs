@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Backend.src.Data;
 using Backend.src.DTOs;
 using Backend.src.Middlewares.Exceptions;
@@ -99,14 +100,32 @@ namespace Backend.src.controllers
             return Ok(aluno);
         }
 
+        /// <summary>
+        /// Atualiza os dados de um aluno.
+        /// </summary>
+        /// <param name="aluno">Dados do aluno que serão atualizados</param>
+        /// <returns>Retorna o aluno atualizado</returns>
+        /// <response code="200">Aluno atualizado com sucesso</response>
+        /// <response code="404">Aluno não encontrado</response>
+        /// <response code="500">Erro interno do servidor</response>
         [HttpPut("atualizar-aluno")]
-        public IActionResult UpdateAluno(AlunoModel aluno)
+        [ProducesResponseType(typeof(AlunoModel), 200)]
+        public async Task<IActionResult> UpdateAluno(AlunoModel aluno)
         {
-            _alunoService.UpdateAluno(aluno);
+            await _alunoService.UpdateAluno(aluno);
             return Ok(aluno);
         }
 
+        /// <summary>
+        /// Efetua a matrícula de um aluno.
+        /// </summary>
+        /// <param name="aluno">Dados do aluno a ser matriculado</param>
+        /// <returns>Retorna o aluno com matrícula efetuada</returns>
+        /// <response code="200">Matrícula efetuada com sucesso</response>
+        /// <response code="404">Aluno não encontrado</response>
+        /// <response code="500">Erro interno do servidor</response>
         [HttpPut("efetuar-matricula")]
+        [ProducesResponseType(typeof(AlunoModel), 200)]
         public async Task<IActionResult> EfetuarMatricula(AlunoModel aluno)
         {
             await _alunoService.EfetuarMatricula(aluno);

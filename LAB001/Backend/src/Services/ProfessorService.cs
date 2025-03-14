@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Backend.src.Data;
 using Backend.src.DTOs;
+using Backend.src.Mailer;
 using Backend.src.models;
 using Backend.src.services.Helpers;
 using Backend.src.services.interfaces;
@@ -24,6 +25,13 @@ namespace Backend.src.services
                 );
             _context.Professores.Add(professor);
             await _context.SaveChangesAsync();
+            MailerService mailer = new();
+            mailer.SendEmail(
+                professor.NumeroDePessoa,
+                professor.Email,
+                professor.Nome,
+                professor.Type
+            );
         }
 
         public async Task<DisciplinaModel> AlocarDisciplina(

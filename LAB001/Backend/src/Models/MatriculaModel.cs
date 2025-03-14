@@ -12,5 +12,7 @@ namespace Backend.src.models
         public required bool Ativa { get; set; }
         public required List<DisciplinaModel> PlanoDeEnsino { get; set; }
         public required int Mensalidade { get; set; }
+
+        public required bool Paga { get; set; }
     }
 }
