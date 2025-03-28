@@ -1,4 +1,4 @@
-namespace Backend.API.Models
+namespace Backend.API.Model
 {
     public class Pedido
     {
@@ -7,7 +7,7 @@ namespace Backend.API.Models
         
         // Chaves estrangeiras
         public required int ContratanteId { get; set; }
-        public required Cliente Contratante { get; set; }
+        public required Cliente Contratante { get; set; } 
 
         public required int AgenteDesignadoId { get; set; }
         public required Agente AgenteDesignado { get; set; }

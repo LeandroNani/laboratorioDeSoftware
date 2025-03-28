@@ -1,16 +1,16 @@
-namespace Backend.API.Models
+using System.Collections.Generic;
+
+namespace Backend.API.Model
 {
-    public class Agente
+    public class Agente : Usuario
     {
-        public int Id { get; set; }               // PK
+        public override Role Role => Role.AGENTE;
         public required string CNPJ { get; set; }
-        public required string Nome { get; set; }
-        public string? Endereco { get; set; }
         public required int QuantidadeCarros { get; set; }
 
         // Relação com Pedidos
         public ICollection<Pedido>? PedidosDesignados { get; set; } = new List<Pedido>();
 
-        public ICollection<Automovel> Automoveis { get; set; } 
+        public ICollection<Automovel> Automoveis { get; set; }  = new List<Automovel>();
     }
 }

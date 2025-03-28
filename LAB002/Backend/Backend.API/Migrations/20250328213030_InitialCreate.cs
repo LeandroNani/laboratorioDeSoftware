@@ -12,38 +12,27 @@ namespace Backend.API.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Agentes",
+                name: "Usuarios",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CNPJ = table.Column<string>(type: "text", nullable: false),
                     Nome = table.Column<string>(type: "text", nullable: false),
                     Endereco = table.Column<string>(type: "text", nullable: true),
-                    QuantidadeCarros = table.Column<int>(type: "integer", nullable: false)
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    SenhaHash = table.Column<string>(type: "text", nullable: false),
+                    Discriminator = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: false),
+                    CNPJ = table.Column<string>(type: "text", nullable: true),
+                    QuantidadeCarros = table.Column<int>(type: "integer", nullable: true),
+                    RG = table.Column<string>(type: "text", nullable: true),
+                    CPF = table.Column<string>(type: "text", nullable: true),
+                    Profissao = table.Column<string>(type: "text", nullable: true),
+                    EntidadeEmpregadora = table.Column<string>(type: "text", nullable: true),
+                    Rendimentos = table.Column<string>(type: "jsonb", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Agentes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Clientes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RG = table.Column<string>(type: "text", nullable: false),
-                    CPF = table.Column<string>(type: "text", nullable: false),
-                    Nome = table.Column<string>(type: "text", nullable: false),
-                    Endereco = table.Column<string>(type: "text", nullable: false),
-                    Profissao = table.Column<string>(type: "text", nullable: false),
-                    EntidadeEmpregadora = table.Column<string>(type: "text", nullable: false),
-                    Rendimentos = table.Column<string>(type: "jsonb", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Clientes", x => x.Id);
+                    table.PrimaryKey("PK_Usuarios", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -64,9 +53,9 @@ namespace Backend.API.Migrations
                 {
                     table.PrimaryKey("PK_Automoveis", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Automoveis_Agentes_AgenteId",
+                        name: "FK_Automoveis_Usuarios_AgenteId",
                         column: x => x.AgenteId,
-                        principalTable: "Agentes",
+                        principalTable: "Usuarios",
                         principalColumn: "Id");
                 });
 
@@ -85,21 +74,21 @@ namespace Backend.API.Migrations
                 {
                     table.PrimaryKey("PK_Pedidos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Pedidos_Agentes_AgenteDesignadoId",
-                        column: x => x.AgenteDesignadoId,
-                        principalTable: "Agentes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Pedidos_Automoveis_AutomovelId",
                         column: x => x.AutomovelId,
                         principalTable: "Automoveis",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Pedidos_Clientes_ContratanteId",
+                        name: "FK_Pedidos_Usuarios_AgenteDesignadoId",
+                        column: x => x.AgenteDesignadoId,
+                        principalTable: "Usuarios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Pedidos_Usuarios_ContratanteId",
                         column: x => x.ContratanteId,
-                        principalTable: "Clientes",
+                        principalTable: "Usuarios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -135,10 +124,7 @@ namespace Backend.API.Migrations
                 name: "Automoveis");
 
             migrationBuilder.DropTable(
-                name: "Clientes");
-
-            migrationBuilder.DropTable(
-                name: "Agentes");
+                name: "Usuarios");
         }
     }
 }

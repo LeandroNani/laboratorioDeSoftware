@@ -1,4 +1,4 @@
-namespace Backend.API.Models
+namespace Backend.API.Model
 {
     public class Automovel
     {

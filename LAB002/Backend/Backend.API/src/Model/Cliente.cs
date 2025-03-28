@@ -1,12 +1,14 @@
-namespace Backend.API.Models
+using System.Collections.Generic;
+
+namespace Backend.API.Model
 {
-    public class Cliente
+    public class Cliente : Usuario
     {
-        public int Id { get; set; }              // Primary key (gerada automaticamente pelo EF)
+        public override Role Role => Role.CLIENTE;
+
+        
         public required string RG { get; set; }
         public required string CPF { get; set; }
-        public required string Nome { get; set; }
-        public required string Endereco { get; set; }
         public required string Profissao { get; set; }
         public required string EntidadeEmpregadora { get; set; }
         

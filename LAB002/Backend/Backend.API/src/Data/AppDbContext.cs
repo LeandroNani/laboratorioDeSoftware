@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Backend.API.Models;
+using Backend.API.Model;
 
 namespace Backend.API.Data
 {
@@ -20,6 +20,9 @@ namespace Backend.API.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) 
             : base(options) { }
 
+        // DbSets
+        public DbSet<Usuario> Usuarios { get; set; }  // base para TPH
+        public DbSet<Admin> Admins { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Agente> Agentes { get; set; }
         public DbSet<Automovel> Automoveis { get; set; }
@@ -35,6 +38,13 @@ namespace Backend.API.Data
             //    .Property(c => c.CPF)
             //    .HasMaxLength(11)
             //    .IsRequired();
+
+            // Configuração do mapeamento TPH (Table Per Hierarchy)
+            modelBuilder.Entity<Usuario>()
+                .HasDiscriminator<string>("Discriminator")
+                .HasValue<Admin>("ADMIN")
+                .HasValue<Cliente>("CLIENTE")
+                .HasValue<Agente>("AGENTE");
 
             modelBuilder.Entity<Cliente>()
                 .Property(c => c.Rendimentos)
