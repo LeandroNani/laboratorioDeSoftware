@@ -4,7 +4,7 @@ namespace Backend.API.Model
 {
     public class Agente : Usuario
     {
-        public override Role Role => Role.AGENTE;
+        public override Role Role  => Role.AGENTE;
         public required string CNPJ { get; set; }
         public required int QuantidadeCarros { get; set; }
 

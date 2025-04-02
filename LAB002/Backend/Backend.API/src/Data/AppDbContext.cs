@@ -73,6 +73,7 @@ namespace Backend.API.Data
             modelBuilder.Entity<Pedido>()
                 .Property(p => p.Status)
                 .HasDefaultValue(false);
+
         }
     }
 }

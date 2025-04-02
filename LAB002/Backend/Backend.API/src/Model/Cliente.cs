@@ -4,7 +4,7 @@ namespace Backend.API.Model
 {
     public class Cliente : Usuario
     {
-        public override Role Role => Role.CLIENTE;
+        public override Role Role  => Role.CLIENTE;
 
         
         public required string RG { get; set; }

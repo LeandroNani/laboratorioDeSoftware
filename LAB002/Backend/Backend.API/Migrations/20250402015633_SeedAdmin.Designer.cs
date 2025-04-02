@@ -2,6 +2,7 @@
 using Backend.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250402015633_SeedAdmin")]
+    partial class SeedAdmin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,9 +120,6 @@ namespace Backend.API.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
-
                     b.Property<string>("SenhaHash")
                         .IsRequired()
                         .HasColumnType("text");
@@ -138,6 +138,15 @@ namespace Backend.API.Migrations
                     b.HasBaseType("Backend.API.Model.Usuario");
 
                     b.HasDiscriminator().HasValue("ADMIN");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "admin@admin.com",
+                            Nome = "Admin Seed",
+                            SenhaHash = "$2a$11$z22flnDB6OGuDpfeM8t4f.TKM/Q5PXIaXD.im.RHplNfj2LBdEMzm"
+                        });
                 });
 
             modelBuilder.Entity("Backend.API.Model.Agente", b =>

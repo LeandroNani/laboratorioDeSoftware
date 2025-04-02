@@ -14,6 +14,6 @@ namespace Backend.API.Model
         public required string SenhaHash { get; set; }
 
         // Cada subclasse vai sobrescrever e retornar seu papel
-        public abstract Role Role { get; }
+        public virtual Role Role { get; set; }
     }
 }
