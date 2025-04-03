@@ -76,9 +76,7 @@ API desenvolvida em *.NET*, seguindo boas práticas de separação de responsabi
 - *Data*: Responsável pela configuração do banco de dados, contexto (DbContext) e acesso aos dados.
 - *Migrations*: Controle e versionamento da estrutura do banco de dados utilizando Entity Framework.
 
-## 🏗 Arquitetura do Projeto
-
-O sistema segue a **arquitetura MVC (Model-View-Controller)** e os seguintes padrões de design:
+Além disso, segue a **arquitetura MVC (Model-View-Controller)** e os seguintes padrões de design:
 
 - **Repository Pattern**: Separação das regras de negócios e acesso aos dados.
 - **DTO (Data Transfer Object)**: Para evitar exposição direta de entidades.
