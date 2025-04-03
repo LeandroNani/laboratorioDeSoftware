@@ -1,6 +1,6 @@
-# 🎓 Sistema de Matrículas - Universidade
+# 🚗 Sistema de Aluguel de Carros
 
-Este é um sistema de matrículas para uma universidade, desenvolvido em **C#**, permitindo que alunos realizem matrículas em disciplinas, professores acompanhem os alunos matriculados e a secretaria gerencie os currículos e ofertas de disciplinas.
+Este é um sistema de aluguel de carros, desenvolvido em **C#**, permitindo que clientes realizem pedidos de aluguel, agentes aprovem ou neguem seus pedidos com base nos rendimentos do cliente e admins gerenciem os automóveis da locadora, bem como cadastrem novos agentes. Caso a solicitação de aluguel do cliente seja aprovado, o sistema gera um contrato entre o Cliente e o Agente.
 
 ---
 
@@ -8,23 +8,23 @@ Este é um sistema de matrículas para uma universidade, desenvolvido em **C#**,
 
 - [📖 Visão Geral](#-visão-geral)
 - [🛠 Tecnologias Utilizadas](#-tecnologias-utilizadas)
-- [🏗 Arquitetura do Projeto](#-arquitetura-do-projeto)
 - [📂 Estrutura de Diretórios](#-estrutura-de-diretórios)
 - [🚀 Como Executar o Projeto](#-como-executar-o-projeto)
-- [📊 Modelagem UML](#-modelagem-uml)
-- [📜 Histórico de Versões](#-histórico-de-versões)
+- [📊 Diagrama de Classe](#-modelagem-uml)
 
 ---
 
 ## 📖 Visão Geral
 
-O **Sistema de Matrículas** permite a informatização do processo de matrícula na universidade, incluindo funcionalidades para:
+O **Sistema de Aluguel de Carros** permite a informatização do processo de alugar um carro, incluindo funcionalidades para:
 
-✅ Alunos se matricularem em disciplinas obrigatórias e optativas.  
-✅ Controle de disponibilidade das disciplinas (mínimo 3 alunos, máximo 60).  
-✅ Professores visualizarem suas turmas.  
-✅ Notificação do sistema de cobrança ao finalizar matrícula.  
-✅ Controle de acesso via autenticação de usuários.  
+✅ Clientes se registrarem na plataforma.  
+✅ Clientes introduzam, modificam, consultam e cancelam pedidos de aluguel de automóveis.  
+✅ Administradores cadastrem automóveis na locadora.
+✅ Administradores cadastrem novos agentes atuantes na locadora.
+✅ Agentes aprovam ou negam os pedidos de aluguel emitidos pelos cliente.
+✅ Agentes visualizam todos os pedidos de aluguel vinculados a eles.
+✅ Contratos são gerados com base na aprovação do pedido de aluguel.
 
 ---
 
@@ -34,11 +34,11 @@ O **Sistema de Matrículas** permite a informatização do processo de matrícul
 - ASP.NET Core 7.0+
 
 ### **Front-end**
-
+- React
 
 ### **Banco de Dados**
+- PostgreSQL
 
----
 
 ## 🏗 Arquitetura do Projeto
 
@@ -123,3 +123,5 @@ Inicie o projeto:
 ````bash
 dotnet run --project SistemaMatriculas.Web
 ````
+
+## Diagrama de Classe
