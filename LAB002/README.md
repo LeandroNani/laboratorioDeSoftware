@@ -148,7 +148,7 @@ dotnet restore
 Inicie o projeto:
 
 ````bash
-dotnet run --project SistemaMatriculas.Web
+dotnet run
 ````
 
 ## Diagrama de Classe
