@@ -98,3 +98,4 @@ dotnet run --project SistemaMatriculas.Web
 ````
 
 ## Diagrama de Classe
+![Diagrama de Componentes](https://raw.githubusercontent.com/imcathalat/projeto-de-software/main/sgo/artefatos/DiagramaDeComponentes.jpg)
