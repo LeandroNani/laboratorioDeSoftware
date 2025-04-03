@@ -17,6 +17,8 @@ type Pedido = {
   agenteDesignado: Agente;
   status: boolean | null; // true = aprovado, false = negado, null = pendente
   automovel: Automovel;
+  duracao: number;
+  tipoContrato: string;
 };
 
 type Cliente = {
@@ -41,6 +43,13 @@ export default function ClientePage() {
   const [pedidos, setPedidos] = useState<Pedido[]>([]);
   const [contratos, setContratos] = useState<Pedido[]>([]);
 
+  const [showForm, setShowForm] = useState(false);
+  const [pedidoForm, setPedidoForm] = useState({
+    automovelId: 0,
+    duracao: 0,
+    tipoContrato: "",
+  });
+
   useEffect(() => {
     fetchCliente();
     fetchAutomoveis();
@@ -50,7 +59,7 @@ export default function ClientePage() {
 
   const fetchCliente = async () => {
     const mockCliente: Cliente = {
-      rg: "123456789",
+      rg: "11223344",
       cpf: "111.222.333-44",
       nome: "João da Silva",
       endereco: "Rua das Flores, 123",
@@ -62,22 +71,22 @@ export default function ClientePage() {
   const fetchAutomoveis = async () => {
     const mockAutomoveis: Automovel[] = [
       {
-        matricula: 1,
+        matricula: 101,
         ano: 2020,
         marca: "Toyota",
         modelo: "Corolla",
-        placa: "ABC-1234",
+        placa: "XYZ-1234",
         quantidade: 5,
       },
       {
-        matricula: 2,
+        matricula: 102,
         ano: 2019,
         marca: "Honda",
         modelo: "Civic",
         placa: "XYZ-5678",
         quantidade: 3,
       },
-    ];
+    ];  
     setAutomoveis(mockAutomoveis);
   };
 
@@ -93,14 +102,9 @@ export default function ClientePage() {
           quantidadeCarros: 10,
         },
         status: null,
-        automovel: {
-          matricula: 1,
-          ano: 2020,
-          marca: "Toyota",
-          modelo: "Corolla",
-          placa: "ABC-1234",
-          quantidade: 5,
-        },
+        duracao: 7,
+        tipoContrato: "credito",
+        automovel: mockAutomoveis[0],
       },
     ];
     setPedidos(mockPedidos);
@@ -112,20 +116,15 @@ export default function ClientePage() {
         id: 2,
         contratante: cliente!,
         agenteDesignado: {
-          cnpj: "12.345.678/0001-99",
+          cnpj: "98.765.432/0001-00",
           nome: "Banco XYZ",
           endereco: "Av. Norte, 789",
           quantidadeCarros: 15,
         },
         status: true,
-        automovel: {
-          matricula: 2,
-          ano: 2019,
-          marca: "Honda",
-          modelo: "Civic",
-          placa: "XYZ-5678",
-          quantidade: 3,
-        },
+        duracao: 10,
+        tipoContrato: "debito",
+        automovel: mockAutomoveis[1],
       },
     ];
     setContratos(mockContratos);
@@ -171,34 +170,102 @@ export default function ClientePage() {
           <div className="bg-white shadow-lg rounded-lg p-6 max-w-4xl mx-auto">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-semibold">Pedidos de Aluguel</h2>
-              {/* NOVO */}
-              <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
-                + Novo Pedido
+              <button
+                onClick={() => setShowForm(!showForm)}
+                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+              >
+                {showForm ? "⬅ Voltar" : "+ Novo Pedido"}
               </button>
             </div>
-            <ul className="space-y-4">
-              {pedidos.map((pedido) => (
-                <li key={pedido.id} className="border border-gray-300 rounded-lg p-4 bg-gray-50 shadow-sm">
-                  <p className="text-lg font-semibold">Pedido #{pedido.id}</p>
-                  <p className="text-sm text-gray-600">
-                    <strong>Status:</strong>{" "}
-                    {pedido.status === null
-                      ? "Pendente"
-                      : pedido.status
-                      ? "Aprovado ✅"
-                      : "Negado ❌"}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    <strong>Automóvel:</strong> {pedido.automovel.marca} {pedido.automovel.modelo}
-                  </p>
-                  {/* NOVO */}
-                  <div className="mt-2 flex gap-2">
-                    <button className="text-blue-600 underline">Editar</button>
-                    <button className="text-red-500 underline">Cancelar</button>
-                  </div>
-                </li>
-              ))}
-            </ul>
+
+            {showForm ? (
+              <form className="space-y-4">
+                <div>
+                  <label className="block mb-1 font-medium text-gray-700">Automóvel</label>
+                  <select
+                    value={pedidoForm.automovelId}
+                    onChange={(e) =>
+                      setPedidoForm({ ...pedidoForm, automovelId: Number(e.target.value) })
+                    }
+                    className="w-full border px-3 py-2 rounded"
+                  >
+                    <option value="">Selecione um automóvel</option>
+                    {automoveis.map((a) => (
+                      <option key={a.matricula} value={a.matricula}>
+                        {a.marca} {a.modelo} ({a.placa})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block mb-1 font-medium text-gray-700">Duração (dias)</label>
+                  <input
+                    type="number"
+                    value={pedidoForm.duracao}
+                    onChange={(e) =>
+                      setPedidoForm({ ...pedidoForm, duracao: Number(e.target.value) })
+                    }
+                    className="w-full border px-3 py-2 rounded"
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-1 font-medium text-gray-700">Tipo de Contrato</label>
+                  <select
+                    value={pedidoForm.tipoContrato}
+                    onChange={(e) =>
+                      setPedidoForm({ ...pedidoForm, tipoContrato: e.target.value })
+                    }
+                    className="w-full border px-3 py-2 rounded"
+                  >
+                    <option value="">Selecione o tipo</option>
+                    <option value="credito">Crédito</option>
+                    <option value="debito">Débito</option>
+                  </select>
+                </div>
+
+                <button
+                  type="submit"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded"
+                >
+                  Enviar Pedido
+                </button>
+              </form>
+            ) : (
+              <ul className="space-y-4">
+                {pedidos.map((pedido) => (
+                  <li key={pedido.id} className="border border-gray-300 rounded-lg p-4 bg-gray-50 shadow-sm">
+                    <p className="text-lg font-semibold">Pedido #{pedido.id}</p>
+                    <p className="text-sm text-gray-600">
+                      <strong>Status:</strong>{" "}
+                      {pedido.status === null
+                        ? "Pendente"
+                        : pedido.status
+                        ? "Aprovado ✅"
+                        : "Negado ❌"}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <strong>Automóvel:</strong> {pedido.automovel.marca} {pedido.automovel.modelo}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <strong>Duração:</strong> {pedido.duracao} dias
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <strong>Tipo de Contrato:</strong> {pedido.tipoContrato}
+                    </p>
+                    <div className="mt-4 flex gap-3">
+  <button className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+    Editar
+  </button>
+  <button className="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition">
+    Cancelar
+  </button>
+</div>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         )}
 
