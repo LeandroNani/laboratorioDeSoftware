@@ -41,7 +41,7 @@ namespace Backend.API.Controllers
                 CNPJ = request.Cnpj,
                 Endereco = request.Endereco,
                 QuantidadeCarros = request.QuantidadeCarros,
-                Role = Role.ADMIN  // Pode ser Role.AGENTE se tiver enum
+                Role = Role.ADMIN  
             };
 
             _context.Agentes.Add(agente);

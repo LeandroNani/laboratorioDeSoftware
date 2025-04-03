@@ -41,7 +41,6 @@ namespace Backend.API.Controllers
             int agenteId = automovel.AgenteId ?? 0;  // Se automovel.AgenteId for int?, use ?? 0
             var agente = await _context.Agentes.FindAsync(agenteId);
 
-            // Cria Pedido
             var pedido = new Pedido
             {
                 ContratanteId = request.ClienteId,
@@ -81,19 +80,15 @@ namespace Backend.API.Controllers
             if (pedido == null)
                 return NotFound("Pedido não encontrado.");
 
-            // Se já aprovado, não pode editar
             if (pedido.Status == "aprovado")
                 return BadRequest($"Não é possível editar um pedido {pedido.Status}.");
 
-            // Se quiser, verifique se o autor é o mesmo cliente:
-            // var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            // if (pedido.ContratanteId != userId) return Forbid();
 
             var novoAuto = await _context.Automoveis.FindAsync(request.NovoAutomovelId);
             if (novoAuto == null)
                 return BadRequest("Novo automóvel inválido.");
 
-            // Ajusta o automóvel e agente designado
+            
             pedido.AutomovelId = novoAuto.Id;
             pedido.Automovel = novoAuto;
 
@@ -103,7 +98,7 @@ namespace Backend.API.Controllers
             pedido.AgenteDesignadoId = novoAgenteId;
             pedido.AgenteDesignado = novoAgente;
 
-            // Mantém status = pendente ou negado
+            
             await _context.SaveChangesAsync();
             return Ok($"Pedido {pedido.Id} atualizado com automóvel {novoAuto.Id}.");
         }
@@ -139,9 +134,6 @@ namespace Backend.API.Controllers
             if (pedido == null)
                 return NotFound("Pedido não encontrado.");
 
-            // Verifique se é dono do pedido
-            // var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            // if (pedido.ContratanteId != userId) return Forbid();
 
             pedido.Status = "cancelado";
             await _context.SaveChangesAsync();

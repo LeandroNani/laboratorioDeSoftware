@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BCrypt.Net;
-using Backend.API.Data;          // Ajuste o namespace do seu contexto
-using Backend.API.Model;         // Ajuste o namespace das suas Models
+using Backend.API.Data;         
+using Backend.API.Model;         
 
 namespace Backend.API.Controllers
 {

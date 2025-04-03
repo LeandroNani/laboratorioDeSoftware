@@ -67,8 +67,6 @@ namespace Backend.API.Controllers
             if (pedido == null)
                 return NotFound("Pedido não encontrado.");
 
-            // Verifique se pedido.AgenteDesignadoId == userId (se necessário)
-            // ...
 
             var dto = new DetalhePedidoDTO
             {
