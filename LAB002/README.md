@@ -8,7 +8,6 @@ Este é um sistema de aluguel de carros, desenvolvido em **C#**, permitindo que 
 
 - [📖 Visão Geral](#-visão-geral)
 - [🛠 Tecnologias Utilizadas](#-tecnologias-utilizadas)
-- [📂 Estrutura de Diretórios](#-estrutura-de-diretórios)
 - [🚀 Como Executar o Projeto](#-como-executar-o-projeto)
 - [📊 Diagrama de Classe](#-modelagem-uml)
 
@@ -31,10 +30,28 @@ O **Sistema de Aluguel de Carros** permite a informatização do processo de alu
 ## 🛠 Tecnologias Utilizadas
 
 ### **Back-end**
-- ASP.NET Core 7.0+
+- *ASP.NET Core 7.0+*
 
 ### **Front-end**
-- React
+
+- *Next.js (v15.2.4)*  
+  Framework React com renderização híbrida, roteamento automático e otimizações.
+
+- *React (v19.0.0)*  
+  Biblioteca para construção de interfaces reativas e modulares.
+
+- *TypeScript (v5.x)*  
+  Superset do JavaScript com tipagem estática e maior segurança.
+
+---
+## 🎨 Estilização
+
+- *Tailwind CSS (v4.x)*  
+  Estilização utilitária com classes direto no JSX.
+
+- *PostCSS + LightningCSS*  
+  Processamento e otimização de CSS.
+
 
 ### **Banco de Dados**
 - PostgreSQL
@@ -56,50 +73,6 @@ O sistema segue a **arquitetura MVC (Model-View-Controller)** e os seguintes pad
 
 ---
 
-## 📂 Estrutura de Diretórios
-
-```plaintext
-/LAB001
-│── /Backend
-│   │── /bin                      # Compiled binaries
-│   │── /Migrations               # Database migrations
-│   │   │──                       # Database 
-│   │── /obj                      # Object files
-│   │── /Properties               # Project properties
-│   │── /src  
-│   │   │── /Controllers         
-│   │   │── /Data
-│   │   │── /DTOs
-│   │   │── /Middlewares
-│   │   │   │── /Exceptions
-│   │   │── /Models
-│   │   │── /Services
-│   │   │   │── /Helpers
-│   │   │   │── /Interfaces
-│   │── appsettings.Development.json # Development settings
-│   │── appsettings.json          # Application settings
-│   │── Backend.csproj            # Project file
-│   │── Backend.sln               # Solution file
-│   │── Program.cs                # Main program file
-│   │── README.md                 # Backend documentation
-│── /doc
-│   │── README.md                 # Documentation
-│── /Frontend
-│   │── /sistema-de-matriculas    # Frontend source code
-│   │   │── /public
-│   │   │── /src
-│   │   │   │── /api
-│   │   │   │   │── /lib
-│   │   │   │── /app
-│   │   │   │   │── /(pages)
-│   │   │   │── /types
-│── /images
-│   │── casosdeuso.png            # Use case diagram
-│   │── diagrama_de_classes_v2.0.png # Class diagram v2.0
-│   │── diagramadeclasses.png     # Class diagram
-│── README.md                     # Project documentation
-```` 
----
 ## 🚀 Como Executar o Projeto
 ### 🔧 **Pré-requisitos**
 - .NET 7.0+ SDK
