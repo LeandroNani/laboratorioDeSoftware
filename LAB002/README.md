@@ -8,10 +8,10 @@ Este é um sistema de aluguel de carros, desenvolvido em **C#**, permitindo que 
 
 - [📖 Visão Geral](#-visão-geral)
 - [🛠 Tecnologias Utilizadas](#-tecnologias-utilizadas)
-- [🏗 Arquitetura do Projeto](#-Arquitetura-do-Projeto)
+- [🏗 Arquitetura do Projeto](#-arquitetura-do-projeto)
+- [📁 Estrutura do Projeto](#-estrutura-do-projeto)
 - [🚀 Como Executar o Projeto](#-como-executar-o-projeto)
-- [📊 Diagrama de Classe](#-Diagrama-de-Classe)
-- [🔗 Endpoints](#-Endpoints)
+- [📊 Diagrama de Classe](#-diagrama-de-classe)
 
 
 ---
@@ -81,6 +81,43 @@ Além disso, segue a **arquitetura MVC (Model-View-Controller)** e os seguintes 
 - **Repository Pattern**: Separação das regras de negócios e acesso aos dados.
 - **DTO (Data Transfer Object)**: Para evitar exposição direta de entidades.
 - **Dependency Injection**: Melhor gerenciamento de dependências.
+
+## 📁 Estrutura do Projeto
+```plaintex
+├── /Backend.API                         # Projeto back-end em .NET
+│   ├── appsettings.json                # Configurações da aplicação
+│   ├── appsettings.Development.json   # Configurações para ambiente de desenvolvimento
+│   ├── Backend.API.csproj              # Arquivo de definição do projeto .NET
+│   ├── Program.cs                      # Ponto de entrada da aplicação
+│   ├── Backend.API.http                # Arquivo de testes de requisições HTTP
+│
+│   ├── /Migrations                     # Histórico e versionamento do banco de dados (EF Core)
+│   │   └── *.cs                        # Arquivos de migração
+│
+│   ├── /Properties
+│   │   └── launchSettings.json         # Configurações de inicialização do projeto
+│
+│   └── /src
+│       ├── /Controllers                # Controllers com endpoints da API
+│       ├── /Data                       # Contexto do banco de dados (AppDbContext)
+│       ├── /DTOs                       # Data Transfer Objects usados na comunicação entre camadas
+│       ├── /Model                      # Entidades que representam o domínio da aplicação
+│       └── /Services                   # Lógica de negócio e interfaces de serviços
+
+├── /frontend                            # Projeto front-end com Next.js + Tailwind
+│   └── /app
+│       ├── favicon.ico                 # Ícone da aba do navegador
+│       ├── globals.css                 # Estilos globais da aplicação
+│       ├── layout.tsx                  # Layout base da aplicação
+│       ├── page.tsx                    # Página inicial
+│
+│       ├── /admin                      # Interface da área administrativa
+│       ├── /agente                     # Interface do agente
+│       ├── /cliente                    # Interface do cliente
+│       ├── /login                      # Página de login
+│       └── /register                   # Página de registro
+
+```
 
 ### 📌 **Camadas do projeto**
 - **WebApp (Apresentação)**: Interface com os usuários.
