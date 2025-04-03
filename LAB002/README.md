@@ -8,8 +8,11 @@ Este é um sistema de aluguel de carros, desenvolvido em **C#**, permitindo que 
 
 - [📖 Visão Geral](#-visão-geral)
 - [🛠 Tecnologias Utilizadas](#-tecnologias-utilizadas)
+- [🏗 Arquitetura do Projeto](#-Arquitetura-do-Projeto)
 - [🚀 Como Executar o Projeto](#-como-executar-o-projeto)
-- [📊 Diagrama de Classe](#-modelagem-uml)
+- [📊 Diagrama de Classe](#-Diagrama-de-Classe)
+- [🔗 Endpoints](#-Endpoints)
+
 
 ---
 
@@ -56,6 +59,22 @@ O **Sistema de Aluguel de Carros** permite a informatização do processo de alu
 ### **Banco de Dados**
 - PostgreSQL
 
+## 🏗 Arquitetura do Projeto
+
+O projeto está dividido em duas camadas principais:
+
+### 🔹 frontend/
+Aplicação web desenvolvida com *Next.js, **React* e *Tailwind CSS*, estruturada por responsabilidades. Cada tipo de usuário (Cliente, Agente e Administrador) possui telas dedicadas e isoladas, com comunicação via requisições HTTP para a API. O código é modular e organizado por componentes reutilizáveis, facilitando a manutenção e escalabilidade.
+
+### 🔸 backend/
+API desenvolvida em *.NET*, seguindo boas práticas de separação de responsabilidades:
+
+- *Controllers*: Ponto de entrada das requisições HTTP. Responsáveis por receber e repassar os dados corretamente às camadas de negócio.
+- *DTOs (Data Transfer Objects)*: Classes auxiliares para transferência de dados entre a API e o cliente, garantindo segurança e clareza.
+- *Models*: Representações das entidades do domínio (ex: Cliente, Pedido, Automovel, etc).
+- *Services*: Contêm a lógica de negócio e são responsáveis pelo processamento dos dados.
+- *Data*: Responsável pela configuração do banco de dados, contexto (DbContext) e acesso aos dados.
+- *Migrations*: Controle e versionamento da estrutura do banco de dados utilizando Entity Framework.
 
 ## 🏗 Arquitetura do Projeto
 
@@ -98,4 +117,7 @@ dotnet run --project SistemaMatriculas.Web
 ````
 
 ## Diagrama de Classe
-![Diagrama de Componentes](https://raw.githubusercontent.com/imcathalat/projeto-de-software/main/sgo/artefatos/DiagramaDeComponentes.jpg)
+![Diagrama de Componentes](https://github.com/LeandroNani/laboratorioDeSoftware/blob/2f715b7518ca4da62f18a379043fed5f9faeb64a/LAB002/Artefatos/dc_aluguel_carros_v2.png)
+
+## Endpoints
+
