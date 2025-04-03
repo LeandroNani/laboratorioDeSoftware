@@ -2,8 +2,7 @@ namespace Backend.API.Model
 {
     public class Automovel
     {
-        public int Id { get; set; }             // PK
-        public required int Matricula { get; set; }
+        public int Id { get; set; }            
         public required int Ano { get; set; }
         public required string Marca { get; set; }
         public required string Modelo { get; set; }

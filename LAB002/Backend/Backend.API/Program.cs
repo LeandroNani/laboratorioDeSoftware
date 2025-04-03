@@ -48,7 +48,6 @@ builder.Services.AddAuthentication("Bearer")
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddScoped<IEmailService, EmailService>();
 
 
 // Construir a aplicação

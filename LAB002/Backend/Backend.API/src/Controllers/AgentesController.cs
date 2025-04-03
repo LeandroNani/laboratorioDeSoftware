@@ -23,7 +23,6 @@ namespace Backend.API.Controllers
         /// Lista todos os pedidos pendentes atribuídos ao agente logado.
         /// </summary>
         /// <returns>Lista de pedidos pendentes</returns>
-        // GET /api/agente/pedidos-pendentes
         [HttpGet("pedidos-pendentes")]
         public async Task<IActionResult> ListarPedidosPendentes()
         {
@@ -41,11 +40,11 @@ namespace Backend.API.Controllers
             var retorno = pedidosPendentes.Select(p => new PedidoPendenteDTO
             {
                 PedidoId = p.Id,
-                NomeCliente = p.Contratante != null ? p.Contratante.Nome : "Desconhecido",
-                CpfCliente = p.Contratante != null ? p.Contratante.CPF : "N/A",
-                MarcaCarro = p.Automovel != null ? p.Automovel.Marca : "N/A",
-                ModeloCarro = p.Automovel != null ? p.Automovel.Modelo : "N/A",
-                FotoCarro = p.Automovel != null ? p.Automovel.FotoUrl : null
+                NomeCliente = p.Contratante?.Nome ?? "Desconhecido",
+                CpfCliente = p.Contratante?.CPF ?? "N/A",
+                MarcaCarro = p.Automovel?.Marca ?? "N/A",
+                ModeloCarro = p.Automovel?.Modelo ?? "N/A",
+                FotoCarro = p.Automovel?.FotoUrl
             }).ToList();
 
             return Ok(retorno);
@@ -56,8 +55,6 @@ namespace Backend.API.Controllers
         /// </summary>
         /// <param name="id">ID do pedido</param>
         /// <returns>Detalhes do pedido</returns>
-        /// <response code="200">Pedido encontrado</response>
-        /// <response code="404">Pedido não encontrado</response>
         [HttpGet("pedidos/{id}")]
         public async Task<IActionResult> DetalharPedido(int id)
         {
@@ -70,7 +67,8 @@ namespace Backend.API.Controllers
             if (pedido == null)
                 return NotFound("Pedido não encontrado.");
 
-            // Se quiser, verifique se p.AgenteDesignadoId == userId
+            // Verifique se pedido.AgenteDesignadoId == userId (se necessário)
+            // ...
 
             var dto = new DetalhePedidoDTO
             {
@@ -82,13 +80,11 @@ namespace Backend.API.Controllers
                 Rendimentos = pedido.Contratante?.Rendimentos?
                     .Select(r => new RendimentoDTO { Valor = r.Valor, Fonte = r.Fonte })
                     .ToList() ?? new List<RendimentoDTO>(),
-
                 AnoCarro = pedido.Automovel?.Ano,
                 MarcaCarro = pedido.Automovel?.Marca,
                 ModeloCarro = pedido.Automovel?.Modelo,
-                PlacaCarro =  pedido.Automovel?.Placa,
-                FotoCarro =   pedido.Automovel?.FotoUrl,
-
+                PlacaCarro = pedido.Automovel?.Placa,
+                FotoCarro = pedido.Automovel?.FotoUrl,
                 Duracao = pedido.Duracao,
                 TipoContrato = pedido.TipoContrato
             };
@@ -96,7 +92,7 @@ namespace Backend.API.Controllers
             return Ok(dto);
         }
 
-       /// <summary>
+        /// <summary>
         /// Aprova um pedido pendente.
         /// </summary>
         /// <param name="id">ID do pedido</param>
@@ -104,42 +100,32 @@ namespace Backend.API.Controllers
         [HttpPut("pedidos/{id}/aprovar")]
         public async Task<IActionResult> AprovarPedido(int id)
         {
-            var agenteId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdStr, out int agenteId))
+                return Unauthorized("Agente não identificado.");
+
             var pedido = await _context.Pedidos
                 .Include(p => p.Automovel)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
-            if (pedido == null) return NotFound("Pedido não encontrado.");
+            if (pedido == null) 
+                return NotFound("Pedido não encontrado.");
             if (pedido.Status != "pendente")
                 return BadRequest($"Não é possível aprovar um pedido com status {pedido.Status}.");
-
             if (pedido.AgenteDesignadoId != agenteId)
                 return Forbid("Este pedido não pertence ao agente logado.");
 
+            // Altera status
             pedido.Status = "aprovado";
 
-            // Cria o contrato
-            var contrato = new Contrato
-            {
-                PedidoId = pedido.Id,
-                ClienteId = pedido.ContratanteId,
-                AgenteId = agenteId,
-                TipoContrato = pedido.TipoContrato ?? "credito",
-                DataInicio = DateTime.UtcNow,
-                DataFim = DateTime.UtcNow.AddDays(pedido.Duracao)
-            };
+            // Se quiser associar automóvel ao cliente aqui
+            // if (pedido.Automovel != null)
+            // {
+            //     pedido.Automovel.ClienteId = pedido.ContratanteId;
+            // }
 
-            _context.Contratos.Add(contrato);
             await _context.SaveChangesAsync();
-
-            // Envia email
-            var cliente = await _context.Clientes.FindAsync(pedido.ContratanteId);
-            if (cliente != null)
-            {
-                await EnviarEmail(cliente.Email, "Seu contrato foi gerado", $"Olá {cliente.Nome}, seu contrato foi gerado e é válido até {contrato.DataFim:dd/MM/yyyy}.");
-            }
-
-            return Ok($"Pedido {pedido.Id} aprovado e contrato gerado.");
+            return Ok($"Pedido {pedido.Id} aprovado com sucesso.");
         }
 
         /// <summary>
@@ -150,13 +136,16 @@ namespace Backend.API.Controllers
         [HttpPut("pedidos/{id}/negar")]
         public async Task<IActionResult> NegarPedido(int id)
         {
-            var agenteId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdStr, out int agenteId))
+                return Unauthorized("Agente não identificado.");
+
             var pedido = await _context.Pedidos.FindAsync(id);
 
-            if (pedido == null) return NotFound("Pedido não encontrado.");
+            if (pedido == null) 
+                return NotFound("Pedido não encontrado.");
             if (pedido.Status != "pendente")
                 return BadRequest($"Não é possível negar um pedido com status {pedido.Status}.");
-
             if (pedido.AgenteDesignadoId != agenteId)
                 return Forbid("Este pedido não pertence ao agente logado.");
 
@@ -166,8 +155,7 @@ namespace Backend.API.Controllers
         }
     }
 
-    // DTOS
-
+    // == DTOs ==
     public class PedidoPendenteDTO
     {
         public int PedidoId { get; set; }
