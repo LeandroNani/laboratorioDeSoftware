@@ -116,18 +116,30 @@ namespace Backend.API.Controllers
             if (pedido.AgenteDesignadoId != agenteId)
                 return Forbid("Este pedido não pertence ao agente logado.");
 
-            // Altera status
             pedido.Status = "aprovado";
 
-            // Associar automovel ao cliente
-            if (pedido.Automovel != null)
+            // Cria o contrato
+            var contrato = new Contrato
             {
-                // Ex: automovel.ClienteId = pedido.ContratanteId;
-                // Se quiser, verifique se automovel.ClienteId já está em uso
+                PedidoId = pedido.Id,
+                ClienteId = pedido.ContratanteId,
+                AgenteId = agenteId,
+                TipoContrato = pedido.TipoContrato ?? "credito",
+                DataInicio = DateTime.UtcNow,
+                DataFim = DateTime.UtcNow.AddDays(pedido.Duracao)
+            };
+
+            _context.Contratos.Add(contrato);
+            await _context.SaveChangesAsync();
+
+            // Envia email
+            var cliente = await _context.Clientes.FindAsync(pedido.ContratanteId);
+            if (cliente != null)
+            {
+                await EnviarEmail(cliente.Email, "Seu contrato foi gerado", $"Olá {cliente.Nome}, seu contrato foi gerado e é válido até {contrato.DataFim:dd/MM/yyyy}.");
             }
 
-            await _context.SaveChangesAsync();
-            return Ok($"Pedido {pedido.Id} aprovado com sucesso.");
+            return Ok($"Pedido {pedido.Id} aprovado e contrato gerado.");
         }
 
         /// <summary>
