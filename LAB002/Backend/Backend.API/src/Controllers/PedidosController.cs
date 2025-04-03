@@ -83,12 +83,11 @@ namespace Backend.API.Controllers
             if (pedido.Status == "aprovado")
                 return BadRequest($"Não é possível editar um pedido {pedido.Status}.");
 
-
             var novoAuto = await _context.Automoveis.FindAsync(request.NovoAutomovelId);
             if (novoAuto == null)
                 return BadRequest("Novo automóvel inválido.");
 
-            
+            // Ajusta o automóvel e agente designado
             pedido.AutomovelId = novoAuto.Id;
             pedido.Automovel = novoAuto;
 
@@ -98,13 +97,12 @@ namespace Backend.API.Controllers
             pedido.AgenteDesignadoId = novoAgenteId;
             pedido.AgenteDesignado = novoAgente;
 
-            
             await _context.SaveChangesAsync();
             return Ok($"Pedido {pedido.Id} atualizado com automóvel {novoAuto.Id}.");
         }
 
         /// <summary>
-        /// Lista todos os pedidos feitos por um cliente.
+        /// Lista todos os pedidos feitos por um cliente (retornando DTOs para evitar ciclos).
         /// </summary>
         /// <param name="clienteId">ID do cliente</param>
         /// <returns>Lista de pedidos</returns>
@@ -118,7 +116,19 @@ namespace Backend.API.Controllers
                 .Where(p => p.ContratanteId == clienteId)
                 .ToListAsync();
 
-            return Ok(pedidos);
+            // Mapeamos cada Pedido para um PedidoDTO enxuto
+            var pedidosDto = pedidos.Select(p => new PedidoDTO
+            {
+                Id = p.Id,
+                Status = p.Status,
+                Duracao = p.Duracao,
+                TipoContrato = p.TipoContrato,
+                MarcaCarro = p.Automovel?.Marca,
+                ModeloCarro = p.Automovel?.Modelo,
+                NomeAgente = p.AgenteDesignado?.Nome
+            }).ToList();
+
+            return Ok(pedidosDto);
         }
 
         /// <summary>
@@ -134,7 +144,6 @@ namespace Backend.API.Controllers
             if (pedido == null)
                 return NotFound("Pedido não encontrado.");
 
-
             pedido.Status = "cancelado";
             await _context.SaveChangesAsync();
 
@@ -142,7 +151,7 @@ namespace Backend.API.Controllers
         }
     }
 
-    // DTOs
+    // DTOs usados pelo PedidosController
     public class CriarPedidoRequest
     {
         public int ClienteId { get; set; }
@@ -154,5 +163,23 @@ namespace Backend.API.Controllers
     public class EditarPedidoRequest
     {
         public int NovoAutomovelId { get; set; }
+    }
+
+    /// <summary>
+    /// DTO para retornar pedidos sem causar ciclos de referência.
+    /// </summary>
+    public class PedidoDTO
+    {
+        public int Id { get; set; }
+        public string? Status { get; set; }
+        public int Duracao { get; set; }
+        public string? TipoContrato { get; set; }
+
+        // Infos resumidas do Automovel
+        public string? MarcaCarro { get; set; }
+        public string? ModeloCarro { get; set; }
+
+        // Infos resumidas do Agente
+        public string? NomeAgente { get; set; }
     }
 }
