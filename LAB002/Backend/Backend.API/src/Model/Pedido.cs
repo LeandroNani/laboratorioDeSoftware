@@ -3,7 +3,10 @@ namespace Backend.API.Model
     public class Pedido
     {
         public int Id { get; set; }
-        public required bool Status { get; set; }    // Ex.: true = ativo, false = cancelado
+        public required string Status { get; set; }  = "pendente";  // Ex.: true = ativo, false = cancelado
+        
+        public int duracao;
+
         
         // Chaves estrangeiras
         public required int ContratanteId { get; set; }
