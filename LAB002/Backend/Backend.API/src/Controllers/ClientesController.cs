@@ -17,7 +17,11 @@ namespace Backend.API.Controllers
             _context = context;
         }
 
-        // POST /api/clientes/registrar
+        /// <summary>
+        /// Registra um novo cliente.
+        /// </summary>
+        /// <param name="req">Dados do cliente</param>
+        /// <returns>Mensagem de sucesso ou erro</returns>
         [HttpPost("registrar")]
         public async Task<IActionResult> RegistrarCliente([FromBody] RegistrarClienteRequest req)
         {

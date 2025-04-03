@@ -28,6 +28,8 @@ namespace Backend.API.Data
         public DbSet<Automovel> Automoveis { get; set; }
         public DbSet<Pedido> Pedidos { get; set; }
 
+        public DbSet<Contrato> Contratos {get; set;}
+
         // Aqui você pode configurar mapeamento adicional via Fluent API
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

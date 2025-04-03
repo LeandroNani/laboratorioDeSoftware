@@ -18,6 +18,13 @@ namespace Backend.API.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Cria um novo agente no sistema (somente Admin).
+        /// </summary>
+        /// <param name="request">Dados do agente a ser criado</param>
+        /// <returns>Mensagem de sucesso ou erro</returns>
+        /// <response code="200">Agente criado com sucesso</response>
+        /// <response code="400">Já existe um agente com esse e-mail</response>
         [HttpPost("criar-agente")]
         [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> CriarAgente([FromBody] CriarAgenteRequest request)

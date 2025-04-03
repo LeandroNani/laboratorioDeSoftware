@@ -23,6 +23,13 @@ namespace Backend.API.Controllers
             _config = config;
         }
 
+        /// <summary>
+        /// Realiza login de usuários do sistema (Admin, Cliente ou Agente).
+        /// </summary>
+        /// <param name="request">Credenciais de login</param>
+        /// <returns>Token JWT e dados do usuário</returns>
+        /// <response code="200">Login bem-sucedido</response>
+        /// <response code="401">Credenciais inválidas</response>
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {

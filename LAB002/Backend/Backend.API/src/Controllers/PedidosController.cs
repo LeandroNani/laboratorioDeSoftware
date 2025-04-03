@@ -18,31 +18,43 @@ namespace Backend.API.Controllers
             _context = context;
         }
 
-        // ------------------------------------------------------------
-        // 1) CADASTRO DE SOLICITAÇÃO DE ALUGUEL (Clientes podem fazer)
-        // POST: /api/pedidos
+        /// <summary>
+        /// Cria um novo pedido de aluguel.
+        /// </summary>
+        /// <param name="request">Dados do pedido</param>
+        /// <returns>Mensagem de sucesso e ID do pedido</returns>
         [HttpPost]
         [Authorize(Roles="CLIENTE")]
         public async Task<IActionResult> CriarPedido([FromBody] CriarPedidoRequest request)
         {
-            // ID do cliente vem no request
-
+            // Verifica se o cliente existe
             var cliente = await _context.Clientes.FindAsync(request.ClienteId);
             if (cliente == null)
                 return BadRequest("Cliente inválido.");
 
-            var automovel = await _context.Automoveis
-                .FirstOrDefaultAsync(a => a.Id == request.AutomovelId);
-
+            // Verifica se automovel existe
+            var automovel = await _context.Automoveis.FindAsync(request.AutomovelId);
             if (automovel == null)
                 return BadRequest("Automóvel inválido.");
+
+            // Pega o agente do automovel
+            int agenteId = automovel.AgenteId ?? 0;  // Se automovel.AgenteId for int?, use ?? 0
+            var agente = await _context.Agentes.FindAsync(agenteId);
 
             // Cria Pedido
             var pedido = new Pedido
             {
-                ClienteId = request.ClienteId,
-                AutomovelId = request.AutomovelId,
-                AgenteId = automovel.AgenteId,  // extrai do Automovel
+                ContratanteId = request.ClienteId,
+                Contratante = cliente,
+
+                AutomovelId = automovel.Id,
+                Automovel = automovel,
+
+                AgenteDesignadoId = agenteId,
+                AgenteDesignado = agente,
+
+                Duracao = request.Duracao,
+                TipoContrato = request.TipoContrato ?? "credito",
                 Status = "pendente"
             };
 
@@ -52,9 +64,12 @@ namespace Backend.API.Controllers
             return Ok(new { message = $"Pedido criado com Id {pedido.Id}", pedidoId = pedido.Id });
         }
 
-        // ------------------------------------------------------------
-        // 2) EDIÇÃO DA SOLICITAÇÃO DE ALUGUEL (status != "aprovado")
-        // PUT: /api/pedidos/{id}
+        /// <summary>
+        /// Edita um pedido, se não estiver aprovado.
+        /// </summary>
+        /// <param name="id">ID do pedido</param>
+        /// <param name="request">Dados para edição</param>
+        /// <returns>Mensagem de sucesso</returns>
         [HttpPut("{id}")]
         [Authorize(Roles="CLIENTE")]
         public async Task<IActionResult> EditarPedido(int id, [FromBody] EditarPedidoRequest request)
@@ -66,45 +81,56 @@ namespace Backend.API.Controllers
             if (pedido == null)
                 return NotFound("Pedido não encontrado.");
 
-            // Verifica se ainda está pendente ou negado (exemplo)
+            // Se já aprovado, não pode editar
             if (pedido.Status == "aprovado")
                 return BadRequest($"Não é possível editar um pedido {pedido.Status}.");
 
-            // Se quiser, garanta que o ID do cliente seja o mesmo do JWT
+            // Se quiser, verifique se o autor é o mesmo cliente:
             // var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            // if (pedido.ClienteId != userId) return Forbid();
+            // if (pedido.ContratanteId != userId) return Forbid();
 
             var novoAuto = await _context.Automoveis.FindAsync(request.NovoAutomovelId);
             if (novoAuto == null)
                 return BadRequest("Novo automóvel inválido.");
 
+            // Ajusta o automóvel e agente designado
             pedido.AutomovelId = novoAuto.Id;
-            pedido.AgenteId = novoAuto.AgenteId;
-            // mantém status inalterado (ex.: "pendente" ou "negado")
+            pedido.Automovel = novoAuto;
 
+            int novoAgenteId = novoAuto.AgenteId ?? 0;
+            var novoAgente = await _context.Agentes.FindAsync(novoAgenteId);
+
+            pedido.AgenteDesignadoId = novoAgenteId;
+            pedido.AgenteDesignado = novoAgente;
+
+            // Mantém status = pendente ou negado
             await _context.SaveChangesAsync();
             return Ok($"Pedido {pedido.Id} atualizado com automóvel {novoAuto.Id}.");
         }
 
-        // ------------------------------------------------------------
-        // 3) LISTAR SOLICITAÇÕES DE AUTOMÓVEL QUE O CLIENTE FEZ
-        // GET: /api/pedidos/minhas-solicitacoes?clienteId=XYZ
+        /// <summary>
+        /// Lista todos os pedidos feitos por um cliente.
+        /// </summary>
+        /// <param name="clienteId">ID do cliente</param>
+        /// <returns>Lista de pedidos</returns>
         [HttpGet("minhas-solicitacoes")]
         [Authorize(Roles="CLIENTE")]
         public async Task<IActionResult> ListarSolicitacoes([FromQuery] int clienteId)
         {
             var pedidos = await _context.Pedidos
                 .Include(p => p.Automovel)
-                .Include(p => p.Agente)
-                .Where(p => p.ClienteId == clienteId)
+                .Include(p => p.AgenteDesignado)
+                .Where(p => p.ContratanteId == clienteId)
                 .ToListAsync();
 
             return Ok(pedidos);
         }
 
-        // ------------------------------------------------------------
-        // 4) CANCELAMENTO DE PEDIDO (status = "cancelado")
-        // DELETE: /api/pedidos/{id}
+        /// <summary>
+        /// Cancela um pedido existente.
+        /// </summary>
+        /// <param name="id">ID do pedido</param>
+        /// <returns>Mensagem de sucesso</returns>
         [HttpDelete("{id}")]
         [Authorize(Roles="CLIENTE")]
         public async Task<IActionResult> CancelarPedido(int id)
@@ -113,9 +139,9 @@ namespace Backend.API.Controllers
             if (pedido == null)
                 return NotFound("Pedido não encontrado.");
 
-            // Se quiser, confira se o cliente é o dono do pedido
+            // Verifique se é dono do pedido
             // var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            // if (pedido.ClienteId != userId) return Forbid();
+            // if (pedido.ContratanteId != userId) return Forbid();
 
             pedido.Status = "cancelado";
             await _context.SaveChangesAsync();
@@ -124,11 +150,13 @@ namespace Backend.API.Controllers
         }
     }
 
-    // DTOS
+    // DTOs
     public class CriarPedidoRequest
     {
         public int ClienteId { get; set; }
         public int AutomovelId { get; set; }
+        public int Duracao { get; set; }
+        public string? TipoContrato { get; set; }
     }
 
     public class EditarPedidoRequest
