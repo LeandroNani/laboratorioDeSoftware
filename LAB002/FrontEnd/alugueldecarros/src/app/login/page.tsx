@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import API_BASE_URL from "@/api/api";
 
 export default function Login() {
   const router = useRouter();
@@ -20,24 +21,25 @@ export default function Login() {
     }
 
     try {
-      const response = await fetch("http://localhost:5145/api/Auth/login", {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, senha: password, tipoUsuario }),
+        body: JSON.stringify({
+          email,
+          senha: password,
+          tipoUsuario,
+        }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Login bem-sucedido:", data);
 
-        // Armazenar token e tipo no localStorage
         localStorage.setItem("token", data.token);
         localStorage.setItem("tipoUsuario", data.tipoUsuario);
         localStorage.setItem("usuarioId", data.usuarioId.toString());
 
-        // Redirecionar para página específica
         router.push(`/${data.tipoUsuario}`);
       } else {
         const text = await response.text();

@@ -2,18 +2,33 @@
 
 import React, { useState, useEffect } from "react";
 
-// Tipos de dados
 type Rendimento = {
-  descricao: string;
   valor: number;
+  fonte: string;
 };
 
-type Cliente = {
-  nome: string;
-  cpf: string;
-  profissao: string;
-  entidadeEmpregadora: string;
+type PedidoPendente = {
+  pedidoId: number;
+  nomeCliente: string;
+  cpfCliente: string;
+  marcaCarro: string;
+  modeloCarro: string;
+  fotoCarro?: string;
+};
+
+type DetalhePedido = {
+  pedidoId: number;
+  status: string;
+  nomeCliente: string;
+  cpfCliente: string;
+  profissaoCliente: string;
   rendimentos: Rendimento[];
+  marcaCarro: string;
+  modeloCarro: string;
+  placaCarro: string;
+  anoCarro: number;
+  duracao: number;
+  tipoContrato: string;
 };
 
 type Automovel = {
@@ -25,18 +40,9 @@ type Automovel = {
   placa: string;
 };
 
-type Pedido = {
-  id: number;
-  status: string;
-  duracao: number;
-  tipoContrato: string;
-  contratante: Cliente;
-  automovel: Automovel;
-};
-
 export default function AgentePage() {
   const [selectedTab, setSelectedTab] = useState("pedidos");
-  const [pedidos, setPedidos] = useState<Pedido[]>([]);
+  const [pedidos, setPedidos] = useState<DetalhePedido[]>([]);
   const [automoveis, setAutomoveis] = useState<Automovel[]>([]);
 
   useEffect(() => {
@@ -44,90 +50,84 @@ export default function AgentePage() {
     fetchAutomoveis();
   }, []);
 
-  const fetchPedidos = () => {
-    const mockPedidos: Pedido[] = [
-        {
-          id: 1,
-          status: "pendente",
-          duracao: 7,
-          tipoContrato: "credito",
-          contratante: {
-            nome: "João da Silva",
-            cpf: "111.222.333-44",
-            profissao: "Engenheiro",
-            entidadeEmpregadora: "Construtora ABC",
-            rendimentos: [
-              { descricao: "Salário", valor: 4000 },
-              { descricao: "Freelance", valor: 1200 },
-            ],
-          },
-          automovel: {
-            id: 1,
-            matricula: 101,
-            ano: 2020,
-            marca: "Toyota",
-            modelo: "Corolla",
-            placa: "XYZ-1234",
-          },
+  const fetchPedidos = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const res = await fetch("http://localhost:5145/api/agente/pedidos-pendentes", {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        {
-          id: 2,
-          status: "pendente",
-          duracao: 10,
-          tipoContrato: "debito",
-          contratante: {
-            nome: "João da Silva",
-            cpf: "111.222.333-44",
-            profissao: "Engenheiro",
-            entidadeEmpregadora: "Construtora ABC",
-            rendimentos: [
-              { descricao: "Salário", valor: 4000 },
-              { descricao: "Freelance", valor: 1200 },
-            ],
+      });
+
+      const pedidosRes: PedidoPendente[] = await res.json();
+
+      // Buscar detalhes de cada pedido
+      const detalhes: DetalhePedido[] = [];
+      for (const p of pedidosRes) {
+        const res = await fetch(`http://localhost:5145/api/agente/pedidos/${p.pedidoId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-          automovel: {
-            id: 2,
-            matricula: 102,
-            ano: 2019,
-            marca: "Honda",
-            modelo: "Civic",
-            placa: "XYZ-5678",
-          },
-        },
-      ];
-    setPedidos(mockPedidos);
+        });
+        const detalhe = await res.json();
+        detalhes.push(detalhe);
+      }
+
+      setPedidos(detalhes);
+    } catch (error) {
+      console.error("Erro ao buscar pedidos pendentes:", error);
+    }
   };
 
-  const fetchAutomoveis = () => {
-    const mockAutomoveis: Automovel[] = [
-        {
-          id: 1,
-          matricula: 101,
-          ano: 2020,
-          marca: "Toyota",
-          modelo: "Corolla",
-          placa: "XYZ-1234",
+  const fetchAutomoveis = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const res = await fetch("http://localhost:5145/api/automoveis/meus-automoveis", {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        {
-          id: 2,
-          matricula: 102,
-          ano: 2019,
-          marca: "Honda",
-          modelo: "Civic",
-          placa: "XYZ-5678",
-        },
-      ];
-    setAutomoveis(mockAutomoveis);
+      });
+      const data = await res.json();
+      setAutomoveis(data);
+    } catch (error) {
+      console.error("Erro ao buscar automóveis:", error);
+    }
   };
 
-  const handleAprovar = (id: number) => {
-    alert(`Pedido #${id} aprovado!`);
-    // Aqui irá a chamada real para API futuramente
+  const handleAprovar = async (id: number) => {
+    const token = localStorage.getItem("token");
+    try {
+      const res = await fetch(`http://localhost:5145/api/agente/pedidos/${id}/aprovar`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res.ok) {
+        alert(`Pedido #${id} aprovado!`);
+        fetchPedidos();
+      }
+    } catch (err) {
+      console.error("Erro ao aprovar pedido:", err);
+    }
   };
 
-  const handleNegar = (id: number) => {
-    alert(`Pedido #${id} negado.`);
-    // Aqui irá a chamada real para API futuramente
+  const handleNegar = async (id: number) => {
+    const token = localStorage.getItem("token");
+    try {
+      const res = await fetch(`http://localhost:5145/api/agente/pedidos/${id}/negar`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res.ok) {
+        alert(`Pedido #${id} negado.`);
+        fetchPedidos();
+      }
+    } catch (err) {
+      console.error("Erro ao negar pedido:", err);
+    }
   };
 
   return (
@@ -165,40 +165,39 @@ export default function AgentePage() {
             <h2 className="text-2xl font-bold mb-6">Pedidos de Aluguel</h2>
             <ul className="space-y-6">
               {pedidos.map((p) => (
-                <li key={p.id} className="bg-gray-50 p-5 border rounded shadow-sm">
+                <li key={p.pedidoId} className="bg-gray-50 p-5 border rounded shadow-sm">
                   <div className="mb-2">
-                    <p className="text-lg font-semibold">Pedido #{p.id}</p>
+                    <p className="text-lg font-semibold">Pedido #{p.pedidoId}</p>
                     <p>Status: <strong>{p.status.toUpperCase()}</strong></p>
                     <p>Duração: {p.duracao} dias</p>
                     <p>Tipo de Contrato: {p.tipoContrato}</p>
                   </div>
                   <div className="mt-4">
                     <p className="font-medium text-gray-700">🚹 Cliente:</p>
-                    <p>Nome: {p.contratante.nome}</p>
-                    <p>CPF: {p.contratante.cpf}</p>
-                    <p>Profissão: {p.contratante.profissao}</p>
-                    <p>Entidade Empregadora: {p.contratante.entidadeEmpregadora}</p>
+                    <p>Nome: {p.nomeCliente}</p>
+                    <p>CPF: {p.cpfCliente}</p>
+                    <p>Profissão: {p.profissaoCliente}</p>
                     <p className="mt-1">Rendimentos:</p>
                     <ul className="ml-4 list-disc text-sm text-gray-600">
-                      {p.contratante.rendimentos.map((r, idx) => (
-                        <li key={idx}>{r.descricao}: R$ {r.valor.toFixed(2)}</li>
+                      {p.rendimentos.map((r, idx) => (
+                        <li key={idx}>{r.fonte}: R$ {r.valor.toFixed(2)}</li>
                       ))}
                     </ul>
                   </div>
                   <div className="mt-4">
                     <p className="font-medium text-gray-700">🚗 Automóvel:</p>
-                    <p>{p.automovel.marca} {p.automovel.modelo} - Placa: {p.automovel.placa}</p>
+                    <p>{p.marcaCarro} {p.modeloCarro} - Placa: {p.placaCarro}</p>
                   </div>
                   <div className="mt-4 flex gap-4">
                     <button
                       className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-                      onClick={() => handleAprovar(p.id)}
+                      onClick={() => handleAprovar(p.pedidoId)}
                     >
                       ✅ Aprovar
                     </button>
                     <button
                       className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-                      onClick={() => handleNegar(p.id)}
+                      onClick={() => handleNegar(p.pedidoId)}
                     >
                       ❌ Negar
                     </button>

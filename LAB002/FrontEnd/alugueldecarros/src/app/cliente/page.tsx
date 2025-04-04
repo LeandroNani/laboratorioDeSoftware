@@ -1,48 +1,37 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-
-type Automovel = {
-  matricula: number;
-  ano: number;
-  marca: string;
-  modelo: string;
-  placa: string;
-  quantidade: number;
-};
-
-type Pedido = {
-  id: number;
-  contratante: Cliente;
-  agenteDesignado: Agente;
-  status: boolean | null; // true = aprovado, false = negado, null = pendente
-  automovel: Automovel;
-  duracao: number;
-  tipoContrato: string;
-};
+import React, { useEffect, useState } from "react";
 
 type Cliente = {
-  rg: string;
-  cpf: string;
   nome: string;
+  cpf: string;
   endereco: string;
   profissao: string;
 };
 
-type Agente = {
-  cnpj: string;
-  nome: string;
-  endereco: string;
-  quantidadeCarros: number;
+type Automovel = {
+  id: number;
+  marca: string;
+  modelo: string;
+  ano: number;
+  placa: string;
+};
+
+type PedidoDTO = {
+  id: number;
+  status: string;
+  duracao: number;
+  tipoContrato: string;
+  marcaCarro: string;
+  modeloCarro: string;
 };
 
 export default function ClientePage() {
   const [selectedTab, setSelectedTab] = useState("perfil");
   const [cliente, setCliente] = useState<Cliente | null>(null);
   const [automoveis, setAutomoveis] = useState<Automovel[]>([]);
-  const [pedidos, setPedidos] = useState<Pedido[]>([]);
-  const [contratos, setContratos] = useState<Pedido[]>([]);
-
+  const [pedidos, setPedidos] = useState<PedidoDTO[]>([]);
+  const [contratos, setContratos] = useState<PedidoDTO[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [pedidoForm, setPedidoForm] = useState({
     automovelId: 0,
@@ -50,84 +39,97 @@ export default function ClientePage() {
     tipoContrato: "",
   });
 
+  const clienteId =
+    typeof window !== "undefined" ? localStorage.getItem("usuarioId") : null;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
   useEffect(() => {
-    fetchCliente();
-    fetchAutomoveis();
-    fetchPedidos();
-    fetchContratos();
-  }, []);
+    if (clienteId && token) {
+      fetchCliente();
+      fetchAutomoveis();
+      fetchPedidos();
+      fetchContratos();
+    }
+  }, [clienteId, token]);
 
   const fetchCliente = async () => {
-    const mockCliente: Cliente = {
-      rg: "11223344",
-      cpf: "111.222.333-44",
-      nome: "João da Silva",
-      endereco: "Rua das Flores, 123",
-      profissao: "Engenheiro",
-    };
-    setCliente(mockCliente);
+    const response = await fetch(
+      `http://localhost:5145/api/clientes/${clienteId}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    const data: Cliente = await response.json();
+    setCliente(data);
   };
 
   const fetchAutomoveis = async () => {
-    const mockAutomoveis: Automovel[] = [
+    const response = await fetch(
+      "http://localhost:5145/api/automoveis/disponiveis",
       {
-        matricula: 101,
-        ano: 2020,
-        marca: "Toyota",
-        modelo: "Corolla",
-        placa: "XYZ-1234",
-        quantidade: 5,
-      },
-      {
-        matricula: 102,
-        ano: 2019,
-        marca: "Honda",
-        modelo: "Civic",
-        placa: "XYZ-5678",
-        quantidade: 3,
-      },
-    ];  
-    setAutomoveis(mockAutomoveis);
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    const data: Automovel[] = await response.json();
+    setAutomoveis(data);
   };
 
   const fetchPedidos = async () => {
-    const mockPedidos: Pedido[] = [
+    const response = await fetch(
+      `http://localhost:5145/api/pedidos/minhas-solicitacoes?clienteId=${clienteId}`,
       {
-        id: 1,
-        contratante: cliente!,
-        agenteDesignado: {
-          cnpj: "12.345.678/0001-99",
-          nome: "Banco ABC",
-          endereco: "Av. Central, 456",
-          quantidadeCarros: 10,
-        },
-        status: null,
-        duracao: 7,
-        tipoContrato: "credito",
-        automovel: mockAutomoveis[0],
-      },
-    ];
-    setPedidos(mockPedidos);
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    const data: PedidoDTO[] = await response.json();
+    setPedidos(data);
   };
 
   const fetchContratos = async () => {
-    const mockContratos: Pedido[] = [
+    const response = await fetch(
+      `http://localhost:5145/api/pedidos/minhas-solicitacoes?clienteId=${clienteId}`,
       {
-        id: 2,
-        contratante: cliente!,
-        agenteDesignado: {
-          cnpj: "98.765.432/0001-00",
-          nome: "Banco XYZ",
-          endereco: "Av. Norte, 789",
-          quantidadeCarros: 15,
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    const data: PedidoDTO[] = await response.json();
+    const contratosAtivos = data.filter((p) => p.status === "aprovado");
+    setContratos(contratosAtivos);
+  };
+
+  const handleSubmitPedido = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const payload = {
+      clienteId: parseInt(clienteId!),
+      automovelId: pedidoForm.automovelId,
+      duracao: pedidoForm.duracao,
+      tipoContrato: pedidoForm.tipoContrato,
+    };
+
+    try {
+      const response = await fetch("http://localhost:5145/api/pedidos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        status: true,
-        duracao: 10,
-        tipoContrato: "debito",
-        automovel: mockAutomoveis[1],
-      },
-    ];
-    setContratos(mockContratos);
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        alert("Pedido criado com sucesso!");
+        setShowForm(false);
+        fetchPedidos();
+      } else {
+        const err = await response.text();
+        alert("Erro ao criar pedido: " + err);
+      }
+    } catch (err) {
+      alert("Erro de rede.");
+      console.error(err);
+    }
   };
 
   return (
@@ -156,16 +158,26 @@ export default function ClientePage() {
 
       {/* Conteúdo principal */}
       <main className="flex-1 p-10">
+        {/* Perfil */}
         {selectedTab === "perfil" && cliente && (
           <div className="bg-white shadow-lg rounded-lg p-6 max-w-3xl mx-auto">
             <h2 className="text-xl font-semibold mb-4">Perfil</h2>
-            <p className="text-lg text-gray-600"><strong>Nome:</strong> {cliente.nome}</p>
-            <p className="text-lg text-gray-600"><strong>CPF:</strong> {cliente.cpf}</p>
-            <p className="text-lg text-gray-600"><strong>Endereço:</strong> {cliente.endereco}</p>
-            <p className="text-lg text-gray-600"><strong>Profissão:</strong> {cliente.profissao}</p>
+            <p className="text-lg text-gray-600">
+              <strong>Nome:</strong> {cliente.nome}
+            </p>
+            <p className="text-lg text-gray-600">
+              <strong>CPF:</strong> {cliente.cpf}
+            </p>
+            <p className="text-lg text-gray-600">
+              <strong>Endereço:</strong> {cliente.endereco}
+            </p>
+            <p className="text-lg text-gray-600">
+              <strong>Profissão:</strong> {cliente.profissao}
+            </p>
           </div>
         )}
 
+        {/* Pedidos */}
         {selectedTab === "pedidos" && (
           <div className="bg-white shadow-lg rounded-lg p-6 max-w-4xl mx-auto">
             <div className="flex justify-between items-center mb-6">
@@ -179,43 +191,58 @@ export default function ClientePage() {
             </div>
 
             {showForm ? (
-              <form className="space-y-4">
+              <form className="space-y-4" onSubmit={handleSubmitPedido}>
                 <div>
-                  <label className="block mb-1 font-medium text-gray-700">Automóvel</label>
+                  <label className="block mb-1 font-medium text-gray-700">
+                    Automóvel
+                  </label>
                   <select
                     value={pedidoForm.automovelId}
                     onChange={(e) =>
-                      setPedidoForm({ ...pedidoForm, automovelId: Number(e.target.value) })
+                      setPedidoForm({
+                        ...pedidoForm,
+                        automovelId: Number(e.target.value),
+                      })
                     }
                     className="w-full border px-3 py-2 rounded"
                   >
                     <option value="">Selecione um automóvel</option>
                     {automoveis.map((a) => (
-                      <option key={a.matricula} value={a.matricula}>
-                        {a.marca} {a.modelo} ({a.placa})
+                      <option key={a.id} value={a.id}>
+                        {a.marca} {a.modelo}
                       </option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <label className="block mb-1 font-medium text-gray-700">Duração (dias)</label>
+                  <label className="block mb-1 font-medium text-gray-700">
+                    Duração (dias)
+                  </label>
                   <input
                     type="number"
                     value={pedidoForm.duracao}
                     onChange={(e) =>
-                      setPedidoForm({ ...pedidoForm, duracao: Number(e.target.value) })
+                      setPedidoForm({
+                        ...pedidoForm,
+                        duracao: Number(e.target.value),
+                      })
                     }
                     className="w-full border px-3 py-2 rounded"
                   />
                 </div>
 
                 <div>
-                  <label className="block mb-1 font-medium text-gray-700">Tipo de Contrato</label>
+                  <label className="block mb-1 font-medium text-gray-700">
+                    Tipo de Contrato
+                  </label>
                   <select
                     value={pedidoForm.tipoContrato}
                     onChange={(e) =>
-                      setPedidoForm({ ...pedidoForm, tipoContrato: e.target.value })
+                      setPedidoForm({
+                        ...pedidoForm,
+                        tipoContrato: e.target.value,
+                      })
                     }
                     className="w-full border px-3 py-2 rounded"
                   >
@@ -234,34 +261,12 @@ export default function ClientePage() {
               </form>
             ) : (
               <ul className="space-y-4">
-                {pedidos.map((pedido) => (
-                  <li key={pedido.id} className="border border-gray-300 rounded-lg p-4 bg-gray-50 shadow-sm">
-                    <p className="text-lg font-semibold">Pedido #{pedido.id}</p>
-                    <p className="text-sm text-gray-600">
-                      <strong>Status:</strong>{" "}
-                      {pedido.status === null
-                        ? "Pendente"
-                        : pedido.status
-                        ? "Aprovado ✅"
-                        : "Negado ❌"}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <strong>Automóvel:</strong> {pedido.automovel.marca} {pedido.automovel.modelo}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <strong>Duração:</strong> {pedido.duracao} dias
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <strong>Tipo de Contrato:</strong> {pedido.tipoContrato}
-                    </p>
-                    <div className="mt-4 flex gap-3">
-  <button className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
-    Editar
-  </button>
-  <button className="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition">
-    Cancelar
-  </button>
-</div>
+                {pedidos.map((p) => (
+                  <li key={p.id} className="border p-4 bg-gray-50 rounded">
+                    <p><strong>Status:</strong> {p.status}</p>
+                    <p><strong>Carro:</strong> {p.marcaCarro} {p.modeloCarro}</p>
+                    <p><strong>Duração:</strong> {p.duracao} dias</p>
+                    <p><strong>Contrato:</strong> {p.tipoContrato}</p>
                   </li>
                 ))}
               </ul>
@@ -269,29 +274,31 @@ export default function ClientePage() {
           </div>
         )}
 
+        {/* Automóveis */}
         {selectedTab === "automoveis" && (
           <div className="bg-white shadow-lg rounded-lg p-6 max-w-3xl mx-auto">
             <h2 className="text-xl font-semibold mb-4">Automóveis Disponíveis</h2>
             <ul className="space-y-4">
               {automoveis.map((a) => (
-                <li key={a.matricula} className="border border-gray-300 rounded-lg p-4 bg-gray-50 shadow-sm">
-                  <p className="text-lg font-semibold">{a.marca} {a.modelo}</p>
-                  <p className="text-sm text-gray-600"><strong>Ano:</strong> {a.ano}</p>
-                  <p className="text-sm text-gray-600"><strong>Placa:</strong> {a.placa}</p>
+                <li key={a.id} className="border p-4 bg-gray-50 rounded">
+                  <p><strong>{a.marca} {a.modelo}</strong></p>
+                  <p>Ano: {a.ano}</p>
+                  <p>Placa: {a.placa}</p>
                 </li>
               ))}
             </ul>
           </div>
         )}
 
+        {/* Contratos */}
         {selectedTab === "contratos" && (
           <div className="bg-white shadow-lg rounded-lg p-6 max-w-3xl mx-auto">
             <h2 className="text-xl font-semibold mb-4">Contratos Ativos</h2>
             <ul className="space-y-4">
               {contratos.map((c) => (
-                <li key={c.id} className="border border-gray-300 rounded-lg p-4 bg-gray-50 shadow-sm">
+                <li key={c.id} className="border p-4 bg-gray-50 rounded">
                   <p className="text-lg font-semibold">Contrato #{c.id}</p>
-                  <p className="text-sm text-gray-600"><strong>Automóvel:</strong> {c.automovel.marca} {c.automovel.modelo}</p>
+                  <p><strong>Automóvel:</strong> {c.marcaCarro} {c.modeloCarro}</p>
                 </li>
               ))}
             </ul>
