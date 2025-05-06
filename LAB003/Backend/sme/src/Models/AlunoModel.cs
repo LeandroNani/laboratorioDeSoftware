@@ -8,7 +8,7 @@ namespace sme.src.Models
     {
         [Key]
         [Column("aluno_id"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int AlunoId { get; set; }
+        public int Id { get; set; }
 
         [Column("rg")]
         public required string Rg { get; set; }

@@ -1,0 +1,408 @@
+2025-05-06 01:21:15.808 -03:00 [INF] Swagger UI available at http://localhost:3030/swagger/index.html
+2025-05-06 01:21:15.876 -03:00 [INF] Server starting and listening on http://127.0.0.1:3030
+2025-05-06 01:21:15.919 -03:00 [INF] Now listening on: http://127.0.0.1:3030
+2025-05-06 01:21:15.922 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-05-06 01:21:15.923 -03:00 [INF] Hosting environment: Development
+2025-05-06 01:21:15.924 -03:00 [INF] Content root path: G:\repos\laboratorioDeSoftware\lab003\Backend\sme
+2025-05-06 01:21:47.353 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:3030/swagger/index.html - null null
+2025-05-06 01:21:47.382 -03:00 [ERR] An unhandled exception has occurred while executing the request.
+System.IO.FileNotFoundException: Could not find file 'G:\repos\laboratorioDeSoftware\LAB003\Backend\sme\bin\Debug\net9.0\sme.xml'.
+File name: 'G:\repos\laboratorioDeSoftware\LAB003\Backend\sme\bin\Debug\net9.0\sme.xml'
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize)
+   at System.Xml.XmlDownloadManager.GetStream(Uri uri, ICredentials credentials, IWebProxy proxy)
+   at System.Xml.XmlTextReaderImpl.OpenUrl()
+   at System.Xml.XmlTextReaderImpl.Read()
+   at System.Xml.XPath.XPathDocument.LoadFromReader(XmlReader reader, XmlSpace space)
+   at System.Xml.XPath.XPathDocument..ctor(String uri, XmlSpace space)
+   at Microsoft.Extensions.DependencyInjection.SwaggerGenOptionsExtensions.<>c__DisplayClass46_0.<IncludeXmlComments>b__0()
+   at Microsoft.Extensions.DependencyInjection.SwaggerGenOptionsExtensions.IncludeXmlComments(SwaggerGenOptions swaggerGenOptions, Func`1 xmlDocFactory, Boolean includeControllerXmlComments)
+   at Microsoft.Extensions.DependencyInjection.SwaggerGenOptionsExtensions.IncludeXmlComments(SwaggerGenOptions swaggerGenOptions, String filePath, Boolean includeControllerXmlComments)
+   at Program.<>c.<<Main>$>b__0_0(SwaggerGenOptions c) in G:\repos\laboratorioDeSoftware\lab003\Backend\sme\Program.cs:line 23
+   at Microsoft.Extensions.Options.ConfigureNamedOptions`1.Configure(String name, TOptions options)
+   at Microsoft.Extensions.Options.OptionsFactory`1.Create(String name)
+   at Microsoft.Extensions.Options.UnnamedOptionsManager`1.get_Value()
+   at Swashbuckle.AspNetCore.SwaggerGen.ConfigureSwaggerGeneratorOptions..ctor(IOptions`1 swaggerGenOptionsAccessor, IServiceProvider serviceProvider, IWebHostEnvironment hostingEnv)
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeConstructorInfo.Invoke(BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitIEnumerable(IEnumerableCallSite enumerableCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitNoCache(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateServiceAccessor(ServiceIdentifier serviceIdentifier)
+   at System.Collections.Concurrent.ConcurrentDictionary`2.GetOrAdd(TKey key, Func`2 valueFactory)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at Microsoft.Extensions.DependencyInjection.SwaggerGenServiceCollectionExtensions.<>c.<AddSwaggerGen>b__0_3(IServiceProvider s)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitFactory(FactoryCallSite factoryCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at Microsoft.Extensions.DependencyInjection.SwaggerGenServiceCollectionExtensions.<>c.<AddSwaggerGen>b__0_1(IServiceProvider s)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitFactory(FactoryCallSite factoryCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at lambda_method2(Closure, Object, HttpContext, IServiceProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-05-06 01:21:47.453 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:3030/swagger/index.html - 500 null text/html; charset=utf-8 101.5462ms
+2025-05-06 01:21:47.621 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:3030/favicon.ico - null null
+2025-05-06 01:21:47.625 -03:00 [ERR] An unhandled exception has occurred while executing the request.
+System.IO.FileNotFoundException: Could not find file 'G:\repos\laboratorioDeSoftware\LAB003\Backend\sme\bin\Debug\net9.0\sme.xml'.
+File name: 'G:\repos\laboratorioDeSoftware\LAB003\Backend\sme\bin\Debug\net9.0\sme.xml'
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize)
+   at System.Xml.XmlDownloadManager.GetStream(Uri uri, ICredentials credentials, IWebProxy proxy)
+   at System.Xml.XmlTextReaderImpl.OpenUrl()
+   at System.Xml.XmlTextReaderImpl.Read()
+   at System.Xml.XPath.XPathDocument.LoadFromReader(XmlReader reader, XmlSpace space)
+   at System.Xml.XPath.XPathDocument..ctor(String uri, XmlSpace space)
+   at Microsoft.Extensions.DependencyInjection.SwaggerGenOptionsExtensions.<>c__DisplayClass46_0.<IncludeXmlComments>b__0()
+   at Microsoft.Extensions.DependencyInjection.SwaggerGenOptionsExtensions.IncludeXmlComments(SwaggerGenOptions swaggerGenOptions, Func`1 xmlDocFactory, Boolean includeControllerXmlComments)
+   at Microsoft.Extensions.DependencyInjection.SwaggerGenOptionsExtensions.IncludeXmlComments(SwaggerGenOptions swaggerGenOptions, String filePath, Boolean includeControllerXmlComments)
+   at Program.<>c.<<Main>$>b__0_0(SwaggerGenOptions c) in G:\repos\laboratorioDeSoftware\lab003\Backend\sme\Program.cs:line 23
+   at Microsoft.Extensions.Options.ConfigureNamedOptions`1.Configure(String name, TOptions options)
+   at Microsoft.Extensions.Options.OptionsFactory`1.Create(String name)
+   at Microsoft.Extensions.Options.UnnamedOptionsManager`1.get_Value()
+   at Swashbuckle.AspNetCore.SwaggerGen.ConfigureSwaggerGeneratorOptions..ctor(IOptions`1 swaggerGenOptionsAccessor, IServiceProvider serviceProvider, IWebHostEnvironment hostingEnv)
+   at InvokeStub_ConfigureSwaggerGeneratorOptions..ctor(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeConstructorInfo.Invoke(BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitIEnumerable(IEnumerableCallSite enumerableCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitNoCache(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateServiceAccessor(ServiceIdentifier serviceIdentifier)
+   at System.Collections.Concurrent.ConcurrentDictionary`2.GetOrAdd(TKey key, Func`2 valueFactory)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at Microsoft.Extensions.DependencyInjection.SwaggerGenServiceCollectionExtensions.<>c.<AddSwaggerGen>b__0_3(IServiceProvider s)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitFactory(FactoryCallSite factoryCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at Microsoft.Extensions.DependencyInjection.SwaggerGenServiceCollectionExtensions.<>c.<AddSwaggerGen>b__0_1(IServiceProvider s)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitFactory(FactoryCallSite factoryCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at lambda_method2(Closure, Object, HttpContext, IServiceProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-05-06 01:21:47.646 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:3030/favicon.ico - 500 null text/plain; charset=utf-8 24.8966ms
+2025-05-06 01:21:55.228 -03:00 [INF] Application is shutting down...
+2025-05-06 01:28:29.019 -03:00 [INF] Swagger UI available at http://localhost:3030/swagger/index.html
+2025-05-06 01:28:29.094 -03:00 [INF] Server starting and listening on http://127.0.0.1:3030
+2025-05-06 01:28:29.143 -03:00 [INF] Now listening on: http://127.0.0.1:3030
+2025-05-06 01:28:29.145 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-05-06 01:28:29.146 -03:00 [INF] Hosting environment: Development
+2025-05-06 01:28:29.147 -03:00 [INF] Content root path: G:\repos\laboratorioDeSoftware\lab003\Backend\sme
+2025-05-06 01:28:30.892 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:3030/swagger/index.html - null null
+2025-05-06 01:28:30.981 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:3030/swagger/index.html - 200 null text/html;charset=utf-8 90.161ms
+2025-05-06 01:28:31.000 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:3030/swagger/index.css - null null
+2025-05-06 01:28:31.000 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:3030/swagger/swagger-ui.css - null null
+2025-05-06 01:28:31.028 -03:00 [INF] Sending file. Request path: '/index.css'. Physical path: 'N/A'
+2025-05-06 01:28:31.030 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:3030/swagger/index.css - 200 202 text/css 30.1758ms
+2025-05-06 01:28:31.030 -03:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2025-05-06 01:28:31.035 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:3030/swagger/swagger-ui-bundle.js - null null
+2025-05-06 01:28:31.036 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:3030/swagger/swagger-ui.css - 200 154949 text/css 36.7378ms
+2025-05-06 01:28:31.041 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:3030/swagger/swagger-ui-standalone-preset.js - null null
+2025-05-06 01:28:31.074 -03:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2025-05-06 01:28:31.076 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:3030/swagger/swagger-ui-standalone-preset.js - 200 229223 text/javascript 34.7314ms
+2025-05-06 01:28:31.079 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:3030/swagger/index.js - null null
+2025-05-06 01:28:31.083 -03:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2025-05-06 01:28:31.084 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:3030/swagger/index.js - 200 null application/javascript;charset=utf-8 5.0345ms
+2025-05-06 01:28:31.084 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:3030/swagger/swagger-ui-bundle.js - 200 1466908 text/javascript 49.6875ms
+2025-05-06 01:28:31.229 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:3030/swagger/v1/swagger.json - null null
+2025-05-06 01:28:31.249 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:3030/swagger/favicon-32x32.png - null null
+2025-05-06 01:28:31.251 -03:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2025-05-06 01:28:31.253 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:3030/swagger/favicon-32x32.png - 200 628 image/png 4.1532ms
+2025-05-06 01:28:31.332 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:3030/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 102.8689ms
+2025-05-06 01:28:57.717 -03:00 [INF] Application is shutting down...
+2025-05-06 01:29:02.429 -03:00 [INF] Swagger UI available at http://localhost:3030/swagger/index.html
+2025-05-06 01:29:02.501 -03:00 [INF] Server starting and listening on http://127.0.0.1:3030
+2025-05-06 01:29:02.546 -03:00 [INF] Now listening on: http://127.0.0.1:3030
+2025-05-06 01:29:02.549 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-05-06 01:29:02.550 -03:00 [INF] Hosting environment: Development
+2025-05-06 01:29:02.551 -03:00 [INF] Content root path: G:\repos\laboratorioDeSoftware\lab003\Backend\sme
+2025-05-06 01:29:03.687 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:3030/swagger/index.html - null null
+2025-05-06 01:29:03.763 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:3030/swagger/index.html - 200 null text/html;charset=utf-8 77.0218ms
+2025-05-06 01:29:03.857 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:3030/swagger/v1/swagger.json - null null
+2025-05-06 01:29:03.945 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:3030/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 87.8493ms
+2025-05-06 01:29:17.006 -03:00 [INF] Application is shutting down...
+2025-05-06 01:29:29.994 -03:00 [INF] Swagger UI available at http://localhost:3030/swagger/index.html
+2025-05-06 01:29:30.060 -03:00 [INF] Server starting and listening on http://127.0.0.1:3030
+2025-05-06 01:29:30.112 -03:00 [INF] Now listening on: http://127.0.0.1:3030
+2025-05-06 01:29:30.114 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-05-06 01:29:30.115 -03:00 [INF] Hosting environment: Development
+2025-05-06 01:29:30.116 -03:00 [INF] Content root path: G:\repos\laboratorioDeSoftware\lab003\Backend\sme
+2025-05-06 01:29:30.932 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:3030/swagger/index.html - null null
+2025-05-06 01:29:31.008 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:3030/swagger/index.html - 200 null text/html;charset=utf-8 77.192ms
+2025-05-06 01:29:31.078 -03:00 [INF] Request starting HTTP/1.1 GET http://localhost:3030/swagger/v1/swagger.json - null null
+2025-05-06 01:29:31.164 -03:00 [INF] Request finished HTTP/1.1 GET http://localhost:3030/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 86.3986ms
+2025-05-06 01:30:44.354 -03:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:3030/api/EmpresaParceira/create - application/json 68
+2025-05-06 01:30:44.373 -03:00 [INF] Executing endpoint 'sme.src.Controllers.EmpresaParceiraController.GetById (sme)'
+2025-05-06 01:30:44.391 -03:00 [INF] Route matched with {action = "GetById", controller = "EmpresaParceira"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetById(Int32) on controller sme.src.Controllers.EmpresaParceiraController (sme).
+2025-05-06 01:30:44.587 -03:00 [INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2025-05-06 01:30:44.629 -03:00 [INF] Executed action sme.src.Controllers.EmpresaParceiraController.GetById (sme) in 233.6381ms
+2025-05-06 01:30:44.630 -03:00 [INF] Executed endpoint 'sme.src.Controllers.EmpresaParceiraController.GetById (sme)'
+2025-05-06 01:30:44.632 -03:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:3030/api/EmpresaParceira/create - 400 null application/problem+json; charset=utf-8 278.5746ms
+2025-05-06 01:33:06.583 -03:00 [INF] Application is shutting down...
+2025-05-06 01:33:10.892 -03:00 [INF] Swagger UI available at http://localhost:3030/swagger/index.html
+2025-05-06 01:33:10.977 -03:00 [INF] Server starting and listening on http://127.0.0.1:3030
+2025-05-06 01:33:11.041 -03:00 [INF] Now listening on: http://127.0.0.1:3030
+2025-05-06 01:33:11.046 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-05-06 01:33:11.047 -03:00 [INF] Hosting environment: Development
+2025-05-06 01:33:11.048 -03:00 [INF] Content root path: G:\repos\laboratorioDeSoftware\lab003\Backend\sme
+2025-05-06 01:33:12.234 -03:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:3030/api/EmpresaParceira/create - application/json 68
+2025-05-06 01:33:12.287 -03:00 [INF] Executing endpoint 'sme.src.Controllers.EmpresaParceiraController.GetById (sme)'
+2025-05-06 01:33:12.302 -03:00 [INF] Route matched with {action = "GetById", controller = "EmpresaParceira"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetById(Int32) on controller sme.src.Controllers.EmpresaParceiraController (sme).
+2025-05-06 01:33:12.473 -03:00 [INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2025-05-06 01:33:12.516 -03:00 [INF] Executed action sme.src.Controllers.EmpresaParceiraController.GetById (sme) in 210.0556ms
+2025-05-06 01:33:12.524 -03:00 [INF] Executed endpoint 'sme.src.Controllers.EmpresaParceiraController.GetById (sme)'
+2025-05-06 01:33:12.527 -03:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:3030/api/EmpresaParceira/create - 400 null application/problem+json; charset=utf-8 294.1916ms
+2025-05-06 01:33:32.910 -03:00 [INF] Application is shutting down...
+2025-05-06 01:33:44.932 -03:00 [INF] Swagger UI available at http://localhost:3030/swagger/index.html
+2025-05-06 01:33:45.021 -03:00 [INF] Server starting and listening on http://127.0.0.1:3030
+2025-05-06 01:33:45.110 -03:00 [INF] Now listening on: http://127.0.0.1:3030
+2025-05-06 01:33:45.113 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-05-06 01:33:45.113 -03:00 [INF] Hosting environment: Development
+2025-05-06 01:33:45.113 -03:00 [INF] Content root path: G:\repos\laboratorioDeSoftware\lab003\Backend\sme
+2025-05-06 01:33:47.229 -03:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/create - application/json 68
+2025-05-06 01:33:47.339 -03:00 [INF] Executing endpoint 'sme.src.Controllers.EmpresaParceiraController.GetById (sme)'
+2025-05-06 01:33:47.363 -03:00 [INF] Route matched with {action = "GetById", controller = "EmpresaParceira"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetById(Int32) on controller sme.src.Controllers.EmpresaParceiraController (sme).
+2025-05-06 01:33:47.585 -03:00 [INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2025-05-06 01:33:47.646 -03:00 [INF] Executed action sme.src.Controllers.EmpresaParceiraController.GetById (sme) in 280.2143ms
+2025-05-06 01:33:47.657 -03:00 [INF] Executed endpoint 'sme.src.Controllers.EmpresaParceiraController.GetById (sme)'
+2025-05-06 01:33:47.660 -03:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/create - 400 null application/problem+json; charset=utf-8 433.072ms
+2025-05-06 01:33:56.387 -03:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/create - application/json 68
+2025-05-06 01:33:56.394 -03:00 [INF] Executing endpoint 'sme.src.Controllers.EmpresaParceiraController.GetById (sme)'
+2025-05-06 01:33:56.395 -03:00 [INF] Route matched with {action = "GetById", controller = "EmpresaParceira"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetById(Int32) on controller sme.src.Controllers.EmpresaParceiraController (sme).
+2025-05-06 01:33:56.402 -03:00 [INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2025-05-06 01:33:56.403 -03:00 [INF] Executed action sme.src.Controllers.EmpresaParceiraController.GetById (sme) in 7.5453ms
+2025-05-06 01:33:56.403 -03:00 [INF] Executed endpoint 'sme.src.Controllers.EmpresaParceiraController.GetById (sme)'
+2025-05-06 01:33:56.403 -03:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/create - 400 null application/problem+json; charset=utf-8 15.5779ms
+2025-05-06 01:34:00.150 -03:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/create - application/json 68
+2025-05-06 01:34:00.152 -03:00 [INF] Executing endpoint 'sme.src.Controllers.EmpresaParceiraController.GetById (sme)'
+2025-05-06 01:34:00.152 -03:00 [INF] Route matched with {action = "GetById", controller = "EmpresaParceira"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetById(Int32) on controller sme.src.Controllers.EmpresaParceiraController (sme).
+2025-05-06 01:34:00.154 -03:00 [INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2025-05-06 01:34:00.155 -03:00 [INF] Executed action sme.src.Controllers.EmpresaParceiraController.GetById (sme) in 2.3677ms
+2025-05-06 01:34:00.155 -03:00 [INF] Executed endpoint 'sme.src.Controllers.EmpresaParceiraController.GetById (sme)'
+2025-05-06 01:34:00.155 -03:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/create - 400 null application/problem+json; charset=utf-8 5.0139ms
+2025-05-06 01:34:28.721 -03:00 [INF] Swagger UI available at http://localhost:3030/swagger/index.html
+2025-05-06 01:34:28.811 -03:00 [INF] Server starting and listening on http://127.0.0.1:3030
+2025-05-06 01:34:28.901 -03:00 [INF] Now listening on: http://127.0.0.1:3030
+2025-05-06 01:34:28.903 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-05-06 01:34:28.904 -03:00 [INF] Hosting environment: Development
+2025-05-06 01:34:28.904 -03:00 [INF] Content root path: G:\repos\laboratorioDeSoftware\lab003\Backend\sme
+2025-05-06 01:34:34.281 -03:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/create - application/json 68
+2025-05-06 01:34:34.362 -03:00 [INF] Executing endpoint 'sme.src.Controllers.EmpresaParceiraController.GetById (sme)'
+2025-05-06 01:34:34.389 -03:00 [INF] Route matched with {action = "GetById", controller = "EmpresaParceira"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetById(Int32) on controller sme.src.Controllers.EmpresaParceiraController (sme).
+2025-05-06 01:34:34.680 -03:00 [INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2025-05-06 01:34:34.740 -03:00 [INF] Executed action sme.src.Controllers.EmpresaParceiraController.GetById (sme) in 347.7248ms
+2025-05-06 01:34:34.748 -03:00 [INF] Executed endpoint 'sme.src.Controllers.EmpresaParceiraController.GetById (sme)'
+2025-05-06 01:34:34.752 -03:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/create - 400 null application/problem+json; charset=utf-8 473.2362ms
+2025-05-06 01:49:09.005 -03:00 [INF] Swagger UI available at http://localhost:3030/swagger/index.html
+2025-05-06 01:49:09.075 -03:00 [INF] Server starting and listening on http://127.0.0.1:3030
+2025-05-06 01:49:09.121 -03:00 [INF] Now listening on: http://127.0.0.1:3030
+2025-05-06 01:49:09.125 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-05-06 01:49:09.126 -03:00 [INF] Hosting environment: Development
+2025-05-06 01:49:09.126 -03:00 [INF] Content root path: G:\repos\laboratorioDeSoftware\lab003\Backend\sme
+2025-05-06 01:49:40.105 -03:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/create - application/json 68
+2025-05-06 01:49:40.156 -03:00 [INF] Executing endpoint 'sme.src.Controllers.EmpresaParceiraController.GetById (sme)'
+2025-05-06 01:49:40.171 -03:00 [INF] Route matched with {action = "GetById", controller = "EmpresaParceira"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetById(Int32) on controller sme.src.Controllers.EmpresaParceiraController (sme).
+2025-05-06 01:49:40.397 -03:00 [INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2025-05-06 01:49:40.438 -03:00 [INF] Executed action sme.src.Controllers.EmpresaParceiraController.GetById (sme) in 262.1738ms
+2025-05-06 01:49:40.447 -03:00 [INF] Executed endpoint 'sme.src.Controllers.EmpresaParceiraController.GetById (sme)'
+2025-05-06 01:49:40.451 -03:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/create - 400 null application/problem+json; charset=utf-8 346.2399ms
+2025-05-06 01:51:18.938 -03:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/create - application/json 68
+2025-05-06 01:51:18.942 -03:00 [INF] Executing endpoint 'sme.src.Controllers.EmpresaParceiraController.GetById (sme)'
+2025-05-06 01:51:18.943 -03:00 [INF] Route matched with {action = "GetById", controller = "EmpresaParceira"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetById(Int32) on controller sme.src.Controllers.EmpresaParceiraController (sme).
+2025-05-06 01:51:18.949 -03:00 [INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2025-05-06 01:51:18.951 -03:00 [INF] Executed action sme.src.Controllers.EmpresaParceiraController.GetById (sme) in 6.5624ms
+2025-05-06 01:51:18.952 -03:00 [INF] Executed endpoint 'sme.src.Controllers.EmpresaParceiraController.GetById (sme)'
+2025-05-06 01:51:18.953 -03:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/create - 400 null application/problem+json; charset=utf-8 14.9169ms
+2025-05-06 01:52:36.614 -03:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:3030/api/empresaparceira/create - application/json 68
+2025-05-06 01:52:36.617 -03:00 [INF] Executing endpoint 'sme.src.Controllers.EmpresaParceiraController.Create (sme)'
+2025-05-06 01:52:36.620 -03:00 [INF] Route matched with {action = "Create", controller = "EmpresaParceira"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Create(sme.src.Public.DTOs.EmpresaParceiraCreationRequest) on controller sme.src.Controllers.EmpresaParceiraController (sme).
+2025-05-06 01:52:38.136 -03:00 [INF] Executed DbCommand (43ms) [Parameters=[@p0='?', @p1='?', @p2='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO empresa_parceira (email, nome, senha)
+VALUES (@p0, @p1, @p2)
+RETURNING empresa_id;
+2025-05-06 01:52:38.173 -03:00 [INF] Executing CreatedAtActionResult, writing value of type 'sme.src.Models.Empresa.EmpresaParceira'.
+2025-05-06 01:52:38.199 -03:00 [INF] Executed action sme.src.Controllers.EmpresaParceiraController.Create (sme) in 1577.3158ms
+2025-05-06 01:52:38.200 -03:00 [INF] Executed endpoint 'sme.src.Controllers.EmpresaParceiraController.Create (sme)'
+2025-05-06 01:52:38.208 -03:00 [INF] Request finished HTTP/1.1 POST http://127.0.0.1:3030/api/empresaparceira/create - 201 null application/json; charset=utf-8 1594.3884ms
+2025-05-06 01:52:52.746 -03:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/1 - application/json 68
+2025-05-06 01:52:52.748 -03:00 [INF] Executing endpoint 'sme.src.Controllers.EmpresaParceiraController.GetById (sme)'
+2025-05-06 01:52:52.749 -03:00 [INF] Route matched with {action = "GetById", controller = "EmpresaParceira"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetById(Int32) on controller sme.src.Controllers.EmpresaParceiraController (sme).
+2025-05-06 01:52:52.997 -03:00 [INF] Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT e.empresa_id, e.email, e.nome, e.senha
+FROM empresa_parceira AS e
+WHERE e.empresa_id = @__p_0
+LIMIT 1
+2025-05-06 01:52:53.004 -03:00 [INF] Executing OkObjectResult, writing value of type 'sme.src.Models.Empresa.EmpresaParceira'.
+2025-05-06 01:52:53.006 -03:00 [INF] Executed action sme.src.Controllers.EmpresaParceiraController.GetById (sme) in 255.8156ms
+2025-05-06 01:52:53.007 -03:00 [INF] Executed endpoint 'sme.src.Controllers.EmpresaParceiraController.GetById (sme)'
+2025-05-06 01:52:53.008 -03:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/1 - 200 null application/json; charset=utf-8 262.5333ms
+2025-05-06 01:53:10.999 -03:00 [INF] Application is shutting down...
+2025-05-06 01:53:15.949 -03:00 [INF] Swagger UI available at http://localhost:3030/swagger/index.html
+2025-05-06 01:53:16.013 -03:00 [INF] Server starting and listening on http://127.0.0.1:3030
+2025-05-06 01:53:16.058 -03:00 [INF] Now listening on: http://127.0.0.1:3030
+2025-05-06 01:53:16.061 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-05-06 01:53:16.062 -03:00 [INF] Hosting environment: Development
+2025-05-06 01:53:16.063 -03:00 [INF] Content root path: G:\repos\laboratorioDeSoftware\lab003\Backend\sme
+2025-05-06 01:53:17.789 -03:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/1 - application/json 68
+2025-05-06 01:53:17.823 -03:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/1 - 404 0 null 35.8842ms
+2025-05-06 01:53:17.834 -03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://127.0.0.1:3030/api/empresaparceira/1, Response status code: 404
+2025-05-06 01:53:25.809 -03:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/get/1 - application/json 68
+2025-05-06 01:53:25.813 -03:00 [INF] Executing endpoint 'sme.src.Controllers.EmpresaParceiraController.GetById (sme)'
+2025-05-06 01:53:25.827 -03:00 [INF] Route matched with {action = "GetById", controller = "EmpresaParceira"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetById(Int32) on controller sme.src.Controllers.EmpresaParceiraController (sme).
+2025-05-06 01:53:26.835 -03:00 [INF] Executed DbCommand (36ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT e.empresa_id, e.email, e.nome, e.senha
+FROM empresa_parceira AS e
+WHERE e.empresa_id = @__p_0
+LIMIT 1
+2025-05-06 01:53:26.889 -03:00 [INF] Executing OkObjectResult, writing value of type 'sme.src.Models.Empresa.EmpresaParceira'.
+2025-05-06 01:53:26.918 -03:00 [INF] Executed action sme.src.Controllers.EmpresaParceiraController.GetById (sme) in 1087.8791ms
+2025-05-06 01:53:26.920 -03:00 [INF] Executed endpoint 'sme.src.Controllers.EmpresaParceiraController.GetById (sme)'
+2025-05-06 01:53:26.927 -03:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/get/1 - 200 null application/json; charset=utf-8 1118.1457ms
+2025-05-06 01:53:38.488 -03:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/all - application/json 68
+2025-05-06 01:53:38.491 -03:00 [INF] Executing endpoint 'sme.src.Controllers.EmpresaParceiraController.GetAll (sme)'
+2025-05-06 01:53:38.495 -03:00 [INF] Route matched with {action = "GetAll", controller = "EmpresaParceira"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller sme.src.Controllers.EmpresaParceiraController (sme).
+2025-05-06 01:53:38.557 -03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT e.empresa_id, e.email, e.nome, e.senha
+FROM empresa_parceira AS e
+2025-05-06 01:53:38.560 -03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[sme.src.Models.Empresa.EmpresaParceira, sme, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-05-06 01:53:38.565 -03:00 [INF] Executed action sme.src.Controllers.EmpresaParceiraController.GetAll (sme) in 68.7421ms
+2025-05-06 01:53:38.566 -03:00 [INF] Executed endpoint 'sme.src.Controllers.EmpresaParceiraController.GetAll (sme)'
+2025-05-06 01:53:38.568 -03:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/all - 200 null application/json; charset=utf-8 80.0216ms
+2025-05-06 01:53:52.033 -03:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/put/1 - application/json 65
+2025-05-06 01:53:52.035 -03:00 [INF] Executing endpoint '405 HTTP Method Not Supported'
+2025-05-06 01:53:52.036 -03:00 [INF] Executed endpoint '405 HTTP Method Not Supported'
+2025-05-06 01:53:52.037 -03:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:3030/api/empresaparceira/put/1 - 405 0 null 4.2419ms
+2025-05-06 01:53:56.903 -03:00 [INF] Request starting HTTP/1.1 PUT http://127.0.0.1:3030/api/empresaparceira/put/1 - application/json 65
+2025-05-06 01:53:56.905 -03:00 [INF] Executing endpoint 'sme.src.Controllers.EmpresaParceiraController.Update (sme)'
+2025-05-06 01:53:56.909 -03:00 [INF] Route matched with {action = "Update", controller = "EmpresaParceira"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Update(Int32, sme.src.Models.Empresa.EmpresaParceira) on controller sme.src.Controllers.EmpresaParceiraController (sme).
+2025-05-06 01:53:57.016 -03:00 [INF] Executed DbCommand (3ms) [Parameters=[@p0='?', @p1='?', @p2='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO empresa_parceira (email, nome, senha)
+VALUES (@p0, @p1, @p2)
+RETURNING empresa_id;
+2025-05-06 01:53:57.033 -03:00 [INF] Executing OkObjectResult, writing value of type 'sme.src.Models.Empresa.EmpresaParceira'.
+2025-05-06 01:53:57.034 -03:00 [INF] Executed action sme.src.Controllers.EmpresaParceiraController.Update (sme) in 123.7059ms
+2025-05-06 01:53:57.035 -03:00 [INF] Executed endpoint 'sme.src.Controllers.EmpresaParceiraController.Update (sme)'
+2025-05-06 01:53:57.037 -03:00 [INF] Request finished HTTP/1.1 PUT http://127.0.0.1:3030/api/empresaparceira/put/1 - 200 null application/json; charset=utf-8 133.6001ms
+2025-05-06 01:54:06.578 -03:00 [INF] Request starting HTTP/1.1 DELETE http://127.0.0.1:3030/api/empresaparceira/del/1 - application/json 65
+2025-05-06 01:54:06.580 -03:00 [INF] Executing endpoint 'sme.src.Controllers.EmpresaParceiraController.Delete (sme)'
+2025-05-06 01:54:06.583 -03:00 [INF] Route matched with {action = "Delete", controller = "EmpresaParceira"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Delete(Int32) on controller sme.src.Controllers.EmpresaParceiraController (sme).
+2025-05-06 01:54:06.590 -03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT e.empresa_id, e.email, e.nome, e.senha
+FROM empresa_parceira AS e
+WHERE e.empresa_id = @__p_0
+LIMIT 1
+2025-05-06 01:54:06.619 -03:00 [INF] Executed DbCommand (11ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM empresa_parceira
+WHERE empresa_id = @p0;
+2025-05-06 01:54:06.625 -03:00 [INF] Executing StatusCodeResult, setting HTTP status code 204
+2025-05-06 01:54:06.625 -03:00 [INF] Executed action sme.src.Controllers.EmpresaParceiraController.Delete (sme) in 41.5074ms
+2025-05-06 01:54:06.626 -03:00 [INF] Executed endpoint 'sme.src.Controllers.EmpresaParceiraController.Delete (sme)'
+2025-05-06 01:54:06.627 -03:00 [INF] Request finished HTTP/1.1 DELETE http://127.0.0.1:3030/api/empresaparceira/del/1 - 204 null null 49.1496ms
+2025-05-06 01:54:40.514 -03:00 [INF] Request starting HTTP/1.1 DELETE http://127.0.0.1:3030/api/empresaparceira/put/1 - application/json 65
+2025-05-06 01:54:40.516 -03:00 [INF] Executing endpoint '405 HTTP Method Not Supported'
+2025-05-06 01:54:40.517 -03:00 [INF] Executed endpoint '405 HTTP Method Not Supported'
+2025-05-06 01:54:40.518 -03:00 [INF] Request finished HTTP/1.1 DELETE http://127.0.0.1:3030/api/empresaparceira/put/1 - 405 0 null 3.5654ms
+2025-05-06 01:54:46.278 -03:00 [INF] Request starting HTTP/1.1 PUT http://127.0.0.1:3030/api/empresaparceira/put/1 - application/json 65
+2025-05-06 01:54:46.280 -03:00 [INF] Executing endpoint 'sme.src.Controllers.EmpresaParceiraController.Update (sme)'
+2025-05-06 01:54:46.281 -03:00 [INF] Route matched with {action = "Update", controller = "EmpresaParceira"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Update(Int32, sme.src.Models.Empresa.EmpresaParceira) on controller sme.src.Controllers.EmpresaParceiraController (sme).
+2025-05-06 01:54:46.295 -03:00 [INF] Executed DbCommand (10ms) [Parameters=[@p0='?', @p1='?', @p2='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO empresa_parceira (email, nome, senha)
+VALUES (@p0, @p1, @p2)
+RETURNING empresa_id;
+2025-05-06 01:54:46.297 -03:00 [INF] Executing OkObjectResult, writing value of type 'sme.src.Models.Empresa.EmpresaParceira'.
+2025-05-06 01:54:46.298 -03:00 [INF] Executed action sme.src.Controllers.EmpresaParceiraController.Update (sme) in 15.7403ms
+2025-05-06 01:54:46.299 -03:00 [INF] Executed endpoint 'sme.src.Controllers.EmpresaParceiraController.Update (sme)'
+2025-05-06 01:54:46.300 -03:00 [INF] Request finished HTTP/1.1 PUT http://127.0.0.1:3030/api/empresaparceira/put/1 - 200 null application/json; charset=utf-8 21.8978ms
+2025-05-06 01:55:32.295 -03:00 [INF] Application is shutting down...
+2025-05-06 01:55:36.405 -03:00 [INF] Swagger UI available at http://localhost:3030/swagger/index.html
+2025-05-06 01:55:36.478 -03:00 [INF] Server starting and listening on http://127.0.0.1:3030
+2025-05-06 01:55:36.525 -03:00 [INF] Now listening on: http://127.0.0.1:3030
+2025-05-06 01:55:36.528 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-05-06 01:55:36.529 -03:00 [INF] Hosting environment: Development
+2025-05-06 01:55:36.529 -03:00 [INF] Content root path: G:\repos\laboratorioDeSoftware\lab003\Backend\sme
+2025-05-06 01:55:42.950 -03:00 [INF] Request starting HTTP/1.1 PUT http://127.0.0.1:3030/api/empresaparceira/put/1 - application/json 65
+2025-05-06 01:55:42.990 -03:00 [INF] Executing endpoint 'sme.src.Controllers.EmpresaParceiraController.Update (sme)'
+2025-05-06 01:55:43.002 -03:00 [INF] Route matched with {action = "Update", controller = "EmpresaParceira"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Update(Int32, sme.src.Models.Empresa.EmpresaParceira) on controller sme.src.Controllers.EmpresaParceiraController (sme).
+2025-05-06 01:55:43.628 -03:00 [INF] Executed action sme.src.Controllers.EmpresaParceiraController.Update (sme) in 623.5305ms
+2025-05-06 01:55:43.635 -03:00 [INF] Executed endpoint 'sme.src.Controllers.EmpresaParceiraController.Update (sme)'
+2025-05-06 01:55:43.655 -03:00 [INF] Request finished HTTP/1.1 PUT http://127.0.0.1:3030/api/empresaparceira/put/1 - 500 null application/json 705.1677ms
+2025-05-06 01:55:50.810 -03:00 [INF] Request starting HTTP/1.1 PUT http://127.0.0.1:3030/api/empresaparceira/put/3 - application/json 65
+2025-05-06 01:55:50.815 -03:00 [INF] Executing endpoint 'sme.src.Controllers.EmpresaParceiraController.Update (sme)'
+2025-05-06 01:55:50.816 -03:00 [INF] Route matched with {action = "Update", controller = "EmpresaParceira"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Update(Int32, sme.src.Models.Empresa.EmpresaParceira) on controller sme.src.Controllers.EmpresaParceiraController (sme).
+2025-05-06 01:55:50.868 -03:00 [INF] Executed action sme.src.Controllers.EmpresaParceiraController.Update (sme) in 51.2696ms
+2025-05-06 01:55:50.870 -03:00 [INF] Executed endpoint 'sme.src.Controllers.EmpresaParceiraController.Update (sme)'
+2025-05-06 01:55:50.871 -03:00 [INF] Request finished HTTP/1.1 PUT http://127.0.0.1:3030/api/empresaparceira/put/3 - 500 null application/json 60.3706ms

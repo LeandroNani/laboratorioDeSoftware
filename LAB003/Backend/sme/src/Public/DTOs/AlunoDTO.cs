@@ -27,7 +27,7 @@ namespace sme.src.Public.DTOs
 
     public class AlunoResponse
     {
-        public required int AlunoId { get; set; }
+        public required int Id { get; set; }
         public required string Rg { get; set; }
         public required string Cpf { get; set; }
         public required string Email { get; set; }

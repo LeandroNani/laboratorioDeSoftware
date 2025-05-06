@@ -12,7 +12,7 @@ namespace sme.src.Public.DTOs
 
     public class ProfessorResponse
     {
-        public required int ProfessorId { get; set; }
+        public required int Id { get; set; }
         public required string Nome { get; set; }
         public required string Senha { get; set; }
         public required string Cpf { get; set; }

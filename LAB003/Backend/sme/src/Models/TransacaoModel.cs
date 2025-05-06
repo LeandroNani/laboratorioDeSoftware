@@ -9,7 +9,7 @@ namespace sme.src.Models
     {
         [Key]
         [Column("transacao_id"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int TransacaoId { get; set; }
+        public int Id { get; set; }
 
         [Column("aluno_id"), ForeignKey("aluno_id")]
         public required Aluno Aluno { get; set; }

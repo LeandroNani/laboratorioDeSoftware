@@ -32,27 +32,27 @@ namespace sme.src.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Produto>()
-                .Property(p => p.ProdutoId)
+                .Property(p => p.Id)
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Professor>()
-                .Property(p => p.ProfessorId)
+                .Property(p => p.Id)
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Aluno>()
-                .Property(a => a.AlunoId)
+                .Property(a => a.Id)
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Curso>()
-                .Property(c => c.CursoId)
+                .Property(c => c.Id)
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<InstituicaoEnsino>()
-                .Property(i => i.InstituicaoId)
+                .Property(i => i.Id)
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Departamento>()
-                .Property(d => d.DepartamentoId)
+                .Property(d => d.Id)
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<EmpresaParceira>()

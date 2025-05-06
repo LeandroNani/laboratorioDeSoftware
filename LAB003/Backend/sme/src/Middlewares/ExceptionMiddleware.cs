@@ -81,7 +81,7 @@ namespace sme.src.Middlewares
                     break;
                 case CustomArgumentNullException argumentNullException:
                     statusCode = (int)HttpStatusCode.BadRequest;
-                    message = argumentNullException.Message;
+                    message = $"{argumentNullException.Message} - Parameter: {argumentNullException.ParamName}";
                     break;
                 case Exceptions.NotImplementedException notImplementedException:
                     statusCode = (int)HttpStatusCode.NotImplemented;

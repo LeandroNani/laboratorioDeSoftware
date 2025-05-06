@@ -9,6 +9,9 @@ namespace sme.src.Middlewares.Exceptions
     public class ValidationException(string message)         : Exception(message);
     public class MailerException(string message)             : Exception(message);
     public class ConflictException(string message)           : Exception(message);
-    public class CustomArgumentNullException(string message) : Exception(message);
     public class NotImplementedException(string message)     : Exception(message);
+    public class CustomArgumentNullException(string name, string message) : Exception(message)
+    {
+        public string ParamName { get; } = name;
+    }
 }

@@ -13,7 +13,7 @@ namespace sme.src.Public.DTOs
     }
     public class TransacaoResponse<T>
     {
-        public int TransacaoId { get; set; }
+        public int Id { get; set; }
         public required decimal Valor { get; set; }
         public required string Motivo { get; set; }
         public required Aluno Aluno { get; set; }

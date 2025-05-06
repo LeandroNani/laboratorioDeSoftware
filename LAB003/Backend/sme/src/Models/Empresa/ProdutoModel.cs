@@ -8,7 +8,7 @@ namespace sme.src.Models.Empresa
     {
         [Key]
         [Column("produto_id"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ProdutoId { get; set; }
+        public int Id { get; set; }
 
         [Column("foto", TypeName = "bytea")]
         public required byte[] Foto { get; set; }

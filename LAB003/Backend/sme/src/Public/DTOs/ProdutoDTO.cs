@@ -19,7 +19,7 @@ namespace sme.src.Public.DTOs
 
     public class ProdutoResponse
     {
-        public int ProdutoId { get; set; }
+        public int Id { get; set; }
         public required byte[] Foto { get; set; }
         public required string Descricao { get; set; }
         public required decimal Preco { get; set; }
