@@ -11,14 +11,14 @@ using AutoMapper;
 namespace sme.src.Controllers
 {
     /// <summary>
-    /// Controlador responsável por gerenciar as operações relacionadas às empresas parceiras.
+    /// Controlador responsável por gerenciar as operações relacionadas aos alunos.
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class AlunoController(AppDbContext context, IMapper _mapper) : ControllerBase
     {
         private readonly Service<Aluno> _service = new (context);
-
+        private readonly AlunoService _alunoService = new (context, _mapper);
         /// <summary>
         /// Obtém um aluno pelo ID.
         /// </summary>
@@ -64,19 +64,18 @@ namespace sme.src.Controllers
         [ProducesResponseType(typeof(Aluno), (int)HttpStatusCode.Created)]
         public async Task<IActionResult> Create([FromBody] AlunoCreationRequest request)
         {
-            var aluno = _mapper.Map<Aluno>(request);
-            await _service.AddAsync(aluno);
+            var aluno = await _alunoService.CreateAsync(request);
             return CreatedAtAction(nameof(GetById), new { id = aluno.Id }, aluno);
         }
 
-        [HttpPut("update")]
+        [HttpPut("update/{id}")]
         [ProducesResponseType(typeof(Aluno), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Update([FromBody] AlunoUpdateRequest request)
+        public async Task<IActionResult> Update(int id, [FromBody] AlunoUpdateRequest request)
         {
             var aluno = _mapper.Map<Aluno>(request);
-            await _service.UpdateAsync(aluno);
+            await _service.UpdateAsync(aluno, id);
             return Ok(aluno);
         }
 

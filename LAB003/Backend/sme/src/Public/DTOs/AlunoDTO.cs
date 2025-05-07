@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using sme.src.Models;
 
 namespace sme.src.Public.DTOs
@@ -10,8 +8,8 @@ namespace sme.src.Public.DTOs
         public required string Cpf { get; set; }
         public required string Email { get; set; }
         public required string Senha { get; set; }
-        public required InstituicaoEnsino Instituicao { get; set; }
-        public required Curso Curso { get; set; }
+        public required int InstituicaoId { get; set; }
+        public required int CursoId { get; set; }
         public int? Moedas { get; set; }
     }
 
@@ -20,8 +18,8 @@ namespace sme.src.Public.DTOs
         public string? Rg { get; set; }
         public string? Cpf { get; set; }
         public string? Email { get; set; }
-        public InstituicaoEnsino? Instituicao { get; set; }
-        public Curso? Curso { get; set; }
+        public int? InstituicaoId { get; set; }
+        public int? CursoId { get; set; }
         public int? Moedas { get; set; }
     }
 

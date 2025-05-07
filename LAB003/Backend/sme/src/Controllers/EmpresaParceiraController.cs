@@ -51,10 +51,11 @@ namespace sme.src.Controllers
         [ProducesResponseType(typeof(EmpresaParceira), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Update(int id, [FromBody] EmpresaParceira empresaParceira)
+        public async Task<IActionResult> Update(int id, [FromBody] EmpresaParceiraUpdateRequest empresaParceira)
         {
-            await _service.UpdateAsync(empresaParceira);
-            return Ok(empresaParceira);
+            var empresa = _mapper.Map<EmpresaParceira>(empresaParceira);
+            var e = await _service.UpdateAsync(empresa, id);
+            return Ok(e);
         }
 
         [HttpDelete("del/{id}")]

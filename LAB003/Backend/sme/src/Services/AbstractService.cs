@@ -24,13 +24,25 @@ namespace sme.src.Services
             return entity;
         }
 
-        public async Task UpdateAsync(T entity)
+        public async Task<T> UpdateAsync(T entity, int id)
         {
             if (entity == null) throw new CustomArgumentNullException(nameof(entity), "Entity cannot be null.");
-            
-            _context.Attach(entity);
-            _context.Entry(entity).State = EntityState.Modified;
+
+            var existingEntity = await _context.Set<T>().FindAsync(id) 
+                ?? throw new NotFoundException($"Entity with id {id} not found.");
+
+            var entry = _context.Entry(existingEntity);
+            var newValues = _context.Entry(entity).CurrentValues;
+
+            foreach (var property in entry.Metadata.GetProperties().Where(p => !p.IsPrimaryKey()))
+            {
+                var newValue = newValues[property.Name];
+                if (newValue != null)
+                    entry.Property(property.Name).CurrentValue = newValue;
+            }
+
             await _context.SaveChangesAsync();
+            return existingEntity;
         }
 
         public async Task DeleteAsync(int id)
