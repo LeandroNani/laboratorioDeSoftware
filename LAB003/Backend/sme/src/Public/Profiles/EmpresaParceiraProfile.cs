@@ -4,7 +4,6 @@ using sme.src.Public.DTOs;
 
 namespace sme.src.Public.Profiles
 {
-
     public class EmpresaParceiraProfile : Profile
     {
         public EmpresaParceiraProfile()

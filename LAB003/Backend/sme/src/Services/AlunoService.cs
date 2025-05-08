@@ -37,27 +37,19 @@ namespace sme.src.Services
             var aluno = await _context.Alunos.Include(a => a.Instituicao).Include(a => a.Curso).FirstOrDefaultAsync(a => a.Id == id)
                 ?? throw new NotFoundException("Aluno not found.");
 
-            if(request.CursoId != null) {
-                var curso = await _context.Cursos.FirstOrDefaultAsync(c => c.Id == request.CursoId)
+            if (request.CursoId.HasValue) {
+                var curso = await _context.Cursos.FindAsync(request.CursoId.Value)
                     ?? throw new NotFoundException("Curso not found.");
                 aluno.Curso = curso;
             }
-            if(request.InstituicaoId != null) {
+
+            if(request.InstituicaoId.HasValue) {
                 var instituicao = await _context.Instituicoes.FirstOrDefaultAsync(i => i.Id == request.InstituicaoId)
                     ?? throw new NotFoundException("Instituição not found.");
                 aluno.Instituicao = instituicao;
             }
 
-            var entry = _context.Entry(aluno);
-            var newValues = _context.Entry(request).CurrentValues;
-
-            foreach (var property in entry.Metadata.GetProperties().Where(p => !p.IsPrimaryKey()))
-            {
-                var newValue = newValues[property.Name];
-                if (newValue != null)
-                    entry.Property(property.Name).CurrentValue = newValue;
-            }
-
+            _mapper.Map(request, aluno);
             _context.Alunos.Update(aluno);
             await _context.SaveChangesAsync();
             return aluno;

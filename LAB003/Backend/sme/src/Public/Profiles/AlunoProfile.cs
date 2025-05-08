@@ -8,11 +8,12 @@ namespace sme.src.Public.Profiles
         public AlunoProfile()
         {
             CreateMap<AlunoCreationRequest, Aluno>();
-            CreateMap<AlunoUpdateRequest, Aluno>();
             CreateMap<Aluno, AlunoResponse>()
                 .ForMember(dest => dest.Moedas, opt => opt.MapFrom(src => src.Moedas))
                 .ForMember(dest => dest.Curso, opt => opt.MapFrom(src => src.Curso))
                 .ForMember(dest => dest.Instituicao, opt => opt.MapFrom(src => src.Instituicao));
+            CreateMap<AlunoUpdateRequest, Aluno>()
+                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }

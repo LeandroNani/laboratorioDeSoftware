@@ -74,8 +74,7 @@ namespace sme.src.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Update(int id, [FromBody] AlunoUpdateRequest request)
         {
-            var aluno = _mapper.Map<Aluno>(request);
-            await _service.UpdateAsync(aluno, id);
+            var aluno = await _alunoService.UpdateAsync(request, id);
             return Ok(aluno);
         }
 

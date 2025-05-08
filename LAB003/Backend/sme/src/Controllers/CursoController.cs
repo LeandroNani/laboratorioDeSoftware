@@ -75,8 +75,8 @@ namespace sme.src.Controllers
         public async Task<IActionResult> Update(int id, [FromBody] CursoUpdateRequest request)
         {
             var Curso = _mapper.Map<Curso>(request);
-            await _service.UpdateAsync(Curso, id);
-            return Ok(Curso);
+            var c = await _service.UpdateAsync(Curso, id);
+            return Ok(c);
         }
 
         [HttpDelete("{id}")]
