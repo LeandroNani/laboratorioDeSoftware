@@ -160,3 +160,9 @@ VALUES ('20250518194356_AtualizacaoModelo', '9.0.4');
 2025-05-18 16:44:43.459 -03:00 [INF] Application started. Press Ctrl+C to shut down.
 2025-05-18 16:44:43.460 -03:00 [INF] Hosting environment: Development
 2025-05-18 16:44:43.461 -03:00 [INF] Content root path: C:\Users\i.cathalat\Downloads\lab_software\laboratorioDeSoftware\LAB003\Backend\sme
+2025-05-18 17:38:31.990 -03:00 [INF] Swagger UI available at http://localhost:3030/swagger/index.html
+2025-05-18 17:38:32.151 -03:00 [INF] Server starting and listening on http://127.0.0.1:3030
+2025-05-18 17:38:32.280 -03:00 [INF] Now listening on: http://127.0.0.1:3030
+2025-05-18 17:38:32.284 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-05-18 17:38:32.285 -03:00 [INF] Hosting environment: Development
+2025-05-18 17:38:32.286 -03:00 [INF] Content root path: C:\Users\i.cathalat\Downloads\lab_software\laboratorioDeSoftware\LAB003\Backend\sme
