@@ -38,8 +38,8 @@ builder.Services.AddControllers();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<IEmailSender, MailerService>();
 var app = builder.Build();
-
 
 
 

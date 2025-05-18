@@ -3,7 +3,6 @@ using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using sme.src.Data;
 using sme.src.Models;
 using sme.src.Public.DTOs;
@@ -15,56 +14,64 @@ namespace sme.src.Controllers
     [Route("api/[controller]")]
     public class ProfessorController : ControllerBase
     {
-        private readonly Service<Professor> _service;
+        private readonly Service<Professor> _crudService;
         private readonly ProfessorService _profService;
         private readonly IMapper _mapper;
 
-        public ProfessorController(AppDbContext context, IMapper mapper)
+        public ProfessorController(
+            Service<Professor> crudService,
+            ProfessorService profService,
+            IMapper mapper)
         {
-            _service = new Service<Professor>(context);
-            _profService = new ProfessorService(context, mapper);
+            _crudService = crudService;
+            _profService = profService;
             _mapper = mapper;
         }
 
+        // GET api/professor/{id}
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ProfessorResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<ActionResult<ProfessorResponse>> GetById(int id)
         {
-            var prof = await _service.GetByIdAsync(id);
+            var prof = await _crudService.GetByIdAsync(id);
             var resp = _mapper.Map<ProfessorResponse>(prof);
             return Ok(resp);
         }
 
-        [HttpGet("all")]
+        // GET api/professor
+        [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<ProfessorResponse>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<IEnumerable<ProfessorResponse>>> GetAll()
         {
-            var list = await _service.GetAllAsync();
+            var list = await _crudService.GetAllAsync();
             var resp = _mapper.Map<IEnumerable<ProfessorResponse>>(list);
             return Ok(resp);
         }
 
-        [HttpPost("create")]
+        // POST api/professor
+        [HttpPost]
         [ProducesResponseType(typeof(ProfessorResponse), (int)HttpStatusCode.Created)]
-        public async Task<IActionResult> Create([FromBody] ProfessorCreationRequest request)
+        public async Task<ActionResult<ProfessorResponse>> Create([FromBody] ProfessorCreationRequest request)
         {
             var prof = await _profService.CreateAsync(request);
             var resp = _mapper.Map<ProfessorResponse>(prof);
             return CreatedAtAction(nameof(GetById), new { id = prof.Id }, resp);
         }
 
-        [HttpPut("update/{id}")]
+        // PUT api/professor/{id}
+        [HttpPut("{id}")]
         [ProducesResponseType(typeof(ProfessorResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> Update(int id, [FromBody] ProfessorUpdateRequest request)
+        public async Task<ActionResult<ProfessorResponse>> Update(int id, [FromBody] ProfessorUpdateRequest request)
         {
             var prof = await _profService.UpdateAsync(id, request);
             var resp = _mapper.Map<ProfessorResponse>(prof);
             return Ok(resp);
         }
 
-        [HttpPost("sendCoins/{professorId}")]
+        // POST api/professor/{professorId}/coins
+        [HttpPost("{professorId}/coins")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -72,23 +79,6 @@ namespace sme.src.Controllers
         {
             await _profService.SendCoinsAsync(professorId, request);
             return Ok();
-        }
-
-        [HttpPost("allocateSemesterCoins")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> AllocateSemesterCoins()
-        {
-            await _profService.AllocateSemesterCoinsAsync();
-            return Ok();
-        }
-
-        [HttpDelete("{id}")]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> Delete(int id)
-        {
-            await _service.DeleteAsync(id);
-            return NoContent();
         }
     }
 }

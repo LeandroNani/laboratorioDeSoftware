@@ -154,3 +154,9 @@ ALTER TABLE professor ADD last_allocation_date timestamp with time zone NOT NULL
 2025-05-18 16:44:29.082 -03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
 VALUES ('20250518194356_AtualizacaoModelo', '9.0.4');
+2025-05-18 16:44:43.199 -03:00 [INF] Swagger UI available at http://localhost:3030/swagger/index.html
+2025-05-18 16:44:43.333 -03:00 [INF] Server starting and listening on http://127.0.0.1:3030
+2025-05-18 16:44:43.455 -03:00 [INF] Now listening on: http://127.0.0.1:3030
+2025-05-18 16:44:43.459 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-05-18 16:44:43.460 -03:00 [INF] Hosting environment: Development
+2025-05-18 16:44:43.461 -03:00 [INF] Content root path: C:\Users\i.cathalat\Downloads\lab_software\laboratorioDeSoftware\LAB003\Backend\sme
