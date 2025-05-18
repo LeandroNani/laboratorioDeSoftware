@@ -3,6 +3,9 @@ using System.Reflection;
 using Microsoft.OpenApi.Models;
 using sme.src.Middlewares;
 using sme.src.Data;
+using sme.src.Services; // Add this if IEmailService is in the Services namespace   
+using sme.src.Public.DTOs;
+
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -37,13 +40,19 @@ builder.Logging.AddConsole();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
 
+
+
+
 // Pipeline de requisição
-if (app.Environment.IsDevelopment()) {
+if (app.Environment.IsDevelopment())
+{
     app.UseSwagger();
     app.UseSwaggerUI();
     var swaggerUrl = "http://localhost:3030/swagger/index.html";
     Log.Information("Swagger UI available at {SwaggerUrl}", swaggerUrl);
-} else {
+}
+else
+{
     app.UseExceptionHandler("/error");
     app.UseHsts();
 }

@@ -22,10 +22,16 @@ namespace sme.src.Models
         [Column("cpf")]
         public required string Cpf { get; set; }
 
-        [Column("departamento_id"), ForeignKey("departamento_id")]
+        [Column("departamento_id")]
+        public int DepartamentoId { get; set; }
+
+        [ForeignKey(nameof(DepartamentoId))]
         public required Departamento Departamento { get; set; }
 
         [Column("moedas")]
         public int Moedas { get; set; }
+
+        // Data da última alocação semestral
+        [Column("last_allocation_date")] public DateTime LastAllocationDate { get; set; } = DateTime.UtcNow;
     }
 }

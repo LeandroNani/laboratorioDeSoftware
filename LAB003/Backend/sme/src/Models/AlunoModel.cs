@@ -22,10 +22,16 @@ namespace sme.src.Models
         [Column("senha")]
         public required string Senha { get; set; }
 
-        [Column("instituicao_id"), ForeignKey("instituicao_id")]
+         [Column("instituicao_id")]
+        public int InstituicaoId { get; set; }
+
+        [ForeignKey(nameof(InstituicaoId))]
         public required InstituicaoEnsino Instituicao { get; set; }
 
-        [Column("curso_id"), ForeignKey("curso_id")]
+        [Column("curso_id")]
+        public int CursoId { get; set; }
+
+        [ForeignKey(nameof(CursoId))]
         public required Curso Curso { get; set; }
 
         [Column("moedas")]
