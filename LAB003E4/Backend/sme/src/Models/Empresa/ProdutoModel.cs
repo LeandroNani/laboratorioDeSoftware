@@ -21,5 +21,8 @@ namespace sme.src.Models.Empresa
 
         [Column("empresa_id"), ForeignKey("empresa_id")]
         public required EmpresaParceira Empresa { get; set; }
+
+        [Column("quantidade")]
+        public int Quantidade { get; set; } = 0;
     }
 }

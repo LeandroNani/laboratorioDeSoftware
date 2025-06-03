@@ -3,9 +3,10 @@ using System.Reflection;
 using Microsoft.OpenApi.Models;
 using sme.src.Middlewares;
 using sme.src.Data;
-using sme.src.Services; // Add this if IEmailService is in the Services namespace   
-using sme.src.Public.DTOs;
+using sme.src.Services;
+using DotNetEnv;
 
+Env.Load();
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()

@@ -18,7 +18,17 @@ namespace sme.src.Public.DTOs
         public required string Motivo { get; set; }
         public required Aluno Aluno { get; set; }
         public required T Ref { get; set; }
-        public Produto? Produto { get; set; }
+        public required ICollection<Produto> Produtos { get; set; }
         public required DateTime DataTransacao { get; set; }
+        public ICollection<string>? Avisos { get; set; } = [];
+    }
+
+    public class TransacaoEmpresaRequest
+    {
+        public required decimal Valor { get; set; }
+        public required string Motivo { get; set; }
+        public required int EmpresaParceiraId { get; set; }
+        public required int AlunoId { get; set; }
+        public required ICollection<ComprarProdutoRequest> Produtos { get; set; } = [];
     }
 }

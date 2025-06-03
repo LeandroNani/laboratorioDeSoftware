@@ -25,4 +25,10 @@ namespace sme.src.Public.DTOs
         public required decimal Preco { get; set; }
         public required EmpresaParceira Empresa { get; set; }
     }
+
+    public class ComprarProdutoRequest
+    {
+        public required int ProdutoId { get; set; }
+        public required int Quantidade { get; set; }
+    }
 }

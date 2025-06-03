@@ -29,9 +29,6 @@ namespace sme.src.Models
     {
         [Column("professor_id"), ForeignKey("professor_id")]
         public required Professor Professor { get; set; }
-
-        [Column("tipo_transacao")]
-        public TipoTransacao TipoTransacao { get; set; } = TipoTransacao.PROFESSOR;
     }
 
     [Table("transacao_aluno_empresa")]
@@ -41,15 +38,6 @@ namespace sme.src.Models
         public required EmpresaParceira EmpresaParceira { get; set; }
 
         [Column("produto_id"), ForeignKey("produto_id")]
-        public required Produto Produto { get; set; }
-
-        [Column("tipo_transacao")]
-        public TipoTransacao TipoTransacao { get; set; } = TipoTransacao.EMPRESA;
-    }
-
-    public enum TipoTransacao
-    {
-        PROFESSOR,
-        EMPRESA
+        public required ICollection<Produto> Produtos { get; set; }
     }
 }

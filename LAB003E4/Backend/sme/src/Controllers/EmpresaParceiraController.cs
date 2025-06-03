@@ -19,7 +19,7 @@ namespace sme.src.Controllers
     [Route("api/[controller]")]
     public class EmpresaParceiraController(AppDbContext context, IMapper _mapper) : ControllerBase
     {
-       private readonly Service<EmpresaParceira> _service = new (context);
+        private readonly Service<EmpresaParceira> _service = new(context);
 
         [HttpGet("get/{id}")]
         [ProducesResponseType(typeof(EmpresaParceira), (int)HttpStatusCode.OK)]
@@ -66,6 +66,18 @@ namespace sme.src.Controllers
             await _service.DeleteAsync(id);
             return NoContent();
         }
-        
+
+        [HttpGet("produtos/{id}")]
+        [ProducesResponseType(typeof(IEnumerable<Produto>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> GetProdutosByEmpresaId(int id)
+        {
+            var _service = new Service<Produto>(context);
+            var produtos = await _service.GetAllAsync();
+            var produtosEmpresa = produtos.Where(p => p.Empresa.Id == id).ToList();
+            return produtosEmpresa.Count != 0
+                ? Ok(produtosEmpresa) 
+                : NotFound($"Nenhum produto encontrado para a empresa com ID {id}.");
+        }
     }
 }

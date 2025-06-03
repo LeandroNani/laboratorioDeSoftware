@@ -47,3 +47,5 @@ next-env.d.ts
 **/bin
 **/config
 **/.config
+
+**/logs

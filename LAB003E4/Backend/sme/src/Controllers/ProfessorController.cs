@@ -12,21 +12,14 @@ namespace sme.src.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProfessorController : ControllerBase
+    public class ProfessorController(
+        Service<Professor> crudService,
+        ProfessorService profService,
+        IMapper mapper) : ControllerBase
     {
-        private readonly Service<Professor> _crudService;
-        private readonly ProfessorService _profService;
-        private readonly IMapper _mapper;
-
-        public ProfessorController(
-            Service<Professor> crudService,
-            ProfessorService profService,
-            IMapper mapper)
-        {
-            _crudService = crudService;
-            _profService = profService;
-            _mapper = mapper;
-        }
+        private readonly Service<Professor> _crudService = crudService;
+        private readonly ProfessorService _profService = profService;
+        private readonly IMapper _mapper = mapper;
 
         // GET api/professor/{id}
         [HttpGet("{id}")]

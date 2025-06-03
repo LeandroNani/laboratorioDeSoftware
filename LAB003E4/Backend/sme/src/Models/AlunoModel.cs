@@ -35,6 +35,6 @@ namespace sme.src.Models
         public required Curso Curso { get; set; }
 
         [Column("moedas")]
-        public int Moedas { get; set; }
+        public decimal Moedas { get; set; }
     }
 }
