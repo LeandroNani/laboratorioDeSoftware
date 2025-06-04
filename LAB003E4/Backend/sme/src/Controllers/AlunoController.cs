@@ -7,6 +7,7 @@ using sme.src.Data;
 using sme.src.Services;
 using sme.src.Public.DTOs;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace sme.src.Controllers
 {
@@ -17,8 +18,8 @@ namespace sme.src.Controllers
     [Route("api/[controller]")]
     public class AlunoController(AppDbContext context, IMapper _mapper) : ControllerBase
     {
-        private readonly Service<Aluno> _service = new (context);
-        private readonly AlunoService _alunoService = new (context, _mapper);
+        private readonly Service<Aluno> _service = new(context);
+        private readonly AlunoService _alunoService = new(context, _mapper);
         /// <summary>
         /// Obtém um aluno pelo ID.
         /// </summary>
@@ -65,7 +66,7 @@ namespace sme.src.Controllers
         public async Task<IActionResult> Create([FromBody] AlunoCreationRequest request)
         {
             var aluno = await _alunoService.CreateAsync(request);
-            return CreatedAtAction(nameof(GetById), new { id = aluno.Id }, aluno);
+            return CreatedAtAction(nameof(Create), new { aluno });
         }
 
         [HttpPut("update/{id}")]
@@ -86,5 +87,25 @@ namespace sme.src.Controllers
             await _service.DeleteAsync(id);
             return NoContent();
         }
+
+        /// <summary>
+        /// Efetua a compra de um produto por um aluno.
+        /// </summary>
+        /// <param name="transacao">O aluno a ser criado.</param>
+        /// <returns>O aluno criado.</returns>
+        /// <response code="201">Retorna o aluno criado.</response>
+        /// <response code="400">Se o aluno não for válido.</response>
+        /// <response code="500">Erro interno do servidor.</response>
+        [HttpPost("comprar-produto")]
+        [Authorize(Policy = "AlunoPolicy")]
+        [ProducesResponseType(typeof(TransacaoResponse<Transacao>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> ComprarProduto([FromBody] TransacaoEmpresaRequest transacao)
+        {
+            var response = await _alunoService.ComprarProduto(transacao);
+            return Ok(response);
+        }
+
     }
 }

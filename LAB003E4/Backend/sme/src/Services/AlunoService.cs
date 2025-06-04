@@ -1,5 +1,7 @@
 using AutoMapper;
+using EcoScale.src.Auth;
 using Microsoft.EntityFrameworkCore;
+using sme.src.Auth;
 using sme.src.Data;
 using sme.src.Middlewares.Exceptions;
 using sme.src.Models;
@@ -10,7 +12,8 @@ namespace sme.src.Services
 {
     public class AlunoService(AppDbContext _context, IMapper _mapper)
     {
-        public async Task<Aluno> CreateAsync(AlunoCreationRequest request)
+        private readonly Jwt _jwt = new(_context);
+        public async Task<CreationResponse<Aluno>> CreateAsync(AlunoCreationRequest request)
         {
             if (request == null) throw new CustomArgumentNullException(nameof(request), "Aluno cannot be null.");
             var existingAluno = await _context.Alunos.FirstOrDefaultAsync(a => a.Cpf == request.Cpf);
@@ -27,11 +30,15 @@ namespace sme.src.Services
             aluno.Curso = curso;
             await _context.Alunos.AddAsync(aluno);
             await _context.SaveChangesAsync();
-            return aluno;
+
+            return new CreationResponse<Aluno>
+            {
+                Entity = aluno,
+                Token = _jwt.GenerateToken(aluno.Email, Role.Aluno),
+            };
         }
 
-
-        public async Task<Aluno> UpdateAsync(AlunoUpdateRequest request, int id)
+        public async Task<CreationResponse<Aluno>> UpdateAsync(AlunoUpdateRequest request, int id)
         {
             if (request == null) throw new CustomArgumentNullException(nameof(request), "Aluno cannot be null.");
 
@@ -55,7 +62,11 @@ namespace sme.src.Services
             _mapper.Map(request, aluno);
             _context.Alunos.Update(aluno);
             await _context.SaveChangesAsync();
-            return aluno;
+            return new CreationResponse<Aluno>
+            {
+                Entity = aluno,
+                Token = _jwt.GenerateToken(aluno.Email, Role.Aluno),
+            };
         }
 
         public async Task<TransacaoResponse<EmpresaParceira>> ComprarProduto(TransacaoEmpresaRequest transacao)

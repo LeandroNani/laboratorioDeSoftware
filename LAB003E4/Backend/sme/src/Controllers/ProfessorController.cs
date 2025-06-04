@@ -48,8 +48,7 @@ namespace sme.src.Controllers
         public async Task<ActionResult<ProfessorResponse>> Create([FromBody] ProfessorCreationRequest request)
         {
             var prof = await _profService.CreateAsync(request);
-            var resp = _mapper.Map<ProfessorResponse>(prof);
-            return CreatedAtAction(nameof(GetById), new { id = prof.Id }, resp);
+            return CreatedAtAction(nameof(Create), new { prof });
         }
 
         // PUT api/professor/{id}

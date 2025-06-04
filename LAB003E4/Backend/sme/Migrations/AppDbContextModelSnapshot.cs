@@ -22,41 +22,24 @@ namespace sme.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("sme.src.Models.Aluno", b =>
+            modelBuilder.Entity("sme.src.Models.Abstract.Usuario", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("aluno_id");
+                        .HasColumnName("usuario_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Cpf")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("cpf");
-
-                    b.Property<int>("CursoId")
-                        .HasColumnType("integer")
-                        .HasColumnName("curso_id");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("email");
 
-                    b.Property<int>("InstituicaoId")
-                        .HasColumnType("integer")
-                        .HasColumnName("instituicao_id");
-
-                    b.Property<int>("Moedas")
-                        .HasColumnType("integer")
-                        .HasColumnName("moedas");
-
-                    b.Property<string>("Rg")
+                    b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("rg");
+                        .HasColumnName("nome");
 
                     b.Property<string>("Senha")
                         .IsRequired()
@@ -65,11 +48,12 @@ namespace sme.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CursoId");
+                    b.HasIndex("Email")
+                        .IsUnique();
 
-                    b.HasIndex("InstituicaoId");
+                    b.ToTable("usuario");
 
-                    b.ToTable("aluno");
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("sme.src.Models.Curso", b =>
@@ -120,35 +104,6 @@ namespace sme.Migrations
                     b.ToTable("departamento");
                 });
 
-            modelBuilder.Entity("sme.src.Models.Empresa.EmpresaParceira", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("empresa_id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("email");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("nome");
-
-                    b.Property<string>("Senha")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("senha");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("empresa_parceira");
-                });
-
             modelBuilder.Entity("sme.src.Models.Empresa.Produto", b =>
                 {
                     b.Property<int>("Id")
@@ -172,14 +127,27 @@ namespace sme.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("preco");
 
+                    b.Property<int>("Quantidade")
+                        .HasColumnType("integer")
+                        .HasColumnName("quantidade");
+
                     b.Property<int>("empresa_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("produto_id")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("empresa_id");
 
-                    b.ToTable("produto");
+                    b.HasIndex("produto_id");
+
+                    b.ToTable("produto", t =>
+                        {
+                            t.Property("produto_id")
+                                .HasColumnName("produto_id1");
+                        });
                 });
 
             modelBuilder.Entity("sme.src.Models.InstituicaoEnsino", b =>
@@ -199,54 +167,6 @@ namespace sme.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("instituicao");
-                });
-
-            modelBuilder.Entity("sme.src.Models.Professor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("professor_id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Cpf")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("cpf");
-
-                    b.Property<int>("DepartamentoId")
-                        .HasColumnType("integer")
-                        .HasColumnName("departamento_id");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("email");
-
-                    b.Property<DateTime>("LastAllocationDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_allocation_date");
-
-                    b.Property<int>("Moedas")
-                        .HasColumnType("integer")
-                        .HasColumnName("moedas");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("nome");
-
-                    b.Property<string>("Senha")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("senha");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DepartamentoId");
-
-                    b.ToTable("professor");
                 });
 
             modelBuilder.Entity("sme.src.Models.Relations.ProfessorDepartamento", b =>
@@ -273,7 +193,7 @@ namespace sme.Migrations
                     b.ToTable("professor_departamento");
                 });
 
-            modelBuilder.Entity("sme.src.Models.TransacaoEmpresa", b =>
+            modelBuilder.Entity("sme.src.Models.Transacao", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -291,10 +211,6 @@ namespace sme.Migrations
                         .HasColumnType("text")
                         .HasColumnName("motivo");
 
-                    b.Property<int>("TipoTransacao")
-                        .HasColumnType("integer")
-                        .HasColumnName("tipo_transacao");
-
                     b.Property<decimal>("Valor")
                         .HasColumnType("numeric")
                         .HasColumnName("valor");
@@ -302,81 +218,119 @@ namespace sme.Migrations
                     b.Property<int>("aluno_id")
                         .HasColumnType("integer");
 
-                    b.Property<int>("empresa_id")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("produto_id")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("aluno_id");
 
-                    b.HasIndex("empresa_id");
+                    b.ToTable("transacao");
 
-                    b.HasIndex("produto_id");
+                    b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("sme.src.Models.Aluno", b =>
+                {
+                    b.HasBaseType("sme.src.Models.Abstract.Usuario");
+
+                    b.Property<string>("Cpf")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("cpf");
+
+                    b.Property<int>("CursoId")
+                        .HasColumnType("integer")
+                        .HasColumnName("curso_id");
+
+                    b.Property<int>("InstituicaoId")
+                        .HasColumnType("integer")
+                        .HasColumnName("instituicao_id");
+
+                    b.Property<decimal>("Moedas")
+                        .HasColumnType("numeric")
+                        .HasColumnName("moedas");
+
+                    b.Property<string>("Rg")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("rg");
+
+                    b.HasIndex("CursoId");
+
+                    b.HasIndex("InstituicaoId");
+
+                    b.ToTable("aluno");
+                });
+
+            modelBuilder.Entity("sme.src.Models.Empresa.EmpresaParceira", b =>
+                {
+                    b.HasBaseType("sme.src.Models.Abstract.Usuario");
+
+                    b.Property<string>("Cnpj")
+                        .IsRequired()
+                        .HasMaxLength(14)
+                        .HasColumnType("character varying(14)")
+                        .HasColumnName("cnpj");
+
+                    b.Property<string>("NomeFantasia")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("nome_fantasia");
+
+                    b.Property<string>("RazaoSocial")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("razao_social");
+
+                    b.ToTable("empresa_parceira");
+                });
+
+            modelBuilder.Entity("sme.src.Models.Professor", b =>
+                {
+                    b.HasBaseType("sme.src.Models.Abstract.Usuario");
+
+                    b.Property<string>("Cpf")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("cpf");
+
+                    b.Property<int>("DepartamentoId")
+                        .HasColumnType("integer")
+                        .HasColumnName("departamento_id");
+
+                    b.Property<DateTime>("LastAllocationDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_allocation_date");
+
+                    b.Property<int>("Moedas")
+                        .HasColumnType("integer")
+                        .HasColumnName("moedas");
+
+                    b.HasIndex("DepartamentoId");
+
+                    b.ToTable("professor");
+                });
+
+            modelBuilder.Entity("sme.src.Models.TransacaoEmpresa", b =>
+                {
+                    b.HasBaseType("sme.src.Models.Transacao");
+
+                    b.Property<int>("empresa_id")
+                        .HasColumnType("integer");
+
+                    b.HasIndex("empresa_id");
 
                     b.ToTable("transacao_aluno_empresa");
                 });
 
             modelBuilder.Entity("sme.src.Models.TransacaoProfessor", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("transacao_id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DataTransacao")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("data_transacao");
-
-                    b.Property<string>("Motivo")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("motivo");
-
-                    b.Property<int>("TipoTransacao")
-                        .HasColumnType("integer")
-                        .HasColumnName("tipo_transacao");
-
-                    b.Property<decimal>("Valor")
-                        .HasColumnType("numeric")
-                        .HasColumnName("valor");
-
-                    b.Property<int>("aluno_id")
-                        .HasColumnType("integer");
+                    b.HasBaseType("sme.src.Models.Transacao");
 
                     b.Property<int>("professor_id")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("aluno_id");
-
                     b.HasIndex("professor_id");
 
                     b.ToTable("transacao_professor_aluno");
-                });
-
-            modelBuilder.Entity("sme.src.Models.Aluno", b =>
-                {
-                    b.HasOne("sme.src.Models.Curso", "Curso")
-                        .WithMany()
-                        .HasForeignKey("CursoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("sme.src.Models.InstituicaoEnsino", "Instituicao")
-                        .WithMany()
-                        .HasForeignKey("InstituicaoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Curso");
-
-                    b.Navigation("Instituicao");
                 });
 
             modelBuilder.Entity("sme.src.Models.Departamento", b =>
@@ -406,18 +360,11 @@ namespace sme.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("sme.src.Models.TransacaoEmpresa", null)
+                        .WithMany("Produtos")
+                        .HasForeignKey("produto_id");
+
                     b.Navigation("Empresa");
-                });
-
-            modelBuilder.Entity("sme.src.Models.Professor", b =>
-                {
-                    b.HasOne("sme.src.Models.Departamento", "Departamento")
-                        .WithMany()
-                        .HasForeignKey("DepartamentoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Departamento");
                 });
 
             modelBuilder.Entity("sme.src.Models.Relations.ProfessorDepartamento", b =>
@@ -439,11 +386,73 @@ namespace sme.Migrations
                     b.Navigation("Professor");
                 });
 
-            modelBuilder.Entity("sme.src.Models.TransacaoEmpresa", b =>
+            modelBuilder.Entity("sme.src.Models.Transacao", b =>
                 {
                     b.HasOne("sme.src.Models.Aluno", "Aluno")
                         .WithMany()
                         .HasForeignKey("aluno_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Aluno");
+                });
+
+            modelBuilder.Entity("sme.src.Models.Aluno", b =>
+                {
+                    b.HasOne("sme.src.Models.Curso", "Curso")
+                        .WithMany()
+                        .HasForeignKey("CursoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("sme.src.Models.Abstract.Usuario", null)
+                        .WithOne()
+                        .HasForeignKey("sme.src.Models.Aluno", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("sme.src.Models.InstituicaoEnsino", "Instituicao")
+                        .WithMany()
+                        .HasForeignKey("InstituicaoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Curso");
+
+                    b.Navigation("Instituicao");
+                });
+
+            modelBuilder.Entity("sme.src.Models.Empresa.EmpresaParceira", b =>
+                {
+                    b.HasOne("sme.src.Models.Abstract.Usuario", null)
+                        .WithOne()
+                        .HasForeignKey("sme.src.Models.Empresa.EmpresaParceira", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("sme.src.Models.Professor", b =>
+                {
+                    b.HasOne("sme.src.Models.Departamento", "Departamento")
+                        .WithMany()
+                        .HasForeignKey("DepartamentoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("sme.src.Models.Abstract.Usuario", null)
+                        .WithOne()
+                        .HasForeignKey("sme.src.Models.Professor", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Departamento");
+                });
+
+            modelBuilder.Entity("sme.src.Models.TransacaoEmpresa", b =>
+                {
+                    b.HasOne("sme.src.Models.Transacao", null)
+                        .WithOne()
+                        .HasForeignKey("sme.src.Models.TransacaoEmpresa", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -453,24 +462,14 @@ namespace sme.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("sme.src.Models.Empresa.Produto", "Produto")
-                        .WithMany()
-                        .HasForeignKey("produto_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Aluno");
-
                     b.Navigation("EmpresaParceira");
-
-                    b.Navigation("Produto");
                 });
 
             modelBuilder.Entity("sme.src.Models.TransacaoProfessor", b =>
                 {
-                    b.HasOne("sme.src.Models.Aluno", "Aluno")
-                        .WithMany()
-                        .HasForeignKey("aluno_id")
+                    b.HasOne("sme.src.Models.Transacao", null)
+                        .WithOne()
+                        .HasForeignKey("sme.src.Models.TransacaoProfessor", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -480,9 +479,12 @@ namespace sme.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Aluno");
-
                     b.Navigation("Professor");
+                });
+
+            modelBuilder.Entity("sme.src.Models.TransacaoEmpresa", b =>
+                {
+                    b.Navigation("Produtos");
                 });
 #pragma warning restore 612, 618
         }

@@ -20,6 +20,7 @@ namespace sme.src.Controllers
     public class EmpresaParceiraController(AppDbContext context, IMapper _mapper) : ControllerBase
     {
         private readonly Service<EmpresaParceira> _service = new(context);
+        private readonly EmpresaService _empresaService = new(_mapper, context);
 
         [HttpGet("get/{id}")]
         [ProducesResponseType(typeof(EmpresaParceira), (int)HttpStatusCode.OK)]
@@ -42,9 +43,8 @@ namespace sme.src.Controllers
         [ProducesResponseType(typeof(EmpresaParceira), (int)HttpStatusCode.Created)]
         public async Task<IActionResult> Create([FromBody] EmpresaParceiraCreationRequest _empresaParceira)
         {
-            var empresaParceira = _mapper.Map<EmpresaParceira>(_empresaParceira);
-            var creation = await _service.AddAsync(empresaParceira);
-            return CreatedAtAction(nameof(GetById), new { id = creation.Id }, creation);
+            var creation = await _empresaService.CreateEmpresaAsync(_empresaParceira);
+            return CreatedAtAction(nameof(Create), new { creation });
         }
 
         [HttpPut("put/{id}")]

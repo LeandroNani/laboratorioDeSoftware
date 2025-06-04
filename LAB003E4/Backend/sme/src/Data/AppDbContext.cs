@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using sme.src.Models;
+using sme.src.Models.Abstract;
 using sme.src.Models.Empresa;
 using sme.src.Models.Relations;
 
@@ -20,6 +21,7 @@ namespace sme.src.Data
         public DbSet<ProfessorDepartamento> ProfessorDepartamentos { get; set; } = null!;
         public DbSet<Transacao> Transacoes { get; set; } = null!;
         public DbSet<TransacaoEmpresa> TransacoesAlunoEmpresa { get; set; } = null!;
+        public DbSet<Usuario> Usuarios { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -37,33 +39,7 @@ namespace sme.src.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Produto>()
-                .Property(p => p.Id)
-                .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<Professor>()
-                .Property(p => p.Id)
-                .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<Aluno>()
-                .Property(a => a.Id)
-                .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<Curso>()
-                .Property(c => c.Id)
-                .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<InstituicaoEnsino>()
-                .Property(i => i.Id)
-                .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<Departamento>()
-                .Property(d => d.Id)
-                .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<EmpresaParceira>()
-                .Property(e => e.Id)
-                .ValueGeneratedOnAdd();
+            
         }
     }
 }

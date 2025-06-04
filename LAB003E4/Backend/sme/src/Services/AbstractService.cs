@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using sme.src.Auth;
 using sme.src.Data;
 using sme.src.Middlewares.Exceptions;
+using sme.src.Public.DTOs;
 
 namespace sme.src.Services
 {

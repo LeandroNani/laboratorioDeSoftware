@@ -1,28 +1,19 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using sme.src.Models.Abstract;
 
 namespace sme.src.Models
 {
     [Table("aluno")]
-    public class Aluno
+    public class Aluno : Usuario
     {
-        [Key]
-        [Column("aluno_id"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
         [Column("rg")]
         public required string Rg { get; set; }
 
         [Column("cpf")]
         public required string Cpf { get; set; }
 
-        [Column("email")]
-        public required string Email { get; set; }
-
-        [Column("senha")]
-        public required string Senha { get; set; }
-
-         [Column("instituicao_id")]
+        [Column("instituicao_id")]
         public int InstituicaoId { get; set; }
 
         [ForeignKey(nameof(InstituicaoId))]

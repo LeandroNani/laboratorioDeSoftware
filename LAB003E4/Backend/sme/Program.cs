@@ -5,6 +5,10 @@ using sme.src.Middlewares;
 using sme.src.Data;
 using sme.src.Services;
 using DotNetEnv;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using sme.src.Middlewares.Exceptions;
+using System.Text;
 
 Env.Load();
 
@@ -17,6 +21,53 @@ Log.Logger = new LoggerConfiguration()
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog();
 
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    var jwtKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY") ?? throw new ArgumentNullException("JWT_SECRET_KEY", "Chave JWT não está configurada.");
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER"),
+        ValidAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE"),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+    };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
+        {
+            throw new UnauthorizedException("Falha na autenticação do token JWT");
+        },
+        OnChallenge = context =>
+        {
+            context.HandleResponse();
+            throw new UnauthorizedException("Token de autorização ausente ou inválido.");
+        }
+    };
+});
+
+// Configuração da Autorização para cada entidade
+builder.Services.AddAuthorizationBuilder().AddPolicy("EmpresaPolicy", policy =>
+{
+    policy.RequireRole("Empresa");
+});
+
+builder.Services.AddAuthorizationBuilder().AddPolicy("ProfessorPolicy", policy =>
+{
+    policy.RequireRole("Professor");
+});
+
+builder.Services.AddAuthorizationBuilder().AddPolicy("AlunoPolicy", policy =>
+{
+    policy.RequireRole("Aluno");
+});
 
 // Configuração do Swagger
 builder.Services.AddEndpointsApiExplorer();
